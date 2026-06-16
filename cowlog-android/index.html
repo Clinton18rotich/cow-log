@@ -6,52 +6,39 @@
     <meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="icon-192.png">
     <style>
-        :root{--bg:#000000;--sheet:#1c1c1e;--sheet2:#2c2c2e;--sep:#38383a;--text:#ffffff;--text2:#8e8e93;--text3:#636366;--accent:#0a84ff;--green:#30d158;--red:#ff453a;--orange:#ff9f0a;--purple:#bf5af2;--radius:14px;--radius-sm:10px}
+        :root{--bg:#000;--sheet:#1c1c1e;--sheet2:#2c2c2e;--sep:#38383a;--text:#fff;--text2:#8e8e93;--text3:#636366;--accent:#0a84ff;--green:#30d158;--red:#ff453a;--orange:#ff9f0a;--purple:#bf5af2;--radius:14px}
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:100px;font-size:17px;line-height:1.4;-webkit-font-smoothing:antialiased;overscroll-behavior:none}
         .navbar{background:rgba(0,0,0,0.85);backdrop-filter:blur(27px);padding:12px 16px;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,255,255,0.08)}
         .navbar-content{display:flex;justify-content:space-between;align-items:center}
-        .navbar-title{font-size:1.1rem;font-weight:700;letter-spacing:-0.3px}
-        .navbar-subtitle{font-size:.68rem;color:var(--accent);font-weight:500}
+        .navbar-title{font-size:1.1rem;font-weight:700}.navbar-subtitle{font-size:.68rem;color:var(--accent);font-weight:500}
         .navbar-actions{display:flex;gap:12px}
         .nav-btn{width:32px;height:32px;border-radius:50%;background:var(--sheet2);border:none;color:var(--text);font-size:.9rem;display:flex;align-items:center;justify-content:center;cursor:pointer}
-        .nav-btn:active{transform:scale(.9)}
-        .project-strip{display:flex;gap:6px;padding:8px 16px;overflow-x:auto;scrollbar-width:none;background:var(--bg);border-bottom:1px solid rgba(255,255,255,0.04)}
-        .project-strip::-webkit-scrollbar{display:none}
+        .project-strip{display:flex;gap:6px;padding:8px 16px;overflow-x:auto;background:var(--bg);border-bottom:1px solid rgba(255,255,255,0.04)}
         .chip{background:var(--sheet);padding:6px 12px;border-radius:16px;font-size:.65rem;color:var(--text2);white-space:nowrap;font-weight:500;display:flex;align-items:center;gap:4px}
         .chip-dot{width:6px;height:6px;border-radius:50%}.chip-dot.green{background:var(--green)}.chip-dot.blue{background:var(--accent)}
         .chip-ai{background:linear-gradient(135deg,rgba(191,90,242,.2),rgba(10,132,255,.2));color:#fff;font-weight:600}
-        .stats-strip{display:flex;gap:6px;padding:12px 16px;overflow-x:auto;scrollbar-width:none}
-        .stats-strip::-webkit-scrollbar{display:none}
-        .stat-pill{background:var(--sheet);padding:10px 14px;border-radius:var(--radius-sm);min-width:80px;text-align:center;border:1px solid rgba(255,255,255,0.06)}
-        .stat-pill .val{font-size:1.4rem;font-weight:700;letter-spacing:-0.5px}
-        .stat-pill .lbl{font-size:.55rem;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+        .stats-strip{display:flex;gap:6px;padding:12px 16px;overflow-x:auto}
+        .stat-pill{background:var(--sheet);padding:10px 14px;border-radius:10px;min-width:80px;text-align:center;border:1px solid rgba(255,255,255,0.06)}
+        .stat-pill .val{font-size:1.4rem;font-weight:700;letter-spacing:-0.5px}.stat-pill .lbl{font-size:.55rem;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
         .val.accent{color:var(--accent)}.val.green{color:var(--green)}.val.red{color:var(--red)}.val.orange{color:var(--orange)}.val.purple{color:var(--purple)}
         .segment-wrap{padding:0 16px;margin-bottom:10px}
-        .segment{display:flex;background:var(--sheet);border-radius:8px;padding:2px;overflow-x:auto;scrollbar-width:none}
-        .segment::-webkit-scrollbar{display:none}
+        .segment{display:flex;background:var(--sheet);border-radius:8px;padding:2px;overflow-x:auto}
         .seg-btn{padding:7px 14px;border-radius:6px;font-size:.68rem;white-space:nowrap;border:none;background:transparent;color:var(--text2);cursor:pointer;font-weight:500;flex-shrink:0}
         .seg-btn.active{background:var(--sheet2);color:var(--text);font-weight:600}
-        .content{padding:0 16px}.panel{display:none;animation:slideUp .25s ease}.panel.active{display:block}
-        @keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        .content{padding:0 16px}.panel{display:none}.panel.active{display:block}
         .list-cell{background:var(--sheet);padding:14px 16px;margin-bottom:1px;display:flex;align-items:center;gap:12px}
-        .list-cell:first-of-type{border-radius:var(--radius-sm) var(--radius-sm) 0 0}
-        .list-cell:last-of-type{border-radius:0 0 var(--radius-sm) var(--radius-sm);margin-bottom:8px}
+        .list-cell:first-of-type{border-radius:10px 10px 0 0}.list-cell:last-of-type{border-radius:0 0 10px 10px;margin-bottom:8px}
         .list-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
         .list-icon.blue{background:rgba(10,132,255,.15)}.list-icon.green{background:rgba(48,209,88,.15)}.list-icon.red{background:rgba(255,69,58,.15)}.list-icon.orange{background:rgba(255,159,10,.15)}.list-icon.purple{background:rgba(191,90,242,.15)}
-        .list-content{flex:1;min-width:0}.list-title{font-size:.9rem;font-weight:500}.list-sub{font-size:.7rem;color:var(--text3)}
-        .list-right{font-size:.75rem;color:var(--text2);text-align:right;flex-shrink:0}
+        .list-content{flex:1}.list-title{font-size:.9rem;font-weight:500}.list-sub{font-size:.7rem;color:var(--text3)}
         .badge{font-size:.6rem;padding:3px 8px;border-radius:10px;font-weight:600}
-        .badge-success{background:rgba(48,209,88,.15);color:var(--green)}.badge-danger{background:rgba(255,69,58,.15);color:var(--red)}.badge-warning{background:rgba(255,159,10,.15);color:var(--orange)}.badge-info{background:rgba(10,132,255,.15);color:var(--accent)}.badge-ai{background:rgba(191,90,242,.15);color:var(--purple)}
-        .card{background:var(--sheet);border-radius:var(--radius);padding:16px;margin-bottom:8px}
-        .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.card-title{font-weight:600;font-size:.85rem}
-        .card-body{font-size:.75rem;color:var(--text2);line-height:1.5}
+        .badge-success{background:rgba(48,209,88,.15);color:var(--green)}.badge-danger{background:rgba(255,69,58,.15);color:var(--red)}.badge-warning{background:rgba(255,159,10,.15);color:var(--orange)}
+        .card{background:var(--sheet);border-radius:14px;padding:16px;margin-bottom:8px}
         .btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:12px 20px;border-radius:10px;border:none;font-weight:600;font-size:.8rem;cursor:pointer;font-family:inherit}
-        .btn:active{transform:scale(.95)}.btn-primary{background:var(--accent);color:#fff;width:100%}.btn-secondary{background:var(--sheet2);color:var(--text);width:100%}.btn-ai{background:linear-gradient(135deg,var(--purple),var(--accent));color:#fff;width:100%}.btn-sm{padding:8px 14px;font-size:.68rem;border-radius:8px;width:auto}.btn-xs{padding:5px 10px;font-size:.6rem;border-radius:6px;width:auto}
+        .btn:active{transform:scale(.95)}.btn-primary{background:var(--accent);color:#fff}.btn-secondary{background:var(--sheet2);color:var(--text)}.btn-sm{padding:8px 14px;font-size:.68rem;border-radius:8px}
         .fab{position:fixed;bottom:28px;right:20px;width:50px;height:50px;border-radius:50%;background:var(--accent);color:#fff;border:none;font-size:1.3rem;cursor:pointer;box-shadow:0 4px 20px rgba(10,132,255,.4);z-index:200;display:flex;align-items:center;justify-content:center}
-        .fab:active{transform:scale(.88)}
-        .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;display:flex;align-items:flex-end;animation:fadeIn .2s}
-        @keyframes fadeIn{from{opacity:0}}
+        .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;display:flex;align-items:flex-end}
         .modal{background:var(--sheet);width:100%;border-radius:20px 20px 0 0;padding:20px 16px 32px;max-height:82vh;overflow-y:auto}
         .modal-handle{width:36px;height:5px;background:var(--sep);border-radius:3px;margin:0 auto 16px}
         .modal h2{font-size:1rem;font-weight:700;margin-bottom:16px;text-align:center}
@@ -62,19 +49,45 @@
         .checkbox-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:.75rem}
         .checkbox-row input[type=checkbox]{width:22px;height:22px;accent-color:var(--accent)}
         .trade-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0}
-        .trade-btn{padding:14px 10px;border-radius:var(--radius-sm);background:var(--sheet2);border:none;color:var(--text);font-size:.7rem;text-align:left;cursor:pointer;font-family:inherit;font-weight:500}
-        .trade-btn:active{background:var(--accent);color:#fff}
+        .trade-btn{padding:14px 10px;border-radius:10px;background:var(--sheet2);border:none;color:var(--text);font-size:.7rem;text-align:left;cursor:pointer;font-family:inherit;font-weight:500}
         .section-label{font-size:.6rem;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 6px;font-weight:700}
-        .report-full{font-family:'SF Mono','Fira Code',monospace;font-size:.62rem;line-height:1.6;white-space:pre-wrap;max-height:55vh;overflow-y:auto;background:var(--sheet);border-radius:var(--radius-sm);padding:16px;color:var(--text2)}
         .drawing-img{width:100%;border-radius:8px;margin:8px 0;border:1px solid var(--sep)}
-        @media(min-width:430px){.content{max-width:430px;margin:0 auto}.navbar{padding:12px max(16px,calc((100% - 430px)/2))}.project-strip{padding:8px max(16px,calc((100% - 430px)/2))}.stats-strip{padding:12px max(16px,calc((100% - 430px)/2))}.segment-wrap{padding:0 max(16px,calc((100% - 430px)/2))}}
+
+        /* PROFESSIONAL REPORT STYLES */
+        .report-document{background:#ffffff;color:#1a1a1a;border-radius:12px;padding:0;overflow:hidden;margin-bottom:8px;box-shadow:0 2px 12px rgba(0,0,0,0.3)}
+        .report-header{background:linear-gradient(180deg,#1a1a2e 0%,#16213e 100%);color:#ffffff;padding:24px 20px;text-align:center}
+        .report-header h2{font-size:1rem;font-weight:700;letter-spacing:1px;margin-bottom:4px;color:#f78166}
+        .report-header .subtitle{font-size:.65rem;color:#a0a0b8;text-transform:uppercase;letter-spacing:2px}
+        .report-meta{background:#f8f9fa;padding:16px 20px;display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.7rem;border-bottom:1px solid #e0e0e0}
+        .report-meta .meta-item{display:flex;flex-direction:column}
+        .report-meta .meta-label{font-size:.55rem;color:#888;text-transform:uppercase;letter-spacing:.5px}
+        .report-meta .meta-value{font-weight:600;color:#1a1a1a}
+        .report-body{padding:20px}
+        .report-section{margin-bottom:16px;page-break-inside:avoid}
+        .report-section h4{font-size:.78rem;font-weight:700;color:#1a1a2e;border-bottom:2px solid #f78166;padding-bottom:6px;margin-bottom:10px}
+        .report-section .section-content{font-size:.7rem;line-height:1.7;color:#444}
+        .report-section .item{margin-bottom:6px;padding-left:12px;border-left:3px solid #e0e0e0}
+        .report-section .item.pass{border-left-color:#00d2a0}.report-section .item.fail{border-left-color:#ff4757}
+        .report-section .item-label{font-weight:600;color:#1a1a1a}
+        .report-signatures{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:20px;border-top:2px solid #e0e0e0;margin-top:20px}
+        .report-signatures .sig-block{text-align:center}
+        .report-signatures .sig-line{border-bottom:1px solid #1a1a1a;margin:30px 0 8px}
+        .report-signatures .sig-name{font-size:.7rem;font-weight:600}.report-signatures .sig-title{font-size:.6rem;color:#888}
+        .report-footer{background:#f8f9fa;padding:12px 20px;text-align:center;font-size:.55rem;color:#888;border-top:1px solid #e0e0e0}
+
+        @media print{
+            body{background:#fff}.navbar,.project-strip,.stats-strip,.segment-wrap,.fab,.toast,.modal-overlay{display:none!important}
+            .content{padding:0;max-width:100%}.panel{display:none!important}#panel-report{display:block!important}
+            .report-document{box-shadow:none;border-radius:0;margin:0}
+        }
+        @media(min-width:430px){.content{max-width:430px;margin:0 auto}}
     </style>
 </head>
 <body>
     <div class="navbar"><div class="navbar-content"><div><div class="navbar-title">CoW Log Pro</div><div class="navbar-subtitle" id="currentDate"></div></div><div class="navbar-actions"><button class="nav-btn" onclick="backupData()">💾</button><button class="nav-btn" id="settingsToggle">⚙️</button></div></div></div>
     <div class="project-strip"><div class="chip"><span class="chip-dot green"></span><span id="displayProject">Project</span></div><div class="chip"><span class="chip-dot blue"></span><span id="displayContractor">Contractor</span></div><div class="chip">📍 <span id="displayLocation">Site</span></div><span id="aiStatus"></span></div>
-    <div id="settingsPanel" style="display:none;padding:0 16px 12px;"><div class="card"><div class="form-group"><label class="form-label">Project</label><input class="input" type="text" id="projectName"></div><div class="form-group"><label class="form-label">Contract No</label><input class="input" type="text" id="contractNo"></div><div class="form-group"><label class="form-label">Contractor</label><input class="input" type="text" id="contractorName"></div><div class="form-group"><label class="form-label">Location</label><input class="input" type="text" id="defaultLocation"></div><div class="form-group"><label class="form-label">CoW Name</label><input class="input" type="text" id="cowName"></div><div class="form-group"><label class="form-label">🤖 Gemini API Key</label><input class="input" type="password" id="geminiKey" placeholder="AIzaSy..."></div><button class="btn btn-primary" onclick="saveProjectSettings()">Save Settings</button><button class="btn btn-secondary" style="margin-top:4px;" onclick="restoreData()">📥 Restore Backup</button></div></div>
-    <div class="stats-strip"><div class="stat-pill"><div class="val accent" id="diaryCount">0</div><div class="lbl">Diary</div></div><div class="stat-pill"><div class="val green" id="inspectionCount">0</div><div class="lbl">Insp</div></div><div class="stat-pill"><div class="val red" id="ncrCount">0</div><div class="lbl">NCRs</div></div><div class="stat-pill"><div class="val orange" id="matLowCount">0</div><div class="lbl">Stock</div></div><div class="stat-pill"><div class="val purple" id="rfiCount">0</div><div class="lbl">Drawings</div></div></div>
+    <div id="settingsPanel" style="display:none;padding:0 16px 12px;"><div class="card"><div class="form-group"><label class="form-label">Project</label><input class="input" type="text" id="projectName"></div><div class="form-group"><label class="form-label">Contract No</label><input class="input" type="text" id="contractNo"></div><div class="form-group"><label class="form-label">Contractor</label><input class="input" type="text" id="contractorName"></div><div class="form-group"><label class="form-label">Location</label><input class="input" type="text" id="defaultLocation"></div><div class="form-group"><label class="form-label">CoW Name</label><input class="input" type="text" id="cowName"></div><div class="form-group"><label class="form-label">🤖 Gemini API Key</label><input class="input" type="password" id="geminiKey"></div><button class="btn btn-primary" onclick="saveProjectSettings()">Save Settings</button><button class="btn btn-secondary" style="margin-top:4px;" onclick="restoreData()">📥 Restore Backup</button></div></div>
+    <div class="stats-strip"><div class="stat-pill"><div class="val accent" id="diaryCount">0</div><div class="lbl">Diary</div></div><div class="stat-pill"><div class="val green" id="inspectionCount">0</div><div class="lbl">Insp</div></div><div class="stat-pill"><div class="val red" id="ncrCount">0</div><div class="lbl">NCRs</div></div><div class="stat-pill"><div class="val orange" id="matLowCount">0</div><div class="lbl">Stock</div></div><div class="stat-pill"><div class="val purple" id="rfiCount">0</div><div class="lbl">Dwgs</div></div></div>
     <div class="segment-wrap"><div class="segment"><button class="seg-btn active" data-tab="diary">📔 Diary</button><button class="seg-btn" data-tab="inspections">✅ Inspect</button><button class="seg-btn" data-tab="ncr">🚨 NCR</button><button class="seg-btn" data-tab="instructions">📋 SI</button><button class="seg-btn" data-tab="rfi">📤 RFI</button><button class="seg-btn" data-tab="drawings">📐 DWG</button><button class="seg-btn" data-tab="materials">🧱 Mat</button><button class="seg-btn" data-tab="concrete">🧪 Cube</button><button class="seg-btn" data-tab="report">📄 Report</button></div></div>
     <div class="content">
         <div class="panel active" id="panel-diary"><input class="input" type="text" placeholder="🔍 Search entries..." id="diarySearch" style="margin-bottom:10px;"><div id="diaryEntries"></div></div>
@@ -91,7 +104,10 @@
     <div id="modalContainer"></div><div id="toastContainer"></div>
 
     <script>
-    const PK='cowlog_proj_v13',AK='cowlog_app_v15';
+    // ============================================
+    // DATA STORE
+    // ============================================
+    const PK='cowlog_proj_v14',AK='cowlog_app_v16';
     function loadProject(){try{return JSON.parse(localStorage.getItem(PK))||{projectName:'',contractNo:'',contractorName:'',defaultLocation:'',cowName:'CoW',geminiKey:'',reportCounter:1};}catch(e){return{projectName:'',contractNo:'',contractorName:'',defaultLocation:'',cowName:'CoW',geminiKey:'',reportCounter:1};}}
     function saveProject(p){localStorage.setItem(PK,JSON.stringify(p));}
     let project=loadProject();
@@ -113,34 +129,34 @@
 
     // AI
     async function analyzeDrawingWithAI(id){
-        if(!hasAI()){toast('Set API key first');return;}
+        if(!hasAI()){toast('Set API key');return;}
         const d=app.drawings.find(dw=>dw.id===id);if(!d||!d.imageData)return;
-        document.getElementById('modalContainer').innerHTML='<div class="modal-overlay"><div class="modal" style="text-align:center;"><div class="modal-handle"></div><div class="ai-spinner"></div><p style="color:var(--text2);">AI analyzing drawing...</p></div></div>';
+        document.getElementById('modalContainer').innerHTML='<div class="modal-overlay"><div class="modal" style="text-align:center;"><div class="modal-handle"></div><p style="color:var(--text2);">🤖 AI analyzing...</p></div></div>';
         try{
             const img=d.imageData.split(',')[1]||d.imageData;
-            const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${project.geminiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:'Analyze this construction drawing. Return JSON: {drawing_type,scale,dimensions:[],structural_elements:[{name,size,type}]}. ONLY JSON.'},{inlineData:{mimeType:'image/jpeg',data:img}}]}]})});
+            const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${project.geminiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts:[{text:'Analyze this drawing. Return JSON: {drawing_type,scale,dimensions:[],structural_elements:[{name,size,type}]}. ONLY JSON.'},{inlineData:{mimeType:'image/jpeg',data:img}}]}]})});
             const j=await r.json();closeModal();
             if(j.error){toast(j.error.message);return;}
             const ex=JSON.parse(j.candidates[0].content.parts[0].text.match(/\{[\s\S]*\}/)[0]);
-            if(ex.dimensions)ex.dimensions.forEach(d=>app.dimensions.push({id:genId('dim'),drawingId:id,label:d,value:'',timestamp:new Date().toISOString()}));
-            if(ex.structural_elements)ex.structural_elements.forEach(e=>app.structuralElements.push({id:genId('se'),drawingId:id,name:e.name||e,size:e.size||'',type:e.type||'',timestamp:new Date().toISOString()}));
+            if(ex.dimensions)ex.dimensions.forEach(d=>app.dimensions.push({id:genId('dim'),drawingId:id,label:d,value:''}));
+            if(ex.structural_elements)ex.structural_elements.forEach(e=>app.structuralElements.push({id:genId('se'),drawingId:id,name:e.name||e,size:e.size||'',type:e.type||''}));
             d.aiAnalysis={extracted:ex,timestamp:new Date().toISOString()};saveApp(app);showAIResults(id,ex);
         }catch(e){closeModal();toast('Error: '+e.message);}
     }
-    function showAIResults(id,data){const d=app.drawings.find(dw=>dw.id===id);let h='<div class="modal-handle"></div><h2>🤖 AI Results</h2><p style="color:var(--text3);text-align:center;font-size:.7rem;">'+d.number+'</p>';if(data.drawing_type)h+='<div class="card"><div class="card-title">'+data.drawing_type+'</div></div>';if(data.scale)h+='<div class="card"><div class="card-title">Scale: '+data.scale+'</div></div>';if(data.dimensions&&data.dimensions.length)h+='<div class="card"><div class="card-title">📏 '+data.dimensions.length+' Dimensions</div>'+data.dimensions.map(d=>'<div style="font-size:.68rem;color:var(--text2);padding:3px 0;">• '+(typeof d==='string'?d:d.label||d)+'</div>').join('')+'</div>';if(data.structural_elements&&data.structural_elements.length)h+='<div class="card"><div class="card-title">🏗️ '+data.structural_elements.length+' Elements</div>'+data.structural_elements.map(e=>'<div style="font-size:.68rem;color:var(--text2);padding:3px 0;">• '+(typeof e==='string'?e:e.name)+'</div>').join('')+'</div>';h+='<button class="btn btn-secondary" style="margin-top:8px;" onclick="closeModal()">Close</button>';document.getElementById('modalContainer').innerHTML='<div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal">'+h+'</div></div>';}
+    function showAIResults(id,data){const d=app.drawings.find(dw=>dw.id===id);let h='<div class="modal-handle"></div><h2>🤖 AI Results</h2><p style="color:var(--text3);text-align:center;font-size:.7rem;">'+d.number+'</p>';if(data.drawing_type)h+='<div class="card"><div class="card-title">'+data.drawing_type+'</div></div>';if(data.scale)h+='<div class="card"><div class="card-title">Scale: '+data.scale+'</div></div>';if(data.dimensions&&data.dimensions.length)h+='<div class="card"><div class="card-title">📏 '+data.dimensions.length+' Dimensions</div>'+data.dimensions.map(d=>'<div style="font-size:.68rem;color:var(--text2);padding:3px 0;">• '+(typeof d==='string'?d:d.label||d)+'</div>').join('')+'</div>';h+='<button class="btn btn-secondary" style="margin-top:8px;" onclick="closeModal()">Close</button>';document.getElementById('modalContainer').innerHTML='<div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal">'+h+'</div></div>';}
 
     // RENDERERS
-    function renderDiary(filter=''){const c=document.getElementById('diaryEntries');let entries=app.diary;if(filter){const q=filter.toLowerCase();entries=entries.filter(e=>e.title.toLowerCase().includes(q)||e.description.toLowerCase().includes(q));}entries.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty"><div class="empty-icon">📔</div><h3>No diary entries</h3><p>Tap + to log your first entry</p></div>';return;}c.innerHTML=entries.map(e=>'<div class="list-cell"><div class="list-icon blue">📔</div><div class="list-content"><div class="list-title">'+e.title+'</div><div class="list-sub">'+fmt(e.timestamp)+' · '+e.location+(e.labourCount?' · 👷'+e.labourCount:'')+(e.equipmentUsed?' · 🚜'+e.equipmentUsed.substring(0,30):'')+'</div></div><div class="list-right"><button class="btn btn-xs btn-secondary" onclick="deleteEntry(\'diary\',\''+e.id+'\')">🗑️</button></div></div>').join('');}
-    function renderInspections(){const c=document.getElementById('inspectionEntries');const entries=[...app.inspections].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));let h='<button class="btn btn-primary btn-sm" style="width:100%;margin-bottom:10px;" onclick="showInspectionMenu()">+ New Inspection</button>';if(!entries.length){h+='<div class="empty"><div class="empty-icon">✅</div><h3>No inspections</h3><p>50+ checklists ready</p></div>';}else{h+=entries.map(e=>'<div class="list-cell"><div class="list-icon green">✅</div><div class="list-content"><div class="list-title">'+e.checklistType+'</div><div class="list-sub">'+fmt(e.timestamp)+' · '+e.location+' · '+e.items.filter(i=>i.passed).length+'/'+e.items.length+' OK</div></div><div class="list-right"><span class="badge '+(e.result==='pass'?'badge-success':'badge-danger')+'">'+e.result.toUpperCase()+'</span></div></div>').join('');}c.innerHTML=h;}
+    function renderDiary(filter=''){const c=document.getElementById('diaryEntries');let entries=app.diary;if(filter){const q=filter.toLowerCase();entries=entries.filter(e=>e.title.toLowerCase().includes(q)||e.description.toLowerCase().includes(q));}entries.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty"><div class="empty-icon">📔</div><h3>No diary entries</h3><p>Tap + to log your first entry</p></div>';return;}c.innerHTML=entries.map(e=>'<div class="list-cell"><div class="list-icon blue">📔</div><div class="list-content"><div class="list-title">'+e.title+'</div><div class="list-sub">'+fmt(e.timestamp)+' · '+e.location+(e.labourCount?' · 👷'+e.labourCount:'')+(e.equipmentUsed?' · 🚜':'')+'</div></div><div class="list-right"><button class="btn btn-xs btn-secondary" onclick="deleteEntry(\'diary\',\''+e.id+'\')">🗑️</button></div></div>').join('');}
+    function renderInspections(){const c=document.getElementById('inspectionEntries');const entries=[...app.inspections].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));let h='<button class="btn btn-primary btn-sm" style="width:100%;margin-bottom:10px;" onclick="showInspectionMenu()">+ New Inspection</button>';if(!entries.length){h+='<div class="empty"><div class="empty-icon">✅</div><h3>No inspections</h3></div>';}else{h+=entries.map(e=>'<div class="list-cell"><div class="list-icon green">✅</div><div class="list-content"><div class="list-title">'+e.checklistType+'</div><div class="list-sub">'+fmt(e.timestamp)+' · '+e.location+' · '+e.items.filter(i=>i.passed).length+'/'+e.items.length+' OK</div></div><div class="list-right"><span class="badge '+(e.result==='pass'?'badge-success':'badge-danger')+'">'+e.result.toUpperCase()+'</span></div></div>').join('');}c.innerHTML=h;}
     function renderNCRs(){const c=document.getElementById('ncrEntries');const entries=[...app.ncrs].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty"><div class="empty-icon">🚨</div><h3>No NCRs</h3></div>';return;}c.innerHTML=entries.map(e=>'<div class="list-cell"><div class="list-icon red">🚨</div><div class="list-content"><div class="list-title">'+e.title+'</div><div class="list-sub">'+fmt(e.timestamp)+' · '+e.location+' · '+e.severity+'</div></div><div class="list-right"><span class="badge '+(e.status==='open'?'badge-danger':'badge-success')+'">'+e.status+'</span></div></div>').join('');}
     function renderInstructions(){const c=document.getElementById('instructionEntries');const entries=[...app.instructions].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty"><div class="empty-icon">📋</div><h3>No instructions</h3></div>';return;}c.innerHTML=entries.map(e=>'<div class="list-cell"><div class="list-icon orange">📋</div><div class="list-content"><div class="list-title">SI-'+e.id.split('-')[1]+'</div><div class="list-sub">'+fmt(e.timestamp)+' · '+e.issuedTo+'</div></div><div class="list-right"><span class="badge '+(e.status==='acknowledged'?'badge-success':'badge-warning')+'">'+e.status+'</span></div></div>').join('');}
     function renderRFIs(){const c=document.getElementById('rfiEntries');const entries=[...app.rfis].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty"><div class="empty-icon">📤</div><h3>No RFIs</h3></div>';return;}c.innerHTML=entries.map(e=>'<div class="list-cell"><div class="list-icon purple">📤</div><div class="list-content"><div class="list-title">'+e.subject+'</div><div class="list-sub">'+fmt(e.timestamp)+' · '+e.sentTo+'</div></div><div class="list-right"><span class="badge '+(e.status==='open'?'badge-warning':'badge-success')+'">'+e.status+'</span></div></div>').join('');}
-    function renderDrawings(){const c=document.getElementById('drawingEntries');const entries=[...app.drawings].sort((a,b)=>a.number.localeCompare(b.number));let h='<div style="display:flex;gap:6px;margin-bottom:10px;"><button class="btn btn-primary btn-sm" onclick="showDrawingForm()">➕ Add</button><button class="btn btn-ai btn-sm" onclick="uploadDrawingForAI()">🤖 AI Scan</button></div>';if(!entries.length){h+='<div class="empty"><div class="empty-icon">📐</div><h3>No drawings</h3></div>';c.innerHTML=h;return;}entries.forEach(e=>{h+='<div class="card"><div class="card-header"><div class="card-title">📐 '+e.number+' <span style="font-size:.65rem;color:var(--text3);">Rev '+e.revision+'</span></div>'+(e.aiAnalysis?'<span class="badge badge-ai">🤖</span>':'')+'</div>';if(e.imageData)h+='<img src="'+e.imageData+'" class="drawing-img" onclick="viewDrawing(\''+e.id+'\')">';h+='<div style="display:flex;gap:4px;">';if(e.imageData&&hasAI()&&!e.aiAnalysis)h+='<button class="btn btn-ai btn-xs" onclick="analyzeDrawingWithAI(\''+e.id+'\')">🤖 Analyze</button>';if(e.aiAnalysis)h+='<button class="btn btn-ghost btn-xs" onclick="showAIResults(\''+e.id+'\',app.drawings.find(d=>d.id===\''+e.id+'\').aiAnalysis.extracted)">📊 View</button>';h+='<button class="btn btn-ghost btn-xs" onclick="deleteEntry(\'drawings\',\''+e.id+'\')">🗑️</button></div></div>';});c.innerHTML=h;}
+    function renderDrawings(){const c=document.getElementById('drawingEntries');const entries=[...app.drawings].sort((a,b)=>a.number.localeCompare(b.number));let h='<div style="display:flex;gap:6px;margin-bottom:10px;"><button class="btn btn-primary btn-sm" onclick="showDrawingForm()">➕ Add</button><button class="btn btn-ai btn-sm" style="background:linear-gradient(135deg,var(--purple),var(--accent));color:#fff;" onclick="uploadDrawingForAI()">🤖 AI Scan</button></div>';if(!entries.length){h+='<div class="empty"><div class="empty-icon">📐</div><h3>No drawings</h3></div>';c.innerHTML=h;return;}entries.forEach(e=>{h+='<div class="card"><div class="card-header"><div class="card-title">📐 '+e.number+' <span style="font-size:.65rem;color:var(--text3);">Rev '+e.revision+'</span></div>'+(e.aiAnalysis?'<span class="badge badge-ai" style="background:rgba(191,90,242,.15);color:var(--purple);">🤖</span>':'')+'</div>';if(e.imageData)h+='<img src="'+e.imageData+'" class="drawing-img" onclick="viewDrawing(\''+e.id+'\')">';h+='<div style="display:flex;gap:4px;">';if(e.imageData&&hasAI()&&!e.aiAnalysis)h+='<button class="btn btn-sm" style="background:linear-gradient(135deg,var(--purple),var(--accent));color:#fff;" onclick="analyzeDrawingWithAI(\''+e.id+'\')">🤖 Analyze</button>';h+='<button class="btn btn-sm btn-secondary" onclick="deleteEntry(\'drawings\',\''+e.id+'\')">🗑️</button></div></div>';});c.innerHTML=h;}
     function renderMaterials(){const c=document.getElementById('materialEntries');if(!app.materials.length){c.innerHTML='<div class="empty"><div class="empty-icon">🧱</div><h3>No materials</h3><button class="btn btn-primary btn-sm" onclick="showMaterialForm()">Add Material</button></div>';return;}let h='<button class="btn btn-primary btn-sm" style="width:100%;margin-bottom:8px;" onclick="showMaterialForm()">+ Add Material</button>';app.materials.forEach(m=>{const s=parseFloat(m.currentStock||0),min=parseFloat(m.minStock||0);h+='<div class="list-cell"><div class="list-icon orange">🧱</div><div class="list-content"><div class="list-title">'+m.name+'</div><div class="list-sub">'+m.unit+'</div></div><div class="list-right" style="font-weight:700;color:'+(s<=0?'var(--red)':s<=min?'var(--orange)':'var(--green)')+';">'+s+'</div></div>';});c.innerHTML=h;}
     function renderConcrete(){const c=document.getElementById('concreteEntries');if(!app.concrete.length){c.innerHTML='<div class="empty"><div class="empty-icon">🧪</div><h3>No cubes</h3></div>';return;}c.innerHTML=app.concrete.map(e=>'<div class="list-cell"><div class="list-icon purple">🧪</div><div class="list-content"><div class="list-title">'+e.cubeId+'</div><div class="list-sub">'+fmtDate(e.pourDate)+' · '+e.grade+'</div></div><div class="list-right" style="font-size:.65rem;">7d:'+(e.result7||'—')+' 28d:'+(e.result28||'—')+'</div></div>').join('');}
 
     // ============================================
-    // COMPREHENSIVE PROFESSIONAL REPORT
+    // PROFESSIONAL REPORT — STYLED LIKE A REAL DOCUMENT
     // ============================================
     function renderReport(){
         const td=today();
@@ -156,199 +172,183 @@
         const rfiOpen=app.rfis.filter(r=>r.status==='open');
         const delays=app.delays.filter(e=>e.date===td);
         const rdate=new Date().toLocaleDateString('en-KE',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-        const pn=project.projectName||'Project',con=project.contractorName||'Contractor',cn=project.contractNo||'N/A',rn='COW-'+String(project.reportCounter||1).padStart(3,'0');
+        const pn=project.projectName||'Riverside Apartments';
+        const con=project.contractorName||'BuildRight Construction Ltd';
+        const cn=project.contractNo||'RAP/CW/2026/001';
+        const rn='COW-'+String(project.reportCounter||1).padStart(3,'0');
         const cowName=project.cowName||'Clerk of Works';
 
-        let tr='';
-        tr+='═══════════════════════════════════════════════\n';
-        tr+='  CLERK OF WORKS — DAILY SITE REPORT\n';
-        tr+='═══════════════════════════════════════════════\n\n';
-        tr+='REPORT NO:     '+rn+'\n';
-        tr+='DATE:          '+rdate+'\n';
-        tr+='PROJECT:       '+pn+'\n';
-        tr+='CONTRACT NO:   '+cn+'\n';
-        tr+='CONTRACTOR:    '+con+'\n';
-        tr+='WEATHER:       Sunny & Clear | Temp: 26°C\n';
-        tr+='REPORTED BY:   '+cowName+'\n';
-        tr+='───────────────────────────────────────────────\n\n';
+        // Build plain text version for copy/share
+        let txt='═══════════════════════════════════════════════\n  CLERK OF WORKS — DAILY SITE REPORT\n═══════════════════════════════════════════════\n\nREPORT NO: '+rn+'\nDATE: '+rdate+'\nPROJECT: '+pn+'\nCONTRACT NO: '+cn+'\nCONTRACTOR: '+con+'\nREPORTED BY: '+cowName+'\n───────────────────────────────────────────────\n\n';
+        txt+='1. WORK PROGRESS\n';dt.length?dt.forEach((e,i)=>{txt+='\n'+(i+1)+'. '+e.title+'\n   Location: '+e.location+'\n   '+e.description.replace(/\n/g,'\n   ')+'\n';if(e.labourCount)txt+='   Labour: '+e.labourCount+'\n';if(e.equipmentUsed)txt+='   Equipment: '+e.equipmentUsed+'\n';if(e.issuesIdentified)txt+='   ⚠️ '+e.issuesIdentified+'\n';}):txt+='\n   No entries today.\n';
+        txt+='\n2. INSPECTIONS\n';it.length?it.forEach(e=>{txt+='\n   '+e.checklistType+' — '+e.result.toUpperCase()+' ('+e.items.filter(i=>i.passed).length+'/'+e.items.length+')\n';}):txt+='\n   None.\n';
+        txt+='\n3. NCRs OPEN: '+no.length+'\n';no.length?no.forEach(e=>{txt+='   • '+e.title+'\n';}):txt+='   None.\n';
+        txt+='\n4. SITE INSTRUCTIONS: '+si.length+' issued\n';
+        txt+='\n5. ATTENDANCE: '+(at.reduce((s,e)=>s+(parseInt(e.count)||0),0)||0)+' personnel\n';
+        txt+='\n6. MATERIALS — Used: '+ml.filter(l=>l.type==='usage').reduce((s,l)=>s+parseFloat(l.quantity||0),0)+' | Delivered: '+ml.filter(l=>l.type==='delivery').length+'\n';
+        if(lowMat.length){txt+='   ⚠️ LOW: ';lowMat.forEach(m=>{txt+=m.name+'('+m.currentStock+') ';});txt+='\n';}
+        txt+='\n═══════════════════════════════════════════════\n  REPORT END\n  '+cowName+'\n';
+        window._report=txt;
 
-        // 1. WORK PROGRESS
-        tr+='1. WORK PROGRESS & OBSERVATIONS\n';
-        tr+='───────────────────────────────────────────────\n';
+        // Build HTML professional document
+        let h='';
+        // Action buttons
+        h+='<div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;">';
+        h+='<button class="btn btn-primary btn-sm" onclick="copyReport()">📋 Copy</button>';
+        h+='<button class="btn btn-secondary btn-sm" onclick="printReport()">🖨️ Print</button>';
+        h+='<button class="btn btn-secondary btn-sm" onclick="shareWA(window._report)">📱 WhatsApp</button>';
+        h+='<button class="btn btn-secondary btn-sm" onclick="emailReport()">📧 Email</button>';
+        h+='<button class="btn btn-secondary btn-sm" onclick="saveReport()">💾 Save</button>';
+        h+='</div>';
+
+        // PROFESSIONAL DOCUMENT
+        h+='<div class="report-document">';
+
+        // HEADER
+        h+='<div class="report-header">';
+        h+='<h2>CLERK OF WORKS — DAILY SITE REPORT</h2>';
+        h+='<div class="subtitle">'+pn+'</div>';
+        h+='</div>';
+
+        // META
+        h+='<div class="report-meta">';
+        h+='<div class="meta-item"><span class="meta-label">Report No</span><span class="meta-value">'+rn+'</span></div>';
+        h+='<div class="meta-item"><span class="meta-label">Date</span><span class="meta-value">'+rdate+'</span></div>';
+        h+='<div class="meta-item"><span class="meta-label">Contract No</span><span class="meta-value">'+cn+'</span></div>';
+        h+='<div class="meta-item"><span class="meta-label">Contractor</span><span class="meta-value">'+con+'</span></div>';
+        h+='<div class="meta-item"><span class="meta-label">Weather</span><span class="meta-value">☀️ Sunny & Clear | 26°C</span></div>';
+        h+='<div class="meta-item"><span class="meta-label">Reported By</span><span class="meta-value">'+cowName+'</span></div>';
+        h+='</div>';
+
+        // BODY
+        h+='<div class="report-body">';
+
+        // Section 1
+        h+='<div class="report-section"><h4>1. WORK PROGRESS & OBSERVATIONS</h4><div class="section-content">';
         if(dt.length){
             dt.forEach((e,i)=>{
-                tr+='\n1.'+(i+1)+' '+e.title+'\n';
-                tr+='    Location: '+e.location+'\n';
-                tr+='    Time: '+fmt(e.timestamp)+'\n';
-                tr+='    '+e.description.replace(/\n/g,'\n    ')+'\n';
-                if(e.labourCount)tr+='    Labour on Site: '+e.labourCount+'\n';
-                if(e.equipmentUsed)tr+='    Equipment: '+e.equipmentUsed+'\n';
-                if(e.materialsDelivered)tr+='    Materials Delivered:\n    '+e.materialsDelivered.replace(/\n/g,'\n    ')+'\n';
-                if(e.issuesIdentified)tr+='    ⚠️ ISSUES: '+e.issuesIdentified+'\n';
+                h+='<div class="item"><div class="item-label">'+(i+1)+'. '+e.title+'</div>';
+                h+='📍 '+e.location+' | 🕐 '+fmt(e.timestamp)+'<br>';
+                h+=e.description.replace(/\n/g,'<br>');
+                if(e.labourCount)h+='<br>👷 Labour: '+e.labourCount;
+                if(e.equipmentUsed)h+='<br>🚜 Equipment: '+e.equipmentUsed;
+                if(e.materialsDelivered)h+='<br>🧱 Materials: '+e.materialsDelivered.replace(/\n/g,'<br>');
+                if(e.issuesIdentified)h+='<br>⚠️ <strong>Issues:</strong> '+e.issuesIdentified;
+                h+='</div>';
             });
-        }else{tr+='\n    No diary entries recorded for today.\n';}
+        }else{h+='<p>No diary entries recorded for today.</p>';}
+        h+='</div></div>';
 
-        // 2. INSPECTIONS
-        tr+='\n\n2. INSPECTIONS & TESTS\n';
-        tr+='───────────────────────────────────────────────\n';
+        // Section 2
+        h+='<div class="report-section"><h4>2. INSPECTIONS & TESTS</h4><div class="section-content">';
         if(it.length){
             it.forEach((e,i)=>{
-                tr+='\n2.'+(i+1)+' '+e.checklistType+' — RESULT: '+e.result.toUpperCase()+'\n';
-                tr+='    Location: '+e.location+' | Passed: '+e.items.filter(i=>i.passed).length+'/'+e.items.length+'\n';
-                e.items.forEach(item=>{tr+='    '+(item.passed?'✅':'❌')+' '+item.label+'\n';});
-                if(e.notes)tr+='    Notes: '+e.notes+'\n';
+                const cls=e.result==='pass'?'pass':'fail';
+                h+='<div class="item '+cls+'"><div class="item-label">'+(i+1)+'. '+e.checklistType+' — <span style="color:'+(e.result==='pass'?'#00d2a0':'#ff4757')+'">'+e.result.toUpperCase()+'</span></div>';
+                h+='📍 '+e.location+' | ✅ '+e.items.filter(i=>i.passed).length+'/'+e.items.length+' passed<br>';
+                e.items.filter(i=>!i.passed).forEach(i=>{h+='<span style="color:#ff4757;">❌ '+i.label+'</span><br>';});
+                if(e.notes)h+='📝 '+e.notes;
+                h+='</div>';
             });
-        }else{tr+='\n    No inspections recorded for today.\n';}
+        }else{h+='<p>No inspections recorded for today.</p>';}
+        h+='</div></div>';
 
-        // 3. NCRs
-        tr+='\n\n3. NON-CONFORMANCE REPORTS (NCRs)\n';
-        tr+='───────────────────────────────────────────────\n';
+        // Section 3
+        h+='<div class="report-section"><h4>3. NON-CONFORMANCE REPORTS (NCRs)</h4><div class="section-content">';
         if(no.length){
-            tr+='\n   OUTSTANDING NCRs ('+no.length+'):\n';
-            no.forEach(e=>{tr+='   • NCR-'+e.id.split('-')[1]+': '+e.title+' ['+e.severity+'] — '+e.location+'\n     Action: '+e.actionRequired+'\n';});
-        }else{tr+='\n    No NCRs raised today. No outstanding NCRs.\n';}
+            h+='<p><strong>Open NCRs: '+no.length+'</strong></p>';
+            no.forEach(e=>{h+='<div class="item fail"><strong>NCR-'+e.id.split('-')[1]+':</strong> '+e.title+' ['+e.severity+']<br>📍 '+e.location+'<br>🔧 '+e.actionRequired+'</div>';});
+        }else{h+='<p>No NCRs raised today. No outstanding NCRs.</p>';}
+        h+='</div></div>';
 
-        // 4. SITE INSTRUCTIONS
-        tr+='\n\n4. SITE INSTRUCTIONS\n';
-        tr+='───────────────────────────────────────────────\n';
-        if(si.length){si.forEach(e=>{tr+='\n   SI-'+e.id.split('-')[1]+': Issued to '+e.issuedTo+'\n   '+e.description+'\n   Status: '+e.status.toUpperCase()+'\n';});}
-        else{tr+='\n    No site instructions issued today.\n';}
+        // Section 4
+        h+='<div class="report-section"><h4>4. SITE INSTRUCTIONS</h4><div class="section-content">';
+        if(si.length){si.forEach(e=>{h+='<div class="item"><strong>SI-'+e.id.split('-')[1]+':</strong> '+e.description+'<br>👷 Issued to: '+e.issuedTo+' | Status: '+e.status.toUpperCase()+'</div>';});}
+        else{h+='<p>No site instructions issued today.</p>';}
+        h+='</div></div>';
 
-        // 5. PLANT & EQUIPMENT
-        tr+='\n\n5. PLANT & EQUIPMENT ON SITE\n';
-        tr+='───────────────────────────────────────────────\n';
+        // Section 5
+        h+='<div class="report-section"><h4>5. PLANT & EQUIPMENT ON SITE</h4><div class="section-content">';
         const eq=dt.filter(e=>e.equipmentUsed).map(e=>e.equipmentUsed);
-        if(eq.length){tr+='\n    '+eq.join('\n    ')+'\n';}
-        else{tr+='\n    Refer to diary entries for equipment details.\n';}
+        if(eq.length){eq.forEach(e=>{h+='<div class="item">🚜 '+e+'</div>';});}
+        else{h+='<p>Refer to diary entries for equipment details.</p>';}
+        h+='</div></div>';
 
-        // 6. LABOUR
-        tr+='\n\n6. LABOUR ON SITE\n';
-        tr+='───────────────────────────────────────────────\n';
+        // Section 6
+        h+='<div class="report-section"><h4>6. LABOUR ON SITE</h4><div class="section-content">';
         if(at.length){
             const total=at.reduce((s,e)=>s+(parseInt(e.count)||0),0);
-            tr+='\n    Total Personnel on Site: '+total+'\n';
+            h+='<p><strong>Total Personnel: '+total+'</strong></p>';
             const cats={};at.forEach(e=>{if(!cats[e.category])cats[e.category]=0;cats[e.category]+=parseInt(e.count)||0;});
-            Object.keys(cats).forEach(c=>{tr+='    '+c+': '+cats[c]+'\n';});
-        }else{tr+='\n    Refer to contractor daily labour returns.\n';}
+            Object.keys(cats).forEach(c=>{h+='<div class="item">👷 '+c+': <strong>'+cats[c]+'</strong></div>';});
+        }else{h+='<p>Refer to contractor daily labour returns.</p>';}
+        h+='</div></div>';
 
-        // 7. MATERIALS
-        tr+='\n\n7. MATERIALS DELIVERED & STOCK STATUS\n';
-        tr+='───────────────────────────────────────────────\n';
+        // Section 7
+        h+='<div class="report-section"><h4>7. MATERIALS DELIVERED</h4><div class="section-content">';
         const matDel=dt.filter(e=>e.materialsDelivered);
-        if(matDel.length){matDel.forEach(e=>{tr+='\n    At '+e.location+':\n    '+e.materialsDelivered.replace(/\n/g,'\n    ')+'\n';});}
-        else{tr+='\n    No major material deliveries recorded.\n';}
-        if(lowMat.length){tr+='\n    ⚠️ LOW STOCK ALERTS:\n';lowMat.forEach(m=>{tr+='    • '+m.name+': '+m.currentStock+' '+m.unit+' (min: '+m.minStock+')\n';});}
+        if(matDel.length){matDel.forEach(e=>{h+='<div class="item">📍 '+e.location+':<br>'+e.materialsDelivered.replace(/\n/g,'<br>')+'</div>';});}
+        else{h+='<p>No major material deliveries recorded.</p>';}
+        if(lowMat.length){h+='<p style="color:#ff4757;"><strong>⚠️ LOW STOCK:</strong> ';lowMat.forEach(m=>{h+=m.name+' ('+m.currentStock+' '+m.unit+') ';});h+='</p>';}
+        h+='</div></div>';
 
-        // 8. H&S
-        tr+='\n\n8. HEALTH & SAFETY OBSERVATIONS\n';
-        tr+='───────────────────────────────────────────────\n';
-        tr+='\n    No specific H&S issues noted. Site appeared orderly.\n';
-        tr+='    All personnel observed wearing mandatory PPE.\n';
+        // Section 8
+        h+='<div class="report-section"><h4>8. HEALTH & SAFETY</h4><div class="section-content">';
+        h+='<p>No specific H&S issues noted. Site appeared orderly. All personnel observed wearing mandatory PPE.</p>';
+        h+='</div></div>';
 
-        // 9. CONCRETE CUBES
-        tr+='\n\n9. CONCRETE CUBE REGISTER\n';
-        tr+='───────────────────────────────────────────────\n';
-        tr+='\n    Cubes Cast Today: '+ct.length+'\n';
-        if(ct.length){ct.forEach(e=>{tr+='    • '+e.cubeId+' — Grade: '+e.grade+' — Location: '+e.location+'\n';});}
-        tr+='    Awaiting 28-Day Results: '+cd.length+'\n';
-        if(cd.length){cd.forEach(e=>{tr+='    • '+e.cubeId+' — Pour Date: '+fmtDate(e.pourDate)+' — Grade: '+e.grade+'\n';});}
+        // Section 9
+        h+='<div class="report-section"><h4>9. GENERAL REMARKS</h4><div class="section-content">';
+        h+='<p>Work is progressing in accordance with the approved programme and specifications unless otherwise noted. Contractor is reminded to maintain quality standards and adhere to all safety requirements.</p>';
+        h+='</div></div>';
 
-        // 10. RFIs
-        tr+='\n\n10. REQUESTS FOR INFORMATION (RFIs)\n';
-        tr+='───────────────────────────────────────────────\n';
-        tr+='\n    Open RFIs: '+rfiOpen.length+'\n';
-        if(rfiOpen.length){rfiOpen.forEach(e=>{tr+='    • RFI-'+e.id.split('-')[1]+': '+e.subject+' (To: '+e.sentTo+')\n';});}
-        else{tr+='    No outstanding RFIs.\n';}
+        h+='</div>'; // end report-body
 
-        // 11. DELAYS
-        if(delays.length){
-            tr+='\n\n11. DELAYS & DISRUPTIONS\n';
-            tr+='───────────────────────────────────────────────\n';
-            delays.forEach(e=>{tr+='\n    • '+e.cause+' — '+e.duration+' days ['+e.impact+']\n      Date: '+fmtDate(e.date)+' — Location: '+e.location+'\n';});
-        }
+        // SIGNATURES
+        h+='<div class="report-signatures">';
+        h+='<div class="sig-block"><div class="sig-line"></div><div class="sig-name">'+cowName+'</div><div class="sig-title">Clerk of Works</div></div>';
+        h+='<div class="sig-block"><div class="sig-line"></div><div class="sig-name">Contractor Rep</div><div class="sig-title">Contractor\'s Representative</div></div>';
+        h+='</div>';
 
-        // 12. GENERAL REMARKS
-        tr+='\n\n12. GENERAL REMARKS\n';
-        tr+='───────────────────────────────────────────────\n';
-        tr+='\n    Work is progressing in accordance with the approved\n';
-        tr+='    programme and specifications unless otherwise noted.\n';
-        tr+='    Contractor is reminded to maintain quality standards\n';
-        tr+='    and adhere to all safety requirements.\n';
+        // FOOTER
+        h+='<div class="report-footer">Report generated by CoW Log Pro | '+rdate+' | Report No: '+rn+'</div>';
 
-        tr+='\n\n═══════════════════════════════════════════════\n';
-        tr+='  REPORT END — '+rdate+'\n';
-        tr+='═══════════════════════════════════════════════\n\n';
-        tr+='  SIGNED: ................................    DATE: ................\n';
-        tr+='  '+cowName+'\n\n';
-        tr+='  COUNTERSIGNED: .........................    DATE: ................\n';
-        tr+='  Contractor\'s Representative\n';
+        h+='</div>'; // end report-document
 
-        window._report=tr;
-        document.getElementById('reportContent').innerHTML=
-        '<div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;">'+
-        '<button class="btn btn-primary btn-sm" onclick="copyReport()">📋 Copy</button>'+
-        '<button class="btn btn-secondary btn-sm" onclick="printReport()">🖨️ Print</button>'+
-        '<button class="btn btn-secondary btn-sm" onclick="shareWA(window._report)">📱 WhatsApp</button>'+
-        '<button class="btn btn-secondary btn-sm" onclick="emailReport()">📧 Email</button>'+
-        '<button class="btn btn-secondary btn-sm" onclick="saveReport()">💾 Save</button>'+
-        '</div><div class="report-full">'+tr+'</div>';
+        document.getElementById('reportContent').innerHTML=h;
     }
 
-    function emailReport(){
-        window.open('mailto:?subject='+encodeURIComponent('COW Daily Report — '+today()+' — '+(project.projectName||'Project'))+'&body='+encodeURIComponent(window._report||''),'_blank');
-        toast('📧 Opening email...');
-    }
-
+    function emailReport(){window.open('mailto:?subject='+encodeURIComponent('COW Daily Report — '+today())+'&body='+encodeURIComponent(window._report||''),'_blank');toast('📧 Opening email...');}
     function refreshAll(){renderDiary();renderInspections();renderNCRs();renderInstructions();renderRFIs();renderDrawings();renderMaterials();renderConcrete();updateStats();}
 
-    // MODALS
+    // MODALS & FORMS
     function showModal(title,html,cb){document.getElementById('modalContainer').innerHTML='<div class="modal-overlay" id="mo"><div class="modal"><div class="modal-handle"></div><h2>'+title+'</h2>'+html+'<div style="display:flex;gap:8px;margin-top:14px;"><button class="btn btn-secondary" onclick="closeModal()">Cancel</button><button class="btn btn-primary" id="ms">Save</button></div></div></div>';document.getElementById('ms').addEventListener('click',()=>{const r=cb();if(r!==false){closeModal();refreshAll();toast('✅ Saved');}});document.getElementById('mo').addEventListener('click',e=>{if(e.target.id==='mo')closeModal();});}
     function closeModal(){document.getElementById('modalContainer').innerHTML='';}
 
-    // FULL DIARY FORM — ALL FIELDS
-    function showDiaryForm(){
-        const h='<div class="form-group"><label class="form-label">Title *</label><input class="input" type="text" id="dt" placeholder="e.g., Concreting — 3rd Floor Slab, Grid C-D/2-5"></div>'+
-        '<div class="form-group"><label class="form-label">Activity Type</label><select class="select" id="da"><option>Work in Progress</option><option>Material Delivery</option><option>Inspection</option><option>Meeting</option><option>Delay/Issue</option><option>General</option></select></div>'+
-        '<div class="form-group"><label class="form-label">Location *</label><input class="input" type="text" id="dl" value="'+loc()+'"></div>'+
-        '<div class="form-group"><label class="form-label">Detailed Description *</label><textarea class="textarea" id="dd" placeholder="Describe work observed, methods, quality, progress, instructions given..."></textarea></div>'+
-        '<div class="form-group"><label class="form-label">Labour on Site</label><input class="input" type="text" id="dlb" placeholder="e.g., 15 skilled, 25 unskilled, 2 foremen"></div>'+
-        '<div class="form-group"><label class="form-label">Equipment on Site</label><input class="input" type="text" id="deq" placeholder="e.g., 1 Tower Crane, 2 Concrete Mixers, 1 Backhoe"></div>'+
-        '<div class="form-group"><label class="form-label">Materials Delivered</label><textarea class="textarea" id="dmt" placeholder="e.g., 200 bags cement (Blue Triangle OPC)\n50 tonnes reinforcement steel (Y12, Y16)\n5000 concrete blocks (6-inch solid)" style="min-height:50px;"></textarea></div>'+
-        '<div class="form-group"><label class="form-label">Issues / Concerns</label><textarea class="textarea" id="dis" placeholder="e.g., Delay in steel delivery from supplier\nHoneycomb observed on Column C12 — NCR raised" style="min-height:50px;"></textarea></div>'+
-        '<div class="form-group"><label class="form-label">Contractor Personnel on Site</label><input class="input" type="text" id="dcr" placeholder="e.g., Eng. Kamau — Site Agent, Mr. Otieno — Foreman"></div>';
-        showModal('📔 New Diary Entry',h,()=>{
-            const t=document.getElementById('dt').value.trim(),d=document.getElementById('dd').value.trim();
-            if(!t||!d){toast('Title and description required');return false;}
-            app.diary.push({id:genId('di'),title:t,activityType:document.getElementById('da').value,location:document.getElementById('dl').value,description:d,labourCount:document.getElementById('dlb').value,equipmentUsed:document.getElementById('deq').value,materialsDelivered:document.getElementById('dmt').value,issuesIdentified:document.getElementById('dis').value,contractorOnSite:document.getElementById('dcr').value,timestamp:new Date().toISOString()});
-            saveApp(app);
-        });
-    }
-
-    function showNCRForm(){const h='<div class="form-group"><label class="form-label">Title *</label><input class="input" type="text" id="nt" placeholder="e.g., Honeycomb on Column C12"></div><div class="form-group"><label class="form-label">Severity</label><select class="select" id="ns"><option>Minor</option><option selected>Major</option><option>Critical</option></select></div><div class="form-group"><label class="form-label">Location</label><input class="input" type="text" id="nl" value="'+loc()+'"></div><div class="form-group"><label class="form-label">Responsible Party</label><input class="input" type="text" id="nr" value="'+(project.contractorName||'Contractor')+'"></div><div class="form-group"><label class="form-label">Description *</label><textarea class="textarea" id="nd" placeholder="Describe the non-conformance in detail..."></textarea></div><div class="form-group"><label class="form-label">Required Corrective Action *</label><textarea class="textarea" id="na" placeholder="What must be done, by whom, and by when..."></textarea></div>';showModal('🚨 Raise NCR',h,()=>{const t=document.getElementById('nt').value.trim(),d=document.getElementById('nd').value.trim(),a=document.getElementById('na').value.trim();if(!t||!d||!a){toast('All fields required');return false;}app.ncrs.push({id:genId('ncr'),title:t,severity:document.getElementById('ns').value,location:document.getElementById('nl').value,responsibleParty:document.getElementById('nr').value,description:d,actionRequired:a,status:'open',timestamp:new Date().toISOString()});saveApp(app);});}
-    function showRFIForm(){const h='<div class="form-group"><label class="form-label">Subject *</label><input class="input" type="text" id="rs" placeholder="e.g., Clarification on rebar spacing"></div><div class="form-group"><label class="form-label">Sent To *</label><input class="input" type="text" id="rt" placeholder="e.g., Structural Engineer"></div><div class="form-group"><label class="form-label">Question *</label><textarea class="textarea" id="rq"></textarea></div>';showModal('📤 New RFI',h,()=>{const s=document.getElementById('rs').value.trim(),q=document.getElementById('rq').value.trim(),t=document.getElementById('rt').value.trim();if(!s||!q||!t){toast('All fields required');return false;}app.rfis.push({id:genId('rfi'),subject:s,sentTo:t,question:q,status:'open',timestamp:new Date().toISOString()});saveApp(app);});}
-    function showInstructionForm(){const h='<div class="form-group"><label class="form-label">Issued To *</label><input class="input" type="text" id="st" value="'+(project.contractorName||'Contractor')+'"></div><div class="form-group"><label class="form-label">Location</label><input class="input" type="text" id="sl" value="'+loc()+'"></div><div class="form-group"><label class="form-label">Instruction *</label><textarea class="textarea" id="sd" placeholder="Clearly state the instruction..."></textarea></div><div class="form-group"><label class="form-label">Reference (Drawing/Spec)</label><input class="input" type="text" id="srf" placeholder="e.g., Dwg S-301 Rev B"></div><div class="form-group"><label class="form-label">Deadline</label><input class="input" type="text" id="sdl" placeholder="e.g., 18 June 2026"></div>';showModal('📋 Site Instruction',h,()=>{const t=document.getElementById('st').value.trim(),d=document.getElementById('sd').value.trim();if(!t||!d)return false;app.instructions.push({id:genId('si'),issuedTo:t,location:document.getElementById('sl').value,description:d,reference:document.getElementById('srf').value,deadline:document.getElementById('sdl').value,status:'issued',timestamp:new Date().toISOString()});saveApp(app);});}
-    function showMaterialForm(){const h='<div class="form-group"><label class="form-label">Name *</label><input class="input" type="text" id="mn" placeholder="e.g., Cement, Reinforcement Steel"></div><div class="form-group"><label class="form-label">Unit</label><select class="select" id="mu"><option>Bags (50kg)</option><option>Tonnes</option><option>m³</option><option>Pieces</option><option>Litres</option><option>m²</option></select></div><div class="form-group"><label class="form-label">Initial Stock</label><input class="input" type="number" id="ms" value="0" step="any"></div><div class="form-group"><label class="form-label">Minimum Stock Level</label><input class="input" type="number" id="mmin" value="0" step="any"></div>';showModal('🧱 Add Material',h,()=>{const n=document.getElementById('mn').value.trim();if(!n)return false;app.materials.push({id:genId('mat'),name:n,unit:document.getElementById('mu').value,initialStock:parseFloat(document.getElementById('ms').value)||0,currentStock:parseFloat(document.getElementById('ms').value)||0,minStock:parseFloat(document.getElementById('mmin').value)||0});saveApp(app);});}
-    function showDelayForm(){const h='<div class="form-group"><label class="form-label">Date</label><input class="input" type="date" id="dyDate" value="'+today()+'"></div><div class="form-group"><label class="form-label">Cause *</label><input class="input" type="text" id="dyCause" placeholder="e.g., Late steel delivery"></div><div class="form-group"><label class="form-label">Duration (Days)</label><input class="input" type="number" id="dyDays" value="1"></div><div class="form-group"><label class="form-label">Impact</label><select class="select" id="dyImpact"><option>Minor</option><option>Moderate</option><option selected>Major</option><option>Critical</option></select></div><div class="form-group"><label class="form-label">Location</label><input class="input" type="text" id="dyLoc" value="'+loc()+'"></div><div class="form-group"><label class="form-label">Description</label><textarea class="textarea" id="dyDesc"></textarea></div>';showModal('🚧 Log Delay',h,()=>{const c=document.getElementById('dyCause').value.trim();if(!c)return false;app.delays.push({id:genId('dly'),date:document.getElementById('dyDate').value,cause:c,duration:document.getElementById('dyDays').value,impact:document.getElementById('dyImpact').value,location:document.getElementById('dyLoc').value,description:document.getElementById('dyDesc').value,timestamp:new Date().toISOString()});saveApp(app);});}
-    function showAttendanceForm(){const h='<div class="form-group"><label class="form-label">Category</label><select class="select" id="attCat"><option>Contractor Staff</option><option>Skilled Labour</option><option>Unskilled Labour</option><option>Subcontractor</option><option>Visitor</option><option>Consultant</option></select></div><div class="form-group"><label class="form-label">Name / Trade</label><input class="input" type="text" id="attName" placeholder="e.g., Eng. Kamau or Masons"></div><div class="form-group"><label class="form-label">Company</label><input class="input" type="text" id="attCompany" value="'+(project.contractorName||'')+'"></div><div class="form-group"><label class="form-label">Count</label><input class="input" type="number" id="attCount" value="1" min="1"></div>';showModal('👷 Add Personnel',h,()=>{app.attendance.push({id:genId('att'),date:today(),category:document.getElementById('attCat').value,name:document.getElementById('attName').value,company:document.getElementById('attCompany').value,count:document.getElementById('attCount').value,timestamp:new Date().toISOString()});saveApp(app);});}
-    function showDrawingForm(){window._dwImg=null;const h='<div class="form-group"><label class="form-label">Number *</label><input class="input" type="text" id="dwNo"></div><div class="form-group"><label class="form-label">Title *</label><input class="input" type="text" id="dwTitle"></div><div class="form-group"><label class="form-label">Discipline</label><select class="select" id="dwDisc"><option>Structural</option><option>Architectural</option><option>Plumbing</option><option>Electrical</option></select></div><div class="form-group"><label class="form-label">Revision</label><input class="input" type="text" id="dwRev" value="A"></div><div class="form-group"><label class="form-label">Date</label><input class="input" type="date" id="dwDate" value="'+today()+'"></div><div class="form-group"><label class="form-label">Photo</label><div style="display:flex;gap:6px;"><button type="button" class="btn btn-secondary btn-sm" onclick="captureDw()">📷</button><button type="button" class="btn btn-secondary btn-sm" onclick="pickDw()">🖼️</button></div><div id="dwPrev" style="margin-top:6px;"></div></div>';showModal('📐 Add Drawing',h,()=>{const n=document.getElementById('dwNo').value.trim(),t=document.getElementById('dwTitle').value.trim();if(!n||!t)return false;const dw={id:genId('dw'),number:n,title:t,discipline:document.getElementById('dwDisc').value,revision:document.getElementById('dwRev').value,dateReceived:document.getElementById('dwDate').value,imageData:window._dwImg||null,aiAnalysis:null,timestamp:new Date().toISOString()};app.drawings.push(dw);saveApp(app);if(dw.imageData&&hasAI())setTimeout(()=>analyzeDrawingWithAI(dw.id),600);});}
+    function showDiaryForm(){const h='<div class="form-group"><label class="form-label">Title *</label><input class="input" type="text" id="dt" placeholder="e.g., Concreting — 3rd Floor Slab"></div><div class="form-group"><label class="form-label">Activity Type</label><select class="select" id="da"><option>Work in Progress</option><option>Material Delivery</option><option>Inspection</option><option>Meeting</option><option>Delay/Issue</option><option>General</option></select></div><div class="form-group"><label class="form-label">Location *</label><input class="input" type="text" id="dl" value="'+loc()+'"></div><div class="form-group"><label class="form-label">Detailed Description *</label><textarea class="textarea" id="dd" placeholder="Describe work observed, methods, quality, progress..."></textarea></div><div class="form-group"><label class="form-label">Labour on Site</label><input class="input" type="text" id="dlb" placeholder="e.g., 15 skilled, 25 unskilled, 2 foremen"></div><div class="form-group"><label class="form-label">Equipment on Site</label><input class="input" type="text" id="deq" placeholder="e.g., 1 Tower Crane, 2 Concrete Mixers"></div><div class="form-group"><label class="form-label">Materials Delivered</label><textarea class="textarea" id="dmt" placeholder="e.g., 200 bags cement\n5 tonnes Y12 steel" style="min-height:50px;"></textarea></div><div class="form-group"><label class="form-label">Issues / Concerns</label><textarea class="textarea" id="dis" placeholder="e.g., Delay in steel delivery" style="min-height:50px;"></textarea></div>';showModal('📔 New Diary Entry',h,()=>{const t=document.getElementById('dt').value.trim(),d=document.getElementById('dd').value.trim();if(!t||!d){toast('Title and description required');return false;}app.diary.push({id:genId('di'),title:t,activityType:document.getElementById('da').value,location:document.getElementById('dl').value,description:d,labourCount:document.getElementById('dlb').value,equipmentUsed:document.getElementById('deq').value,materialsDelivered:document.getElementById('dmt').value,issuesIdentified:document.getElementById('dis').value,timestamp:new Date().toISOString()});saveApp(app);});}
+    function showNCRForm(){const h='<div class="form-group"><label class="form-label">Title *</label><input class="input" type="text" id="nt"></div><div class="form-group"><label class="form-label">Severity</label><select class="select" id="ns"><option>Minor</option><option selected>Major</option><option>Critical</option></select></div><div class="form-group"><label class="form-label">Location</label><input class="input" type="text" id="nl" value="'+loc()+'"></div><div class="form-group"><label class="form-label">Responsible</label><input class="input" type="text" id="nr" value="'+(project.contractorName||'Contractor')+'"></div><div class="form-group"><label class="form-label">Description *</label><textarea class="textarea" id="nd"></textarea></div><div class="form-group"><label class="form-label">Action Required *</label><textarea class="textarea" id="na"></textarea></div>';showModal('🚨 NCR',h,()=>{const t=document.getElementById('nt').value.trim(),d=document.getElementById('nd').value.trim(),a=document.getElementById('na').value.trim();if(!t||!d||!a)return false;app.ncrs.push({id:genId('ncr'),title:t,severity:document.getElementById('ns').value,location:document.getElementById('nl').value,responsibleParty:document.getElementById('nr').value,description:d,actionRequired:a,status:'open',timestamp:new Date().toISOString()});saveApp(app);});}
+    function showRFIForm(){const h='<div class="form-group"><label class="form-label">Subject *</label><input class="input" type="text" id="rs"></div><div class="form-group"><label class="form-label">Sent To *</label><input class="input" type="text" id="rt"></div><div class="form-group"><label class="form-label">Question *</label><textarea class="textarea" id="rq"></textarea></div>';showModal('📤 RFI',h,()=>{const s=document.getElementById('rs').value.trim(),q=document.getElementById('rq').value.trim(),t=document.getElementById('rt').value.trim();if(!s||!q||!t)return false;app.rfis.push({id:genId('rfi'),subject:s,sentTo:t,question:q,status:'open',timestamp:new Date().toISOString()});saveApp(app);});}
+    function showInstructionForm(){const h='<div class="form-group"><label class="form-label">Issued To *</label><input class="input" type="text" id="st" value="'+(project.contractorName||'Contractor')+'"></div><div class="form-group"><label class="form-label">Instruction *</label><textarea class="textarea" id="sd"></textarea></div>';showModal('📋 SI',h,()=>{const t=document.getElementById('st').value.trim(),d=document.getElementById('sd').value.trim();if(!t||!d)return false;app.instructions.push({id:genId('si'),issuedTo:t,description:d,location:loc(),status:'issued',timestamp:new Date().toISOString()});saveApp(app);});}
+    function showMaterialForm(){const h='<div class="form-group"><label class="form-label">Name *</label><input class="input" type="text" id="mn"></div><div class="form-group"><label class="form-label">Unit</label><select class="select" id="mu"><option>Bags</option><option>Tonnes</option><option>m³</option><option>Pieces</option></select></div><div class="form-group"><label class="form-label">Stock</label><input class="input" type="number" id="ms" value="0"></div><div class="form-group"><label class="form-label">Min Level</label><input class="input" type="number" id="mmin" value="0"></div>';showModal('🧱 Material',h,()=>{const n=document.getElementById('mn').value.trim();if(!n)return false;app.materials.push({id:genId('mat'),name:n,unit:document.getElementById('mu').value,currentStock:parseFloat(document.getElementById('ms').value)||0,minStock:parseFloat(document.getElementById('mmin').value)||0});saveApp(app);});}
+    function showDelayForm(){const h='<div class="form-group"><label class="form-label">Cause *</label><input class="input" type="text" id="dyCause"></div><div class="form-group"><label class="form-label">Days</label><input class="input" type="number" id="dyDays" value="1"></div><div class="form-group"><label class="form-label">Impact</label><select class="select" id="dyImpact"><option>Minor</option><option>Major</option><option>Critical</option></select></div>';showModal('🚧 Delay',h,()=>{const c=document.getElementById('dyCause').value.trim();if(!c)return false;app.delays.push({id:genId('dly'),date:today(),cause:c,duration:document.getElementById('dyDays').value,impact:document.getElementById('dyImpact').value,location:loc()});saveApp(app);});}
+    function showAttendanceForm(){const h='<div class="form-group"><label class="form-label">Category</label><select class="select" id="attCat"><option>Contractor Staff</option><option>Skilled Labour</option><option>Unskilled Labour</option><option>Subcontractor</option></select></div><div class="form-group"><label class="form-label">Name</label><input class="input" type="text" id="attName"></div><div class="form-group"><label class="form-label">Count</label><input class="input" type="number" id="attCount" value="1"></div>';showModal('👷 Attendance',h,()=>{app.attendance.push({id:genId('att'),date:today(),category:document.getElementById('attCat').value,name:document.getElementById('attName').value,count:document.getElementById('attCount').value});saveApp(app);});}
+    function showDrawingForm(){window._dwImg=null;const h='<div class="form-group"><label class="form-label">Number *</label><input class="input" type="text" id="dwNo"></div><div class="form-group"><label class="form-label">Title *</label><input class="input" type="text" id="dwTitle"></div><div class="form-group"><label class="form-label">Revision</label><input class="input" type="text" id="dwRev" value="A"></div><div class="form-group"><label class="form-label">Photo</label><div style="display:flex;gap:6px;"><button type="button" class="btn btn-secondary btn-sm" onclick="captureDw()">📷</button><button type="button" class="btn btn-secondary btn-sm" onclick="pickDw()">🖼️</button></div><div id="dwPrev" style="margin-top:6px;"></div></div>';showModal('📐 Drawing',h,()=>{const n=document.getElementById('dwNo').value.trim(),t=document.getElementById('dwTitle').value.trim();if(!n||!t)return false;const dw={id:genId('dw'),number:n,title:t,revision:document.getElementById('dwRev').value,dateReceived:today(),imageData:window._dwImg||null,aiAnalysis:null};app.drawings.push(dw);saveApp(app);if(dw.imageData&&hasAI())setTimeout(()=>analyzeDrawingWithAI(dw.id),600);});}
     function captureDw(){const i=document.createElement('input');i.type='file';i.accept='image/*';i.setAttribute('capture','environment');i.onchange=function(){if(this.files[0]){const r=new FileReader();r.onload=function(e){window._dwImg=e.target.result;document.getElementById('dwPrev').innerHTML='<img src="'+e.target.result+'" style="width:100%;max-height:100px;object-fit:contain;border-radius:6px;">';};r.readAsDataURL(this.files[0]);}};i.click();}
     function pickDw(){const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=function(){if(this.files[0]){const r=new FileReader();r.onload=function(e){window._dwImg=e.target.result;document.getElementById('dwPrev').innerHTML='<img src="'+e.target.result+'" style="width:100%;max-height:100px;object-fit:contain;border-radius:6px;">';};r.readAsDataURL(this.files[0]);}};i.click();}
-    function uploadDrawingForAI(){if(!hasAI()){toast('Set API key first');return;}const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=function(){if(this.files[0]){const r=new FileReader();r.onload=async function(e){const dw={id:genId('dw'),number:'AI-'+Date.now().toString(36),title:this.files[0].name,discipline:'Unknown',revision:'A',dateReceived:today(),imageData:e.target.result,aiAnalysis:null,timestamp:new Date().toISOString()};app.drawings.push(dw);saveApp(app);refreshAll();toast('Analyzing...');await analyzeDrawingWithAI(dw.id);};r.readAsDataURL(this.files[0]);}};i.click();}
+    function uploadDrawingForAI(){if(!hasAI()){toast('Set API key');return;}const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=function(){if(this.files[0]){const r=new FileReader();r.onload=async function(e){const dw={id:genId('dw'),number:'AI-'+Date.now().toString(36),title:this.files[0].name,revision:'A',dateReceived:today(),imageData:e.target.result,aiAnalysis:null};app.drawings.push(dw);saveApp(app);refreshAll();toast('Analyzing...');await analyzeDrawingWithAI(dw.id);};r.readAsDataURL(this.files[0]);}};i.click();}
     function viewDrawing(id){const d=app.drawings.find(dw=>dw.id===id);if(!d||!d.imageData)return;document.getElementById('modalContainer').innerHTML='<div class="modal-overlay" style="align-items:center;" onclick="closeModal()"><img src="'+d.imageData+'" style="max-width:95%;max-height:80vh;border-radius:12px;"></div>';}
 
-    // INSPECTIONS
-    const ALL_CHECKLISTS={'🏗️ Earthworks':{'Excavation':['Setting out checked','Depth correct','Bottom firm','Safety batter','Dewatering'],'Trench':['Line & level','Width correct','Depth to invert','Bedding','Shoring'],'Backfill':['Material approved','Compaction>95%','Layers<150mm','No debris']},'🧱 Concrete':{'Pre-Pour':['Formwork','Reinf correct','Cover blocks','Grade','Slump','Vibrators'],'Post-Pour':['Curing','Formwork time','No cracks','Cubes to lab']},'🔩 Steel':{'Reinforcement':['Bar sizes','Spacing','Laps','Chairs','Clean']},'🧱 Masonry':{'Blockwork':['Block type','Mortar 1:4','Plumb','Wall ties','DPC','Openings']},'💧 Waterproofing':{'Membrane':['Surface prep','Primer','Membrane','Laps','Detailing','Ponding test']},'🚿 Plumbing':{'Pressure Test':['System filled','1.5x pressure','1 hour','No leaks','Certificate'],'Drainage':['Gradient','Joints','Traps','Vents','Water test']},'⚡ Electrical':{'Containment':['Conduit type','Route','Supports','Bends'],'Cabling':['Type','No damage','Labels','IR test']},'🎨 Finishes':{'Plastering':['Background','Mesh','Mix','Thickness','Curing'],'Tiling':['Type','Adhesive','Grout','Level','Falls'],'Painting':['Surface','Primer','Undercoat','Finish','No runs']},'🚪 Joinery':{'Doors':['Size','Plumb','Anchors','Ironmongery','Operation','Sealant']},'✓ Final':{'Snagging':['All rooms','Walls','Ceilings','Floors','Doors','Plumbing','Electrical','Cleaning']}};
+    const ALL_CHECKLISTS={'🏗️ Earthworks':{'Excavation':['Setting out','Depth correct','Bottom firm','Safety batter','Dewatering'],'Trench':['Line & level','Width','Depth to invert','Bedding','Shoring'],'Backfill':['Material approved','Compaction','Layers','No debris']},'🧱 Concrete':{'Pre-Pour':['Formwork','Reinf correct','Cover blocks','Grade','Slump','Vibrators'],'Post-Pour':['Curing','Formwork time','No cracks','Cubes']},'🔩 Steel':{'Reinforcement':['Bar sizes','Spacing','Laps','Chairs','Clean']},'🧱 Masonry':{'Blockwork':['Block type','Mortar 1:4','Plumb','Wall ties','DPC','Openings']},'💧 Waterproofing':{'Membrane':['Surface prep','Primer','Membrane','Laps','Detailing','Ponding test']},'🚿 Plumbing':{'Pressure Test':['System filled','1.5x pressure','1 hour','No leaks','Certificate'],'Drainage':['Gradient','Joints','Traps','Vents','Water test']},'⚡ Electrical':{'Containment':['Conduit type','Route','Supports','Bends'],'Cabling':['Type','No damage','Labels','IR test']},'🎨 Finishes':{'Plastering':['Background','Mesh','Mix','Thickness','Curing'],'Tiling':['Type','Adhesive','Grout','Level','Falls'],'Painting':['Surface','Primer','Undercoat','Finish']},'🚪 Joinery':{'Doors':['Size','Plumb','Anchors','Ironmongery','Operation']},'✓ Final':{'Snagging':['All rooms','Walls','Ceilings','Floors','Doors','Plumbing','Electrical','Cleaning']}};
     function showInspectionMenu(){let html='';Object.keys(ALL_CHECKLISTS).forEach(g=>{html+='<div class="section-label">'+g+'</div><div class="trade-grid">';Object.keys(ALL_CHECKLISTS[g]).forEach(n=>{html+='<button class="trade-btn" onclick="closeModal();startInsp(\''+n+'\',\''+g+'\')">'+n+'</button>';});html+='</div>';});document.getElementById('modalContainer').innerHTML='<div class="modal-overlay" id="mo" onclick="if(event.target.id==\'mo\')closeModal()"><div class="modal"><div class="modal-handle"></div><h2>Select Inspection</h2>'+html+'</div></div>';}
-    function startInsp(name,group){const items=ALL_CHECKLISTS[group][name];let h='<div class="form-group"><label class="form-label">Type</label><input class="input" value="'+name+'" disabled></div><div class="form-group"><label class="form-label">Location</label><input class="input" type="text" id="il" value="'+loc()+'"></div>';items.forEach((item,i)=>{h+='<div class="checkbox-row"><input type="checkbox" id="it'+i+'" checked><label for="it'+i+'">'+item+'</label></div>';});h+='<div class="form-group"><label class="form-label">Notes</label><textarea class="textarea" id="in" placeholder="Additional observations..."></textarea></div>';showModal('✅ '+name,h,()=>{const checked=items.map((item,i)=>({label:item,passed:document.getElementById('it'+i).checked}));app.inspections.push({id:genId('ins'),checklistType:name,location:document.getElementById('il').value,items:checked,result:checked.every(i=>i.passed)?'pass':'fail',notes:document.getElementById('in').value,timestamp:new Date().toISOString()});saveApp(app);});}
+    function startInsp(name,group){const items=ALL_CHECKLISTS[group][name];let h='<div class="form-group"><label class="form-label">Type</label><input class="input" value="'+name+'" disabled></div><div class="form-group"><label class="form-label">Location</label><input class="input" type="text" id="il" value="'+loc()+'"></div>';items.forEach((item,i)=>{h+='<div class="checkbox-row"><input type="checkbox" id="it'+i+'" checked><label for="it'+i+'">'+item+'</label></div>';});h+='<div class="form-group"><label class="form-label">Notes</label><textarea class="textarea" id="in"></textarea></div>';showModal('✅ '+name,h,()=>{const checked=items.map((item,i)=>({label:item,passed:document.getElementById('it'+i).checked}));app.inspections.push({id:genId('ins'),checklistType:name,location:document.getElementById('il').value,items:checked,result:checked.every(i=>i.passed)?'pass':'fail',notes:document.getElementById('in').value,timestamp:new Date().toISOString()});saveApp(app);});}
+    function showFABMenu(){document.getElementById('modalContainer').innerHTML='<div class="modal-overlay" id="fo" style="align-items:flex-end;justify-content:center;"><div class="modal" style="max-width:360px;text-align:center;"><div class="modal-handle"></div><h2>New Entry</h2><button class="btn btn-primary" style="margin:3px 0;" onclick="closeModal();showDiaryForm();">📔 Diary Entry</button><button class="btn btn-primary" style="margin:3px 0;background:var(--green);" onclick="closeModal();showInspectionMenu();">✅ Inspection</button><button class="btn btn-primary" style="margin:3px 0;background:var(--red);" onclick="closeModal();showNCRForm();">🚨 NCR</button><button class="btn btn-primary" style="margin:3px 0;background:var(--orange);" onclick="closeModal();showInstructionForm();">📋 SI</button><button class="btn btn-primary" style="margin:3px 0;background:var(--accent);" onclick="closeModal();showRFIForm();">📤 RFI</button><button class="btn btn-ai" style="margin:3px 0;background:linear-gradient(135deg,var(--purple),var(--accent));color:#fff;" onclick="closeModal();uploadDrawingForAI();">🤖 AI Scan</button><button class="btn btn-secondary" style="margin-top:6px;" onclick="closeModal();">Cancel</button></div></div>';document.getElementById('fo').addEventListener('click',e=>{if(e.target.id==='fo')closeModal();});}
 
-    function showFABMenu(){document.getElementById('modalContainer').innerHTML='<div class="modal-overlay" id="fo" style="align-items:flex-end;justify-content:center;"><div class="modal" style="max-width:360px;text-align:center;"><div class="modal-handle"></div><h2>New Entry</h2><button class="btn btn-primary" style="margin:3px 0;" onclick="closeModal();showDiaryForm();">📔 Diary Entry</button><button class="btn btn-primary" style="margin:3px 0;background:var(--green);" onclick="closeModal();showInspectionMenu();">✅ Inspection</button><button class="btn btn-primary" style="margin:3px 0;background:var(--red);" onclick="closeModal();showNCRForm();">🚨 NCR</button><button class="btn btn-primary" style="margin:3px 0;background:var(--orange);color:#000;" onclick="closeModal();showInstructionForm();">📋 Site Instruction</button><button class="btn btn-primary" style="margin:3px 0;background:var(--accent);" onclick="closeModal();showRFIForm();">📤 RFI</button><button class="btn btn-primary" style="margin:3px 0;background:var(--purple);" onclick="closeModal();showDelayForm();">🚧 Log Delay</button><button class="btn btn-primary" style="margin:3px 0;background:var(--purple);" onclick="closeModal();showAttendanceForm();">👷 Attendance</button><button class="btn btn-ai" style="margin:3px 0;" onclick="closeModal();uploadDrawingForAI();">🤖 AI Scan Drawing</button><button class="btn btn-secondary" style="margin-top:6px;" onclick="closeModal();">Cancel</button></div></div>';document.getElementById('fo').addEventListener('click',e=>{if(e.target.id==='fo')closeModal();});}
-
-    function deleteEntry(type,id){app[type]=app[type].filter(e=>e.id!==id);saveApp(app);refreshAll();toast('Deleted');}
+    function deleteEntry(type,id){app[type]=app[type].filter(e=>e.id!==id);saveApp(app);refreshAll();}
     function copyReport(){navigator.clipboard.writeText(window._report||'').then(()=>toast('📋 Copied'));}
     function printReport(){document.querySelectorAll('.seg-btn').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelector('[data-tab="report"]').classList.add('active');document.getElementById('panel-report').classList.add('active');renderReport();setTimeout(()=>window.print(),400);}
     function shareWA(text){window.open('https://wa.me/?text='+encodeURIComponent(text.substring(0,1500)),'_blank');}
-    function saveReport(){project.reportCounter=(project.reportCounter||1)+1;saveProject(project);app.dailyReports.push({id:genId('rpt'),content:window._report||'',date:today(),timestamp:new Date().toISOString()});saveApp(app);toast('💾 Saved');}
-    function backupData(){const backup={project,app,date:new Date().toISOString()};const blob=new Blob([JSON.stringify(backup)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='cowlog-'+today()+'.json';a.click();toast('💾 Backup saved');}
+    function saveReport(){project.reportCounter=(project.reportCounter||1)+1;saveProject(project);app.dailyReports.push({id:genId('rpt'),content:window._report||'',date:today()});saveApp(app);toast('💾 Saved');}
+    function backupData(){const backup={project,app};const blob=new Blob([JSON.stringify(backup)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='cowlog-'+today()+'.json';a.click();toast('💾 Backup saved');}
     function restoreData(){const i=document.createElement('input');i.type='file';i.accept='.json';i.onchange=function(){const r=new FileReader();r.onload=function(e){try{const d=JSON.parse(e.target.result);if(!d.project)return;project=d.project;app=d.app;saveProject(project);saveApp(app);refreshAll();populateProjectFields();updateCompactDisplay();toast('✅ Restored');}catch(err){}};r.readAsText(this.files[0]);};i.click();}
 
     function init(){
