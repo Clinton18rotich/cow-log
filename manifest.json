@@ -1,8 +1,10 @@
 {
-  "name": "CoW Log",
+  "name": "CoW Log — Clerk of Works",
   "short_name": "CoW Log",
+  "description": "Professional site documentation & daily reports for Clerks of Works",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#1a1a2e",
-  "theme_color": "#1a1a2e"
+  "background_color": "#0d1117",
+  "theme_color": "#0d1117",
+  "orientation": "portrait"
 }

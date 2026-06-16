@@ -3,435 +3,1289 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>CoW Log</title>
-    <meta name="theme-color" content="#1a1a2e">
+    <title>🦺 CoW Log</title>
+    <meta name="theme-color" content="#0d1117">
     <link rel="manifest" href="manifest.json">
     <style>
         :root {
-            --primary: #1a1a2e;
-            --accent: #e94560;
-            --card: #16213e;
-            --text: #eee;
-            --muted: #0f3460;
-            --green: #00b894;
-            --orange: #fdcb6e;
-            --red: #d63031;
-            --border: #2d3436;
+            --bg: #0d1117;
+            --card: #161b22;
+            --border: #30363d;
+            --text: #e6edf3;
+            --muted: #8b949e;
+            --accent: #f78166;
+            --green: #3fb950;
+            --red: #f85149;
+            --yellow: #d2991d;
+            --blue: #58a6ff;
+            --purple: #a371f7;
+            --radius: 12px;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--primary);
+            background: var(--bg);
             color: var(--text);
             min-height: 100vh;
-            padding-bottom: 80px;
+            padding-bottom: 100px;
+            -webkit-tap-highlight-color: transparent;
+            font-size: 15px;
+            line-height: 1.5;
         }
         .header {
             background: var(--card);
-            padding: 14px 16px;
+            padding: 16px;
             position: sticky;
             top: 0;
             z-index: 100;
             border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
         }
-        .header-top {
+        .header-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 8px;
         }
         .header h1 {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: var(--accent);
+            letter-spacing: -0.5px;
         }
         .header .date {
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-align: right;
+        }
+        .project-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
             font-size: 0.75rem;
-            color: #888;
+            color: var(--muted);
         }
-        .project-bar {
-            display: flex;
-            gap: 10px;
-            margin-top: 6px;
-            font-size: 0.7rem;
-            color: #888;
-            flex-wrap: wrap;
+        .project-info .label {
+            color: var(--muted);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .weather-select {
-            background: var(--muted);
+        .project-info .value {
+            color: var(--text);
+            font-weight: 500;
+        }
+        .project-info input, .project-info select {
+            background: var(--bg);
             border: 1px solid var(--border);
             color: var(--text);
-            padding: 4px 8px;
+            padding: 6px 10px;
             border-radius: 6px;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
+            width: 100%;
+            font-family: inherit;
         }
         .stats-row {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
             gap: 6px;
-            padding: 10px 14px;
-            overflow-x: auto;
+            padding: 12px 16px;
         }
         .stat-card {
             background: var(--card);
-            padding: 10px;
-            border-radius: 10px;
-            min-width: 65px;
+            padding: 12px 8px;
+            border-radius: var(--radius);
             text-align: center;
-            flex: 1;
+            border: 1px solid var(--border);
         }
         .stat-card .count {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             font-weight: 700;
         }
         .stat-card .label {
             font-size: 0.6rem;
-            color: #888;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             margin-top: 2px;
         }
-        .stat-card.ncr .count { color: var(--red); }
-        .stat-card.inspections .count { color: var(--green); }
+        .stat-card .count.red { color: var(--red); }
+        .stat-card .count.green { color: var(--green); }
+        .stat-card .count.yellow { color: var(--yellow); }
+        .stat-card .count.blue { color: var(--blue); }
+        .stat-card .count.purple { color: var(--purple); }
+
         .tabs {
             display: flex;
             gap: 4px;
-            padding: 0 14px;
-            margin-bottom: 10px;
+            padding: 0 16px;
+            margin-bottom: 12px;
             overflow-x: auto;
+            scrollbar-width: none;
         }
+        .tabs::-webkit-scrollbar { display: none; }
         .tab {
-            padding: 7px 14px;
+            padding: 8px 16px;
             border-radius: 20px;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             white-space: nowrap;
             border: 1px solid var(--border);
             background: transparent;
-            color: #888;
+            color: var(--muted);
             cursor: pointer;
+            transition: all 0.15s;
+            font-weight: 500;
         }
         .tab.active {
             background: var(--accent);
             border-color: var(--accent);
-            color: white;
+            color: #0d1117;
+            font-weight: 600;
         }
-        .content { padding: 0 14px; }
+
+        .content { padding: 0 16px; }
         .panel { display: none; }
         .panel.active { display: block; }
+
         .entry-card {
             background: var(--card);
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 8px;
-            border-left: 3px solid transparent;
+            border-radius: var(--radius);
+            padding: 14px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--border);
         }
-        .entry-card.ncr-card { border-left-color: var(--red); }
+        .entry-card.diary-card { border-left-color: var(--blue); }
         .entry-card.inspection-card { border-left-color: var(--green); }
-        .entry-card.diary-card { border-left-color: var(--accent); }
-        .entry-card.instruction-card { border-left-color: var(--orange); }
+        .entry-card.ncr-card { border-left-color: var(--red); }
+        .entry-card.instruction-card { border-left-color: var(--yellow); }
+
         .entry-header {
             display: flex;
             justify-content: space-between;
-            align-items: start;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            gap: 8px;
+        }
+        .entry-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+        .badge {
+            font-size: 0.65rem;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+        }
+        .badge-pass { background: rgba(63,185,80,0.15); color: var(--green); }
+        .badge-fail { background: rgba(248,81,73,0.15); color: var(--red); }
+        .badge-open { background: rgba(248,81,73,0.15); color: var(--red); }
+        .badge-closed { background: rgba(63,185,80,0.15); color: var(--green); }
+        .badge-pending { background: rgba(210,153,29,0.15); color: var(--yellow); }
+        .badge-info { background: rgba(88,166,255,0.15); color: var(--blue); }
+
+        .entry-meta {
+            font-size: 0.7rem;
+            color: var(--muted);
+            margin-bottom: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .entry-meta span { display: flex; align-items: center; gap: 4px; }
+        .entry-desc {
+            font-size: 0.8rem;
+            line-height: 1.6;
+            color: #c9d1d9;
+        }
+        .entry-section {
+            background: var(--bg);
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-top: 8px;
+            font-size: 0.75rem;
+        }
+        .entry-section .section-label {
+            font-size: 0.65rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             margin-bottom: 6px;
         }
-        .entry-title { font-weight: 600; font-size: 0.85rem; }
-        .entry-badge {
-            font-size: 0.6rem;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-weight: 600;
-        }
-        .badge-open { background: rgba(214,48,49,0.2); color: var(--red); }
-        .badge-closed { background: rgba(0,184,148,0.2); color: var(--green); }
-        .entry-meta { font-size: 0.65rem; color: #888; margin-bottom: 4px; }
-        .entry-desc { font-size: 0.75rem; line-height: 1.4; color: #ccc; }
+
         .fab {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 52px;
-            height: 52px;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             background: var(--accent);
-            color: white;
+            color: #0d1117;
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            box-shadow: 0 4px 16px rgba(233,68,96,0.4);
+            box-shadow: 0 4px 20px rgba(247,129,102,0.3);
             z-index: 200;
+            font-weight: 700;
+            transition: transform 0.15s;
         }
-        .fab:active { transform: scale(0.9); }
+        .fab:active { transform: scale(0.92); }
+
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             z-index: 300;
             display: flex;
             align-items: flex-end;
+            animation: fadeIn 0.15s ease;
         }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .modal {
             background: var(--card);
             width: 100%;
-            border-radius: 18px 18px 0 0;
-            padding: 18px;
-            max-height: 85vh;
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            max-height: 88vh;
             overflow-y: auto;
+            border: 1px solid var(--border);
+            border-bottom: none;
         }
         .modal h2 {
-            font-size: 0.95rem;
-            margin-bottom: 14px;
+            font-size: 1rem;
+            margin-bottom: 16px;
             color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            font-weight: 600;
         }
         .modal input, .modal textarea, .modal select {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 8px;
+            padding: 12px;
             border-radius: 8px;
             border: 1px solid var(--border);
-            background: var(--primary);
+            background: var(--bg);
             color: var(--text);
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             font-family: inherit;
+            transition: border-color 0.15s;
         }
-        .modal textarea { min-height: 80px; resize: vertical; }
-        .modal .btn-row { display: flex; gap: 8px; }
+        .modal input:focus, .modal textarea:focus, .modal select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        .modal textarea { min-height: 90px; resize: vertical; }
+        .btn-row { display: flex; gap: 10px; margin-top: 16px; }
         .btn {
-            padding: 10px 16px;
-            border-radius: 8px;
+            padding: 12px 20px;
+            border-radius: 10px;
             border: none;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             cursor: pointer;
             flex: 1;
+            transition: opacity 0.15s;
         }
-        .btn-primary { background: var(--accent); color: white; }
-        .btn-secondary { background: var(--muted); color: var(--text); }
-        .btn-small { padding: 5px 10px; font-size: 0.65rem; border-radius: 6px; }
-        .empty-state {
-            text-align: center;
-            padding: 35px 16px;
-            color: #555;
+        .btn:active { opacity: 0.8; }
+        .btn-primary { background: var(--accent); color: #0d1117; }
+        .btn-secondary { background: var(--border); color: var(--text); }
+        .btn-danger { background: var(--red); color: white; }
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.7rem;
+            border-radius: 6px;
+            flex: 0;
         }
-        .empty-state .icon { font-size: 2.5rem; margin-bottom: 10px; }
-        .search-bar {
+
+        .checklist-item {
             display: flex;
-            gap: 8px;
-            margin-bottom: 10px;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--green);
+        }
+
+        .report-preview {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.7rem;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            max-height: 60vh;
+            overflow-y: auto;
+            color: var(--text);
+        }
+
+        .search-bar {
+            margin-bottom: 12px;
         }
         .search-bar input {
-            flex: 1;
-            padding: 9px 12px;
-            border-radius: 8px;
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 10px;
             border: 1px solid var(--border);
             background: var(--card);
             color: var(--text);
+            font-size: 0.85rem;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 48px 20px;
+            color: var(--muted);
+        }
+        .empty-state .icon { font-size: 3rem; margin-bottom: 12px; opacity: 0.5; }
+        .empty-state p { font-size: 0.85rem; }
+
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--green);
+            color: #0d1117;
+            padding: 10px 24px;
+            border-radius: 20px;
+            font-weight: 600;
             font-size: 0.8rem;
+            z-index: 400;
+            animation: toastIn 0.3s ease;
+        }
+        @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+
+        @media (min-width: 600px) {
+            .content { max-width: 600px; margin: 0 auto; }
+            .stats-row { max-width: 600px; margin: 0 auto; }
+            .header { padding: 16px max(16px, calc((100% - 600px)/2)); }
         }
     </style>
 </head>
 <body>
+    <!-- HEADER -->
     <div class="header">
-        <div class="header-top">
-            <h1>CoW Log</h1>
+        <div class="header-row">
+            <h1>🦺 CoW Log</h1>
             <span class="date" id="currentDate"></span>
         </div>
-        <div class="project-bar">
-            <span id="projectName">Riverside Apartments</span>
-            <select class="weather-select" id="weatherSelect">
-                <option>Sunny</option>
-                <option>Partly Cloudy</option>
-                <option>Overcast</option>
-                <option>Rainy</option>
-                <option>Storm</option>
-            </select>
+        <div class="project-info">
+            <div>
+                <div class="label">Project</div>
+                <input type="text" id="projectName" value="Riverside Apartments" placeholder="Project name">
+            </div>
+            <div>
+                <div class="label">Contract No.</div>
+                <input type="text" id="contractNo" value="RAP/CW/2026/001" placeholder="Contract No.">
+            </div>
+            <div>
+                <div class="label">Contractor</div>
+                <input type="text" id="contractorName" value="BuildRight Construction Ltd" placeholder="Contractor">
+            </div>
+            <div>
+                <div class="label">Report No.</div>
+                <input type="text" id="reportNo" value="COW-001" placeholder="Report No.">
+            </div>
+            <div style="grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <div>
+                    <div class="label">Weather</div>
+                    <select id="weatherSelect">
+                        <option>☀️ Sunny & Clear</option>
+                        <option>⛅ Partly Cloudy</option>
+                        <option>☁️ Overcast</option>
+                        <option>🌧️ Light Rain</option>
+                        <option>⛈️ Heavy Rain / Storm</option>
+                        <option>🌙 Night Work</option>
+                    </select>
+                </div>
+                <div>
+                    <div class="label">Temperature</div>
+                    <input type="text" id="temperature" value="26°C" placeholder="Temp">
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- STATS -->
     <div class="stats-row">
-        <div class="stat-card diary"><div class="count" id="diaryCount">0</div><div class="label">Diary</div></div>
-        <div class="stat-card inspections"><div class="count" id="inspectionCount">0</div><div class="label">Inspections</div></div>
-        <div class="stat-card ncr"><div class="count" id="ncrCount">0</div><div class="label">NCRs</div></div>
-        <div class="stat-card"><div class="count" id="photoCount">0</div><div class="label">Photos</div></div>
+        <div class="stat-card">
+            <div class="count blue" id="diaryCount">0</div>
+            <div class="label">Diary</div>
+        </div>
+        <div class="stat-card">
+            <div class="count green" id="inspectionCount">0</div>
+            <div class="label">Inspections</div>
+        </div>
+        <div class="stat-card">
+            <div class="count red" id="ncrCount">0</div>
+            <div class="label">Open NCRs</div>
+        </div>
+        <div class="stat-card">
+            <div class="count yellow" id="instructionCount">0</div>
+            <div class="label">SI Issued</div>
+        </div>
+        <div class="stat-card">
+            <div class="count purple" id="photoCount">0</div>
+            <div class="label">Photos</div>
+        </div>
     </div>
 
+    <!-- TABS -->
     <div class="tabs">
-        <button class="tab active" data-tab="diary">Diary</button>
-        <button class="tab" data-tab="inspections">Inspect</button>
-        <button class="tab" data-tab="ncr">NCR</button>
-        <button class="tab" data-tab="instructions">SI</button>
+        <button class="tab active" data-tab="diary">📔 Diary</button>
+        <button class="tab" data-tab="inspections">✅ Inspections</button>
+        <button class="tab" data-tab="ncr">🚨 NCRs</button>
+        <button class="tab" data-tab="instructions">📋 Site Instructions</button>
+        <button class="tab" data-tab="photos">📸 Photos</button>
+        <button class="tab" data-tab="report">📄 Report</button>
     </div>
 
+    <!-- CONTENT -->
     <div class="content">
         <div class="panel active" id="panel-diary">
-            <div class="search-bar"><input type="text" placeholder="Search diary..." id="diarySearch"></div>
+            <div class="search-bar"><input type="text" placeholder="🔍 Search diary entries..." id="diarySearch"></div>
             <div id="diaryEntries"></div>
         </div>
         <div class="panel" id="panel-inspections"><div id="inspectionEntries"></div></div>
         <div class="panel" id="panel-ncr"><div id="ncrEntries"></div></div>
         <div class="panel" id="panel-instructions"><div id="instructionEntries"></div></div>
+        <div class="panel" id="panel-photos"><div id="photoGallery"></div></div>
+        <div class="panel" id="panel-report"><div id="reportContent"></div></div>
     </div>
 
     <button class="fab" id="fabBtn">+</button>
     <div id="modalContainer"></div>
+    <div id="toastContainer"></div>
 
     <script>
-        const STORAGE_KEY = 'cowlog_v1';
-        function loadData() {
-            try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : { diary: [], inspections: [], ncrs: [], instructions: [] }; }
-            catch(e) { return { diary: [], inspections: [], ncrs: [], instructions: [] }; }
-        }
-        function saveData(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
-        let appData = loadData();
-        function genId(p) { return p + '-' + Date.now() + '-' + Math.random().toString(36).substr(2,5); }
+        // ============================================
+        // DATA STORE
+        // ============================================
+        const STORAGE_KEY = 'cowlog_v2';
+        const SETTINGS_KEY = 'cowlog_settings';
 
+        function loadData() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                return raw ? JSON.parse(raw) : { diary: [], inspections: [], ncrs: [], instructions: [], photos: [], dailyReports: [] };
+            } catch(e) {
+                return { diary: [], inspections: [], ncrs: [], instructions: [], photos: [], dailyReports: [] };
+            }
+        }
+
+        function saveData(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function loadSettings() {
+            try {
+                const raw = localStorage.getItem(SETTINGS_KEY);
+                return raw ? JSON.parse(raw) : {};
+            } catch(e) { return {}; }
+        }
+
+        function saveSettings(s) {
+            localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+        }
+
+        let appData = loadData();
+        let settings = loadSettings();
+
+        // Restore settings
+        if (settings.projectName) document.addEventListener('DOMContentLoaded', () => {
+            if (settings.projectName) document.getElementById('projectName').value = settings.projectName;
+            if (settings.contractNo) document.getElementById('contractNo').value = settings.contractNo;
+            if (settings.contractorName) document.getElementById('contractorName').value = settings.contractorName;
+        });
+
+        // Auto-save settings on change
+        function bindSettings() {
+            ['projectName','contractNo','contractorName'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('change', () => {
+                        settings[id] = el.value;
+                        saveSettings(settings);
+                    });
+                    // Set initial value
+                    if (settings[id]) el.value = settings[id];
+                }
+            });
+            // Report number auto-increment
+            const reportEl = document.getElementById('reportNo');
+            if (reportEl) {
+                const saved = settings.reportCounter || 1;
+                reportEl.value = 'COW-' + String(saved).padStart(3, '0');
+            }
+        }
+
+        function genId(prefix) {
+            return prefix + '-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6);
+        }
+
+        function timeFormat(ts) {
+            return new Date(ts).toLocaleString('en-KE', {
+                weekday: 'short', year: 'numeric', month: 'short', day: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            });
+        }
+
+        function dateOnly(ts) {
+            return new Date(ts).toLocaleDateString('en-KE', { year: 'numeric', month: 'short', day: 'numeric' });
+        }
+
+        function getToday() {
+            return new Date().toISOString().split('T')[0];
+        }
+
+        // ============================================
+        // TOAST
+        // ============================================
+        function showToast(msg) {
+            const c = document.getElementById('toastContainer');
+            c.innerHTML = '<div class="toast">' + msg + '</div>';
+            setTimeout(() => { c.innerHTML = ''; }, 2000);
+        }
+
+        // ============================================
+        // STATS
+        // ============================================
         function updateStats() {
             document.getElementById('diaryCount').textContent = appData.diary.length;
             document.getElementById('inspectionCount').textContent = appData.inspections.length;
             document.getElementById('ncrCount').textContent = appData.ncrs.filter(n => n.status === 'open').length;
-            document.getElementById('photoCount').textContent = appData.diary.reduce((c, e) => c + (e.photos ? e.photos.length : 0), 0);
+            document.getElementById('instructionCount').textContent = appData.instructions.length;
+            document.getElementById('photoCount').textContent = appData.photos.length;
         }
 
-        function timeFormat(ts) { return new Date(ts).toLocaleString('en-KE', { dateStyle: 'medium', timeStyle: 'short' }); }
-
+        // ============================================
+        // RENDERERS
+        // ============================================
         function renderDiary(filter = '') {
             const container = document.getElementById('diaryEntries');
             let entries = appData.diary;
             if (filter) {
                 const q = filter.toLowerCase();
-                entries = entries.filter(e => e.title.toLowerCase().includes(q) || e.description.toLowerCase().includes(q));
+                entries = entries.filter(e =>
+                    e.title.toLowerCase().includes(q) ||
+                    e.description.toLowerCase().includes(q) ||
+                    e.location.toLowerCase().includes(q) ||
+                    (e.activityType && e.activityType.toLowerCase().includes(q))
+                );
             }
-            entries.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+            entries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
             if (!entries.length) {
-                container.innerHTML = '<div class="empty-state"><div class="icon">+</div><p>No diary entries yet</p><p style="font-size:0.65rem;color:#666;">Tap + to start</p></div>';
+                container.innerHTML = '<div class="empty-state"><div class="icon">📔</div><p>No diary entries yet</p><p style="font-size:0.75rem;">Tap + to log your first site observation</p></div>';
                 return;
             }
-            container.innerHTML = entries.map(e => '<div class="entry-card diary-card"><div class="entry-header"><span class="entry-title">' + e.title + '</span><span style="font-size:0.6rem;color:#888;">' + (e.weather||'') + '</span></div><div class="entry-meta">' + timeFormat(e.timestamp) + ' | ' + e.location + '</div><div class="entry-desc">' + e.description + '</div><div style="margin-top:6px;"><button class="btn btn-small btn-secondary" onclick="deleteEntry(\'diary\',\'' + e.id + '\')">Delete</button></div></div>').join('');
+
+            container.innerHTML = entries.map(e => {
+                let activityBadge = '';
+                if (e.activityType) {
+                    const colors = { 'Work in Progress': 'badge-info', 'Material Delivery': 'badge-pending', 'Inspection': 'badge-pass', 'Meeting': 'badge-pending', 'Delay/Issue': 'badge-fail', 'General': 'badge-closed' };
+                    activityBadge = '<span class="badge ' + (colors[e.activityType] || 'badge-info') + '">' + e.activityType + '</span>';
+                }
+                return '<div class="entry-card diary-card">' +
+                    '<div class="entry-header">' +
+                        '<span class="entry-title">📔 ' + e.title + '</span>' +
+                        activityBadge +
+                    '</div>' +
+                    '<div class="entry-meta">' +
+                        '<span>🕐 ' + timeFormat(e.timestamp) + '</span>' +
+                        '<span>📍 ' + e.location + '</span>' +
+                        '<span>🌤️ ' + (e.weather || 'N/A') + '</span>' +
+                    '</div>' +
+                    '<div class="entry-desc">' + e.description.replace(/\n/g, '<br>') + '</div>' +
+                    (e.labourCount || e.equipmentUsed ? '<div class="entry-section"><div class="section-label">Resources on Site</div>' +
+                        (e.labourCount ? '👷 Labour: ' + e.labourCount + '<br>' : '') +
+                        (e.equipmentUsed ? '🚜 Equipment: ' + e.equipmentUsed : '') +
+                    '</div>' : '') +
+                    (e.materialsDelivered ? '<div class="entry-section"><div class="section-label">Materials Delivered</div>' + e.materialsDelivered.replace(/\n/g, '<br>') + '</div>' : '') +
+                    (e.issuesIdentified ? '<div class="entry-section" style="border-left:3px solid var(--red);"><div class="section-label">⚠️ Issues / Concerns</div>' + e.issuesIdentified.replace(/\n/g, '<br>') + '</div>' : '') +
+                    (e.contractorOnSite ? '<div class="entry-section"><div class="section-label">Contractor Personnel</div>👤 ' + e.contractorOnSite + '</div>' : '') +
+                    '<div style="margin-top:8px;display:flex;gap:6px;">' +
+                        '<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'diary\',\'' + e.id + '\')">🗑️ Delete</button>' +
+                        '<button class="btn btn-small btn-primary" onclick="editDiary(\'' + e.id + '\')">✏️ Edit</button>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
         }
 
         function renderInspections() {
             const container = document.getElementById('inspectionEntries');
-            const entries = [...appData.inspections].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-            if (!entries.length) { container.innerHTML = '<div class="empty-state"><div class="icon">OK</div><p>No inspections yet</p></div>'; return; }
-            container.innerHTML = entries.map(e => '<div class="entry-card inspection-card"><div class="entry-header"><span class="entry-title">' + e.checklistType + '</span><span class="entry-badge ' + (e.result==='pass'?'badge-closed':'badge-open') + '">' + e.result.toUpperCase() + '</span></div><div class="entry-meta">' + timeFormat(e.timestamp) + ' | ' + e.location + '</div><div class="entry-desc">' + e.items.map(i => (i.passed ? 'OK' : 'X') + ' ' + i.label).join('<br>') + '</div>' + (e.notes ? '<div class="entry-desc" style="margin-top:4px;color:#888;">Note: ' + e.notes + '</div>' : '') + '<div style="margin-top:6px;"><button class="btn btn-small btn-secondary" onclick="deleteEntry(\'inspections\',\'' + e.id + '\')">Delete</button></div></div>').join('');
+            const entries = [...appData.inspections].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            if (!entries.length) {
+                container.innerHTML = '<div class="empty-state"><div class="icon">✅</div><p>No inspections recorded</p></div>';
+                return;
+            }
+
+            container.innerHTML = entries.map(e => '<div class="entry-card inspection-card">' +
+                '<div class="entry-header">' +
+                    '<span class="entry-title">✅ ' + e.checklistType + '</span>' +
+                    '<span class="badge ' + (e.result === 'pass' ? 'badge-pass' : 'badge-fail') + '">' + e.result.toUpperCase() + '</span>' +
+                '</div>' +
+                '<div class="entry-meta">' +
+                    '<span>🕐 ' + timeFormat(e.timestamp) + '</span>' +
+                    '<span>📍 ' + e.location + '</span>' +
+                    '<span>📋 ' + e.items.filter(i => i.passed).length + '/' + e.items.length + ' passed</span>' +
+                '</div>' +
+                '<div class="entry-section"><div class="section-label">Checklist Items</div>' +
+                    e.items.map(i => '<div style="padding:3px 0;font-size:0.75rem;">' + (i.passed ? '✅' : '❌') + ' ' + i.label + (i.comment ? ' <span style="color:var(--muted);font-size:0.65rem;">— ' + i.comment + '</span>' : '') + '</div>').join('') +
+                '</div>' +
+                (e.notes ? '<div class="entry-section"><div class="section-label">Inspector Notes</div>' + e.notes + '</div>' : '') +
+                (e.correctiveAction ? '<div class="entry-section" style="border-left:3px solid var(--red);"><div class="section-label">Corrective Action Required</div>' + e.correctiveAction + '</div>' : '') +
+                '<div style="margin-top:8px;display:flex;gap:6px;">' +
+                    '<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'inspections\',\'' + e.id + '\')">🗑️</button>' +
+                '</div>' +
+            '</div>').join('');
         }
 
         function renderNCRs() {
             const container = document.getElementById('ncrEntries');
-            const entries = [...appData.ncrs].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-            if (!entries.length) { container.innerHTML = '<div class="empty-state"><div class="icon">!</div><p>No NCRs raised</p></div>'; return; }
-            container.innerHTML = entries.map(e => '<div class="entry-card ncr-card"><div class="entry-header"><span class="entry-title">' + e.title + '</span><span class="entry-badge ' + (e.status==='open'?'badge-open':'badge-closed') + '">' + e.status.toUpperCase() + '</span></div><div class="entry-meta">' + timeFormat(e.timestamp) + ' | ' + e.location + ' | ' + e.severity + '</div><div class="entry-desc">' + e.description + '</div><div class="entry-desc" style="margin-top:4px;color:var(--orange);">Action: ' + e.actionRequired + '</div><div style="margin-top:6px;display:flex;gap:6px;">' + (e.status!=='closed' ? '<button class="btn btn-small btn-primary" onclick="closeNCR(\'' + e.id + '\')">Close</button>' : '') + '<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'ncrs\',\'' + e.id + '\')">Delete</button></div></div>').join('');
+            const entries = [...appData.ncrs].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            if (!entries.length) {
+                container.innerHTML = '<div class="empty-state"><div class="icon">🚨</div><p>No NCRs raised</p></div>';
+                return;
+            }
+
+            container.innerHTML = entries.map(e => '<div class="entry-card ncr-card">' +
+                '<div class="entry-header">' +
+                    '<span class="entry-title">🚨 NCR-' + e.id.split('-')[1] + ': ' + e.title + '</span>' +
+                    '<span class="badge ' + (e.status === 'open' ? 'badge-open' : e.status === 'closed' ? 'badge-closed' : 'badge-pending') + '">' + e.status.toUpperCase() + '</span>' +
+                '</div>' +
+                '<div class="entry-meta">' +
+                    '<span>🕐 ' + timeFormat(e.timestamp) + '</span>' +
+                    '<span>📍 ' + e.location + '</span>' +
+                    '<span>⚠️ ' + e.severity + '</span>' +
+                    (e.responsibleParty ? '<span>🏢 ' + e.responsibleParty + '</span>' : '') +
+                '</div>' +
+                '<div class="entry-section"><div class="section-label">Description of Non-Conformance</div>' + e.description + '</div>' +
+                '<div class="entry-section" style="border-left:3px solid var(--yellow);"><div class="section-label">Required Corrective Action</div>' + e.actionRequired + '</div>' +
+                (e.rootCause ? '<div class="entry-section"><div class="section-label">Root Cause Analysis</div>' + e.rootCause + '</div>' : '') +
+                (e.closeoutComment ? '<div class="entry-section" style="border-left:3px solid var(--green);"><div class="section-label">Closeout Verification</div>' + e.closeoutComment + '<br><small>Closed: ' + timeFormat(e.closedDate) + '</small></div>' : '') +
+                '<div style="margin-top:8px;display:flex;gap:6px;">' +
+                    (e.status !== 'closed' ? '<button class="btn btn-small btn-primary" onclick="closeNCR(\'' + e.id + '\')">✅ Close NCR</button>' : '') +
+                    '<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'ncrs\',\'' + e.id + '\')">🗑️</button>' +
+                '</div>' +
+            '</div>').join('');
         }
 
         function renderInstructions() {
             const container = document.getElementById('instructionEntries');
-            const entries = [...appData.instructions].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
-            if (!entries.length) { container.innerHTML = '<div class="empty-state"><div class="icon">i</div><p>No site instructions</p></div>'; return; }
-            container.innerHTML = entries.map(e => '<div class="entry-card instruction-card"><div class="entry-header"><span class="entry-title">SI-' + e.id.split('-')[1] + '</span><span class="entry-badge ' + (e.status==='acknowledged'?'badge-closed':'badge-open') + '">' + e.status + '</span></div><div class="entry-meta">' + timeFormat(e.timestamp) + ' | To: ' + e.issuedTo + '</div><div class="entry-desc">' + e.description + '</div><div style="margin-top:6px;display:flex;gap:6px;">' + (e.status!=='acknowledged' ? '<button class="btn btn-small btn-primary" onclick="ackSI(\'' + e.id + '\')">Ack</button>' : '') + '<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'instructions\',\'' + e.id + '\')">Delete</button></div></div>').join('');
+            const entries = [...appData.instructions].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            if (!entries.length) {
+                container.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>No site instructions issued</p></div>';
+                return;
+            }
+
+            container.innerHTML = entries.map(e => '<div class="entry-card instruction-card">' +
+                '<div class="entry-header">' +
+                    '<span class="entry-title">📋 SI-' + e.id.split('-')[1] + '</span>' +
+                    '<span class="badge ' + (e.status === 'acknowledged' ? 'badge-closed' : 'badge-open') + '">' + e.status.toUpperCase() + '</span>' +
+                '</div>' +
+                '<div class="entry-meta">' +
+                    '<span>🕐 ' + timeFormat(e.timestamp) + '</span>' +
+                    '<span>👷 Issued to: ' + e.issuedTo + '</span>' +
+                    '<span>📍 ' + e.location + '</span>' +
+                '</div>' +
+                '<div class="entry-desc">' + e.description.replace(/\n/g, '<br>') + '</div>' +
+                (e.reference ? '<div class="entry-section"><div class="section-label">Reference Drawing / Spec</div>' + e.reference + '</div>' : '') +
+                (e.deadline ? '<div class="entry-section"><div class="section-label">Deadline</div>⏰ ' + e.deadline + '</div>' : '') +
+                '<div style="margin-top:8px;display:flex;gap:6px;">' +
+                    (e.status !== 'acknowledged' ? '<button class="btn btn-small btn-primary" onclick="acknowledgeSI(\'' + e.id + '\')">✍️ Acknowledge</button>' : '') +
+                    '<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'instructions\',\'' + e.id + '\')">🗑️</button>' +
+                '</div>' +
+            '</div>').join('');
         }
 
-        function renderAll() { renderDiary(); renderInspections(); renderNCRs(); renderInstructions(); updateStats(); }
+        function renderPhotos() {
+            const container = document.getElementById('photoGallery');
+            if (!appData.photos.length) {
+                container.innerHTML = '<div class="empty-state"><div class="icon">📸</div><p>No photos captured</p><p style="font-size:0.75rem;">Add photos from diary entries or inspections</p></div>';
+                return;
+            }
+            container.innerHTML = '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;">' +
+                appData.photos.map(p => '<div class="entry-card" style="text-align:center;padding:12px;">' +
+                    '<div style="font-size:3rem;">📷</div>' +
+                    '<div style="font-size:0.7rem;font-weight:600;margin-top:4px;">' + (p.label || 'Site Photo') + '</div>' +
+                    '<div style="font-size:0.65rem;color:var(--muted);">' + dateOnly(p.timestamp) + '</div>' +
+                    '<div style="font-size:0.6rem;color:var(--muted);">📍 ' + (p.location || 'Site') + '</div>' +
+                '</div>').join('') +
+            '</div>';
+        }
 
+        function renderReport() {
+            const today = getToday();
+            const container = document.getElementById('reportContent');
+
+            const diaryToday = appData.diary.filter(e => e.timestamp.startsWith(today));
+            const inspectionsToday = appData.inspections.filter(e => e.timestamp.startsWith(today));
+            const ncrsOpen = appData.ncrs.filter(e => e.status === 'open');
+            const ncrsToday = appData.ncrs.filter(e => e.timestamp.startsWith(today));
+            const instructionsToday = appData.instructions.filter(e => e.timestamp.startsWith(today));
+
+            const projectName = document.getElementById('projectName').value || 'Project Name';
+            const contractNo = document.getElementById('contractNo').value || 'N/A';
+            const contractorName = document.getElementById('contractorName').value || 'N/A';
+            const reportNo = document.getElementById('reportNo').value || 'COW-001';
+            const weather = document.getElementById('weatherSelect').value || 'N/A';
+            const temperature = document.getElementById('temperature').value || 'N/A';
+
+            let report = '';
+            report += '═══════════════════════════════════════════════\n';
+            report += '  CLERK OF WORKS — DAILY SITE REPORT\n';
+            report += '═══════════════════════════════════════════════\n\n';
+            report += 'REPORT NO:     ' + reportNo + '\n';
+            report += 'DATE:          ' + new Date().toLocaleDateString('en-KE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + '\n';
+            report += 'PROJECT:       ' + projectName + '\n';
+            report += 'CONTRACT NO:   ' + contractNo + '\n';
+            report += 'CONTRACTOR:    ' + contractorName + '\n';
+            report += 'WEATHER:       ' + weather + ' | Temp: ' + temperature + '\n';
+            report += 'REPORTED BY:   Clerk of Works\n';
+            report += '───────────────────────────────────────────────\n\n';
+
+            report += '1. WORK PROGRESS & OBSERVATIONS\n';
+            report += '───────────────────────────────────────────────\n';
+            if (diaryToday.length > 0) {
+                diaryToday.forEach((e, i) => {
+                    report += '\n1.' + (i+1) + ' ' + e.title + ' [' + (e.activityType || 'General') + ']\n';
+                    report += '    Location: ' + e.location + '\n';
+                    report += '    Time: ' + timeFormat(e.timestamp) + '\n';
+                    report += '    ' + e.description.replace(/\n/g, '\n    ') + '\n';
+                    if (e.labourCount) report += '    Labour on Site: ' + e.labourCount + '\n';
+                    if (e.equipmentUsed) report += '    Equipment: ' + e.equipmentUsed + '\n';
+                    if (e.materialsDelivered) report += '    Materials Delivered:\n    ' + e.materialsDelivered.replace(/\n/g, '\n    ') + '\n';
+                    if (e.issuesIdentified) report += '    ⚠️ ISSUES: ' + e.issuesIdentified.replace(/\n/g, '\n    ') + '\n';
+                    if (e.contractorOnSite) report += '    Contractor Rep: ' + e.contractorOnSite + '\n';
+                });
+            } else {
+                report += '\n    No diary entries recorded for today.\n';
+            }
+
+            report += '\n\n2. INSPECTIONS & TESTS\n';
+            report += '───────────────────────────────────────────────\n';
+            if (inspectionsToday.length > 0) {
+                inspectionsToday.forEach((e, i) => {
+                    report += '\n2.' + (i+1) + ' ' + e.checklistType + ' — RESULT: ' + e.result.toUpperCase() + '\n';
+                    report += '    Location: ' + e.location + ' | Time: ' + timeFormat(e.timestamp) + '\n';
+                    e.items.forEach(item => {
+                        report += '    ' + (item.passed ? '✅' : '❌') + ' ' + item.label;
+                        if (item.comment) report += ' (' + item.comment + ')';
+                        report += '\n';
+                    });
+                    if (e.notes) report += '    Notes: ' + e.notes + '\n';
+                    if (e.correctiveAction) report += '    ⚠️ Corrective Action: ' + e.correctiveAction + '\n';
+                });
+            } else {
+                report += '\n    No inspections recorded for today.\n';
+            }
+
+            report += '\n\n3. NON-CONFORMANCE REPORTS (NCRs)\n';
+            report += '───────────────────────────────────────────────\n';
+            if (ncrsToday.length > 0) {
+                report += '\n   NCRs RAISED TODAY:\n';
+                ncrsToday.forEach((e, i) => {
+                    report += '\n   NCR-' + e.id.split('-')[1] + ': ' + e.title + ' [' + e.severity + ']\n';
+                    report += '   Location: ' + e.location + '\n';
+                    report += '   Description: ' + e.description + '\n';
+                    report += '   Action Required: ' + e.actionRequired + '\n';
+                    report += '   Status: ' + e.status.toUpperCase() + '\n';
+                });
+            }
+            if (ncrsOpen.length > 0) {
+                report += '\n   OUTSTANDING NCRs (' + ncrsOpen.length + '):\n';
+                ncrsOpen.forEach(e => {
+                    report += '   • NCR-' + e.id.split('-')[1] + ': ' + e.title + ' [' + e.severity + '] — ' + e.location + '\n';
+                });
+            }
+            if (ncrsToday.length === 0 && ncrsOpen.length === 0) {
+                report += '\n    No NCRs raised today. No outstanding NCRs.\n';
+            }
+
+            report += '\n\n4. SITE INSTRUCTIONS\n';
+            report += '───────────────────────────────────────────────\n';
+            if (instructionsToday.length > 0) {
+                instructionsToday.forEach((e, i) => {
+                    report += '\n   SI-' + e.id.split('-')[1] + ': Issued to ' + e.issuedTo + '\n';
+                    report += '   Location: ' + e.location + '\n';
+                    report += '   ' + e.description.replace(/\n/g, '\n   ') + '\n';
+                    if (e.reference) report += '   Ref: ' + e.reference + '\n';
+                    if (e.deadline) report += '   Deadline: ' + e.deadline + '\n';
+                    report += '   Status: ' + e.status.toUpperCase() + '\n';
+                });
+            } else {
+                report += '\n    No site instructions issued today.\n';
+            }
+
+            report += '\n\n5. PLANT & EQUIPMENT ON SITE\n';
+            report += '───────────────────────────────────────────────\n';
+            const equipmentToday = diaryToday.filter(e => e.equipmentUsed).map(e => e.equipmentUsed);
+            if (equipmentToday.length > 0) {
+                const allEquip = [...new Set(equipmentToday.join(', ').split(', '))];
+                report += '\n    ' + allEquip.join('\n    ') + '\n';
+            } else {
+                report += '\n    Refer to diary entries for equipment details.\n';
+            }
+
+            report += '\n\n6. LABOUR ON SITE\n';
+            report += '───────────────────────────────────────────────\n';
+            const labourToday = diaryToday.filter(e => e.labourCount);
+            if (labourToday.length > 0) {
+                labourToday.forEach(e => {
+                    report += '\n    ' + e.labourCount + ' — ' + e.location + ' (' + e.title + ')\n';
+                });
+            } else {
+                report += '\n    Refer to contractor daily labour returns.\n';
+            }
+
+            report += '\n\n7. MATERIALS DELIVERED\n';
+            report += '───────────────────────────────────────────────\n';
+            const materialsToday = diaryToday.filter(e => e.materialsDelivered);
+            if (materialsToday.length > 0) {
+                materialsToday.forEach(e => {
+                    report += '\n    At ' + e.location + ':\n    ' + e.materialsDelivered.replace(/\n/g, '\n    ') + '\n';
+                });
+            } else {
+                report += '\n    No major material deliveries recorded.\n';
+            }
+
+            report += '\n\n8. HEALTH & SAFETY OBSERVATIONS\n';
+            report += '───────────────────────────────────────────────\n';
+            const hnsEntries = diaryToday.filter(e => e.description.toLowerCase().includes('safety') || e.description.toLowerCase().includes('h&s') || e.description.toLowerCase().includes('ppe') || (e.issuesIdentified && e.issuesIdentified.toLowerCase().includes('safety')));
+            if (hnsEntries.length > 0) {
+                hnsEntries.forEach(e => {
+                    report += '\n    • ' + e.title + ': ' + (e.issuesIdentified || e.description).substring(0, 150) + '\n';
+                });
+            } else {
+                report += '\n    No specific H&S issues noted. Site appeared orderly.\n';
+                report += '    All personnel observed wearing mandatory PPE.\n';
+            }
+
+            report += '\n\n9. GENERAL REMARKS\n';
+            report += '───────────────────────────────────────────────\n';
+            report += '\n    Work is progressing in accordance with the approved\n';
+            report += '    programme and specifications unless otherwise noted.\n';
+            report += '    Contractor is reminded to maintain quality standards\n';
+            report += '    and adhere to all safety requirements.\n';
+
+            report += '\n\n═══════════════════════════════════════════════\n';
+            report += '  REPORT END — ' + new Date().toLocaleDateString('en-KE', { dateStyle: 'full' }) + '\n';
+            report += '═══════════════════════════════════════════════\n';
+            report += '\n  SIGNED: ................................    DATE: ................\n';
+            report += '  Clerk of Works\n';
+            report += '\n  COUNTERSIGNED: .........................    DATE: ................\n';
+            report += '  Contractor\'s Representative\n';
+
+            container.innerHTML = '<div style="display:flex;gap:8px;margin-bottom:12px;">' +
+                '<button class="btn btn-primary btn-small" onclick="copyReport()">📋 Copy Report</button>' +
+                '<button class="btn btn-secondary btn-small" onclick="saveReport()">💾 Save Report</button>' +
+                '<button class="btn btn-secondary btn-small" onclick="shareReport()">📤 Share</button>' +
+            '</div>' +
+            '<div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;">' +
+                '<span class="badge badge-info">Diary: ' + diaryToday.length + '</span>' +
+                '<span class="badge ' + (inspectionsToday.filter(i => i.result === 'fail').length > 0 ? 'badge-fail' : 'badge-pass') + '">Inspections: ' + inspectionsToday.length + '</span>' +
+                '<span class="badge badge-open">Open NCRs: ' + ncrsOpen.length + '</span>' +
+                '<span class="badge badge-pending">SI Issued: ' + instructionsToday.length + '</span>' +
+            '</div>' +
+            '<div class="report-preview" id="reportText">' + report + '</div>';
+
+            // Store report in memory for copy/share
+            window._currentReport = report;
+        }
+
+        function renderAll() {
+            renderDiary();
+            renderInspections();
+            renderNCRs();
+            renderInstructions();
+            renderPhotos();
+            updateStats();
+            // Don't auto-render report — only when tab selected
+        }
+
+        // ============================================
+        // MODAL SYSTEM
+        // ============================================
         function showModal(title, formHTML, onSubmit) {
             const container = document.getElementById('modalContainer');
-            container.innerHTML = '<div class="modal-overlay" id="modalOverlay"><div class="modal"><h2>' + title + '</h2><div id="modalForm">' + formHTML + '</div><div class="btn-row" style="margin-top:10px;"><button class="btn btn-secondary" onclick="closeModal()">Cancel</button><button class="btn btn-primary" id="modalSubmit">Save</button></div></div></div>';
-            document.getElementById('modalSubmit').addEventListener('click', () => { const r = onSubmit(); if (r !== false) { closeModal(); renderAll(); } });
-            document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target.id==='modalOverlay') closeModal(); });
+            container.innerHTML = '' +
+                '<div class="modal-overlay" id="modalOverlay">' +
+                    '<div class="modal">' +
+                        '<h2>' + title + '</h2>' +
+                        '<div id="modalForm">' + formHTML + '</div>' +
+                        '<div class="btn-row">' +
+                            '<button class="btn btn-secondary" onclick="closeModal()">Cancel</button>' +
+                            '<button class="btn btn-primary" id="modalSubmit">Save Entry</button>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            document.getElementById('modalSubmit').addEventListener('click', () => {
+                const result = onSubmit();
+                if (result !== false) {
+                    closeModal();
+                    renderAll();
+                    showToast('✅ Saved successfully!');
+                }
+            });
+            document.getElementById('modalOverlay').addEventListener('click', (e) => {
+                if (e.target.id === 'modalOverlay') closeModal();
+            });
         }
-        function closeModal() { document.getElementById('modalContainer').innerHTML = ''; }
 
-        function showDiaryForm() {
-            showModal('New Diary Entry', '<input type="text" id="diaryTitle" placeholder="Entry title"><select id="diaryLocation"><option>Floor 3 - East Wing</option><option>Floor 2 - East Wing</option><option>Ground Floor</option><option>External Works</option><option>Site General</option></select><textarea id="diaryDesc" placeholder="Describe work, labour, materials, issues..."></textarea>', () => {
+        function closeModal() {
+            document.getElementById('modalContainer').innerHTML = '';
+        }
+
+        // ============================================
+        // FORMS
+        // ============================================
+        function showDiaryForm(editId = null) {
+            const existing = editId ? appData.diary.find(e => e.id === editId) : null;
+            const formHTML = '' +
+                '<div class="form-group"><label>Entry Title *</label><input type="text" id="diaryTitle" placeholder="e.g., Concreting — 3rd Floor Slab, Grid C-D/2-5" value="' + (existing ? existing.title : '') + '"></div>' +
+                '<div class="form-group"><label>Activity Type</label><select id="diaryActivity">' +
+                    '<option>Work in Progress</option><option>Material Delivery</option><option>Inspection</option><option>Meeting</option><option>Delay/Issue</option><option>General</option>' +
+                '</select></div>' +
+                '<div class="form-group"><label>Location</label><input type="text" id="diaryLocation" placeholder="e.g., Block A, Floor 3, East Wing" value="' + (existing ? existing.location : '') + '"></div>' +
+                '<div class="form-group"><label>Detailed Description *</label><textarea id="diaryDesc" placeholder="Describe work observed, methods, quality, progress, instructions given...">' + (existing ? existing.description : '') + '</textarea></div>' +
+                '<div class="form-group"><label>Labour on Site</label><input type="text" id="diaryLabour" placeholder="e.g., 15 skilled, 25 unskilled, 2 foremen" value="' + (existing ? existing.labourCount || '' : '') + '"></div>' +
+                '<div class="form-group"><label>Equipment on Site</label><input type="text" id="diaryEquipment" placeholder="e.g., 1 Tower Crane, 2 Concrete Mixers, 1 Backhoe" value="' + (existing ? existing.equipmentUsed || '' : '') + '"></div>' +
+                '<div class="form-group"><label>Materials Delivered</label><textarea id="diaryMaterials" placeholder="e.g., 200 bags cement (Blue Triangle, OPC)\n50 tonnes reinforcement steel (Y12, Y16)\n5000 concrete blocks (6-inch solid)" style="min-height:60px;">' + (existing ? existing.materialsDelivered || '' : '') + '</textarea></div>' +
+                '<div class="form-group"><label>Issues / Concerns</label><textarea id="diaryIssues" placeholder="e.g., Delay in steel delivery from supplier\nHoneycomb observed on Column C12 — NCR raised\nScaffolding on West wing not fully braced" style="min-height:60px;">' + (existing ? existing.issuesIdentified || '' : '') + '</textarea></div>' +
+                '<div class="form-group"><label>Contractor Personnel on Site</label><input type="text" id="diaryContractorRep" placeholder="e.g., Eng. Kamau — Site Agent, Mr. Otieno — Foreman" value="' + (existing ? existing.contractorOnSite || '' : '') + '"></div>';
+
+            showModal(existing ? '✏️ Edit Diary Entry' : '📔 New Diary Entry', formHTML, () => {
                 const title = document.getElementById('diaryTitle').value.trim();
-                if (!title) { alert('Title required'); return false; }
-                appData.diary.push({ id: genId('diary'), title, location: document.getElementById('diaryLocation').value, description: document.getElementById('diaryDesc').value.trim(), weather: document.getElementById('weatherSelect').value, photos: [], timestamp: new Date().toISOString() });
+                const description = document.getElementById('diaryDesc').value.trim();
+                if (!title || !description) { alert('Title and description are required'); return false; }
+
+                const entry = {
+                    id: existing ? existing.id : genId('diary'),
+                    title,
+                    activityType: document.getElementById('diaryActivity').value,
+                    location: document.getElementById('diaryLocation').value,
+                    description,
+                    labourCount: document.getElementById('diaryLabour').value,
+                    equipmentUsed: document.getElementById('diaryEquipment').value,
+                    materialsDelivered: document.getElementById('diaryMaterials').value,
+                    issuesIdentified: document.getElementById('diaryIssues').value,
+                    contractorOnSite: document.getElementById('diaryContractorRep').value,
+                    weather: document.getElementById('weatherSelect').value,
+                    temperature: document.getElementById('temperature').value,
+                    timestamp: existing ? existing.timestamp : new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                };
+
+                if (existing) {
+                    const idx = appData.diary.findIndex(e => e.id === editId);
+                    if (idx > -1) appData.diary[idx] = entry;
+                } else {
+                    appData.diary.push(entry);
+                }
                 saveData(appData);
             });
+
+            // Set activity type if editing
+            if (existing && existing.activityType) {
+                setTimeout(() => {
+                    const sel = document.getElementById('diaryActivity');
+                    if (sel) sel.value = existing.activityType;
+                }, 100);
+            }
+        }
+
+        function editDiary(id) {
+            showDiaryForm(id);
         }
 
         function showInspectionForm() {
-            const lists = {
-                'Concrete Pour': ['Formwork checked','Reinforcement as drawing','Cover blocks placed','Grade confirmed','Slump test done','Vibrator ready','Curing plan ready'],
-                'Steel Fixing': ['Bar sizes correct','Spacing correct','Laps correct','Chairs placed','Clean & rust-free','Drawings on site'],
-                'Blockwork': ['Block type correct','Mortar 1:4','Plumb & level','Wall ties','DPC in place','Openings correct'],
-                'Excavation': ['Setting out checked','Depth correct','Bottom firm','Safety batter','Dewatering','Blinding approval'],
+            const checklists = {
+                'Concrete Pour — Pre-Pour': ['Formwork inspected — dimensions, alignment, bracing OK', 'Reinforcement as per structural drawings', 'Cover blocks placed (25mm min for slabs, 40mm for foundations)', 'Concrete grade confirmed (e.g., C30/37)', 'Slump test equipment ready', 'Poker vibrators available (2 minimum)', 'Curing plan in place (water/membrane)', 'Pour card signed by Structural Engineer', 'Area clean and free of debris'],
+                'Steel Reinforcement': ['Bar sizes and grades as per BBS', 'Spacing within tolerance (±10mm)', 'Lap lengths correct (per BS 8110)', 'Couplers torqued to specification', 'Chairs and spacers at correct spacing', 'Clean and free from rust/contamination', 'Approved shop drawings on site', 'NCRs from previous inspection closed'],
+                'Blockwork / Masonry': ['Block type and strength confirmed', 'Mortar mix ratio 1:4 (cement:sand)', 'Plumb and level within 5mm per storey', 'Wall ties at 450mm c/c vertically, 900mm horizontally', 'Damp proof course in place at base', 'Openings as per architectural drawings', 'Bond pattern correct (half bond / stretcher)', 'Joints fully filled and struck'],
+                'Excavation & Earthworks': ['Setting out checked — line and level', 'Depth to formation level per drawings', 'Bottom of excavation firm and undisturbed', 'Safety batter/slope provided (or shoring)', 'Dewatering system working (if required)', 'Approval obtained before blinding', 'Services located and protected', 'Spoil placed >2m from edge'],
+                'Waterproofing': ['Substrate prepared — smooth, clean, dry', 'Primer applied per manufacturer spec', 'Membrane lapped minimum 100mm', 'Detailing at junctions/penetrations correct', 'Protection board placed immediately', 'Fillet at internal angles', 'Ponding test completed (24hrs)', 'Manufacturer rep present during application'],
+                'Plastering & Rendering': ['Background prepared — joints raked', 'Chicken mesh at column/block interface', 'Screeds/guides in place', 'Mix ratio 1:4 for undercoat, 1:6 for finish', 'Thickness 15mm max per coat', 'Curing between coats (24hrs minimum)', 'No hollow spots on sounding', 'Falls correct for wet areas'],
             };
-            window._lists = lists;
-            let h = '<select id="checklistType" onchange="window.updateList()"><option value="">Select checklist...</option>';
-            Object.keys(lists).forEach(k => { h += '<option value="' + k + '">' + k + '</option>'; });
-            h += '</select><div id="checklistItems" style="margin-top:8px;"></div><textarea id="inspectionNotes" placeholder="Notes..." style="margin-top:8px;"></textarea><input type="text" id="inspectionLocation" placeholder="Location" value="Floor 3 - East Wing">';
-            showModal('Inspection Checklist', h, () => {
+
+            window._inspectionChecklists = checklists;
+
+            let formHTML = '<div class="form-group"><label>Checklist Type *</label><select id="checklistType" onchange="window.updateChecklistItems()"><option value="">— Select inspection type —</option>';
+            Object.keys(checklists).forEach(k => {
+                formHTML += '<option value="' + k + '">' + k + '</option>';
+            });
+            formHTML += '</select></div>';
+            formHTML += '<div class="form-group"><label>Location</label><input type="text" id="inspectionLocation" placeholder="e.g., Block A, Floor 3" value="Block A, Floor 3"></div>';
+            formHTML += '<div class="form-group"><label>Checklist Items</label><div id="checklistItems" style="background:var(--bg);border-radius:8px;padding:4px 12px;border:1px solid var(--border);"><p style="color:var(--muted);font-size:0.75rem;text-align:center;padding:16px;">Select a checklist type above</p></div></div>';
+            formHTML += '<div class="form-group"><label>Inspector Notes</label><textarea id="inspectionNotes" placeholder="Overall assessment, observations, recommendations..."></textarea></div>';
+            formHTML += '<div class="form-group"><label>Corrective Actions (if any items fail)</label><textarea id="inspectionCorrective" placeholder="Required corrective actions for failed items..."></textarea></div>';
+
+            showModal('✅ Inspection Checklist', formHTML, () => {
                 const type = document.getElementById('checklistType').value;
-                if (!type) { alert('Select type'); return false; }
-                const cbs = document.querySelectorAll('#checklistItems input[type=checkbox]');
-                const items = Array.from(cbs).map(cb => ({ label: cb.nextElementSibling.textContent, passed: cb.checked }));
-                appData.inspections.push({ id: genId('insp'), checklistType: type, location: document.getElementById('inspectionLocation').value, items: items, result: items.every(i => i.passed) ? 'pass' : 'fail', notes: document.getElementById('inspectionNotes').value, timestamp: new Date().toISOString() });
+                if (!type) { alert('Please select a checklist type'); return false; }
+
+                const checkboxes = document.querySelectorAll('#checklistItems input[type="checkbox"]');
+                const comments = document.querySelectorAll('#checklistItems .item-comment');
+                const items = Array.from(checkboxes).map((cb, i) => ({
+                    label: cb.nextElementSibling.textContent.replace(/\s*$/, ''),
+                    passed: cb.checked,
+                    comment: comments[i] ? comments[i].value : ''
+                }));
+
+                appData.inspections.push({
+                    id: genId('insp'),
+                    checklistType: type,
+                    location: document.getElementById('inspectionLocation').value,
+                    items,
+                    result: items.every(i => i.passed) ? 'pass' : 'fail',
+                    notes: document.getElementById('inspectionNotes').value,
+                    correctiveAction: document.getElementById('inspectionCorrective').value,
+                    inspectorName: 'Clerk of Works',
+                    timestamp: new Date().toISOString()
+                });
                 saveData(appData);
             });
-            window.updateList = function() {
+
+            window.updateChecklistItems = function() {
                 const type = document.getElementById('checklistType').value;
-                const c = document.getElementById('checklistItems');
-                if (!type || !window._lists[type]) { c.innerHTML = ''; return; }
-                c.innerHTML = window._lists[type].map((item,i) => '<label style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:0.75rem;"><input type="checkbox" id="item' + i + '" checked> ' + item + '</label>').join('');
+                const container = document.getElementById('checklistItems');
+                if (!type || !window._inspectionChecklists[type]) {
+                    container.innerHTML = '<p style="color:var(--muted);font-size:0.75rem;text-align:center;padding:16px;">Select a checklist type above</p>';
+                    return;
+                }
+                container.innerHTML = window._inspectionChecklists[type].map((item, i) => '' +
+                    '<div class="checklist-item">' +
+                        '<input type="checkbox" id="item' + i + '" checked>' +
+                        '<label for="item' + i + '" style="flex:1;">' + item + '</label>' +
+                        '<input type="text" class="item-comment" placeholder="Comment (optional)" style="width:40%;padding:4px 8px;font-size:0.7rem;background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--text);">' +
+                    '</div>'
+                ).join('');
             };
         }
 
         function showNCRForm() {
-            showModal('Raise NCR', '<input type="text" id="ncrTitle" placeholder="NCR Title"><select id="ncrSeverity"><option value="Minor">Minor</option><option value="Major" selected>Major</option><option value="Critical">Critical</option></select><input type="text" id="ncrLocation" placeholder="Location" value="Floor 3 - East Wing"><textarea id="ncrDesc" placeholder="Describe non-conformance..."></textarea><textarea id="ncrAction" placeholder="Required corrective action..."></textarea>', () => {
+            const formHTML = '' +
+                '<div class="form-group"><label>NCR Title *</label><input type="text" id="ncrTitle" placeholder="e.g., Honeycomb on Column C12 — 3rd Floor"></div>' +
+                '<div class="form-group"><label>Severity</label><select id="ncrSeverity"><option value="Minor">Minor — Cosmetic / easily rectified</option><option value="Major" selected>Major — Requires significant rework</option><option value="Critical">Critical — Structural / safety / regulatory concern</option></select></div>' +
+                '<div class="form-group"><label>Location</label><input type="text" id="ncrLocation" placeholder="e.g., Block A, Floor 3, Grid C-D/2-5" value="Block A, Floor 3"></div>' +
+                '<div class="form-group"><label>Responsible Party</label><input type="text" id="ncrResponsible" placeholder="e.g., BuildRight Construction Ltd / Subcontractor Name"></div>' +
+                '<div class="form-group"><label>Description of Non-Conformance *</label><textarea id="ncrDesc" placeholder="Describe in detail what was observed, measurements, photographs taken, reference to specification/drawing violated..."></textarea></div>' +
+                '<div class="form-group"><label>Required Corrective Action *</label><textarea id="ncrAction" placeholder="Specify what must be done, by whom, and by when..."></textarea></div>';
+
+            showModal('🚨 Raise Non-Conformance Report (NCR)', formHTML, () => {
                 const title = document.getElementById('ncrTitle').value.trim();
-                const desc = document.getElementById('ncrDesc').value.trim();
-                if (!title || !desc) { alert('Title and description required'); return false; }
-                appData.ncrs.push({ id: genId('ncr'), title: title, severity: document.getElementById('ncrSeverity').value, location: document.getElementById('ncrLocation').value, description: desc, actionRequired: document.getElementById('ncrAction').value.trim(), status: 'open', timestamp: new Date().toISOString() });
+                const description = document.getElementById('ncrDesc').value.trim();
+                const action = document.getElementById('ncrAction').value.trim();
+                if (!title || !description || !action) { alert('Title, description, and action required'); return false; }
+
+                appData.ncrs.push({
+                    id: genId('ncr'),
+                    title,
+                    severity: document.getElementById('ncrSeverity').value,
+                    location: document.getElementById('ncrLocation').value,
+                    responsibleParty: document.getElementById('ncrResponsible').value,
+                    description,
+                    actionRequired: action,
+                    status: 'open',
+                    timestamp: new Date().toISOString()
+                });
                 saveData(appData);
             });
         }
 
         function showInstructionForm() {
-            showModal('Site Instruction', '<input type="text" id="siTo" placeholder="Issued to (Contractor)"><input type="text" id="siLoc" placeholder="Location" value="Floor 3 - East Wing"><textarea id="siDesc" placeholder="Describe instruction..."></textarea>', () => {
+            const formHTML = '' +
+                '<div class="form-group"><label>Issued To *</label><input type="text" id="siTo" placeholder="e.g., Site Agent — BuildRight Construction Ltd"></div>' +
+                '<div class="form-group"><label>Location</label><input type="text" id="siLocation" placeholder="e.g., Block A, Floor 3" value="Block A, Floor 3"></div>' +
+                '<div class="form-group"><label>Instruction *</label><textarea id="siDesc" placeholder="Clearly state the instruction, reason, and expected outcome..."></textarea></div>' +
+                '<div class="form-group"><label>Reference (Drawing/Spec)</label><input type="text" id="siRef" placeholder="e.g., Dwg S-301 Rev B / Spec Clause 5.2.3"></div>' +
+                '<div class="form-group"><label>Deadline</label><input type="text" id="siDeadline" placeholder="e.g., 18 June 2026 — Close of business"></div>';
+
+            showModal('📋 Site Instruction', formHTML, () => {
                 const to = document.getElementById('siTo').value.trim();
                 const desc = document.getElementById('siDesc').value.trim();
-                if (!to || !desc) { alert('All fields required'); return false; }
-                appData.instructions.push({ id: genId('si'), issuedTo: to, location: document.getElementById('siLoc').value, description: desc, status: 'issued', timestamp: new Date().toISOString() });
+                if (!to || !desc) { alert('Issued to and instruction required'); return false; }
+
+                appData.instructions.push({
+                    id: genId('si'),
+                    issuedTo: to,
+                    location: document.getElementById('siLocation').value,
+                    description: desc,
+                    reference: document.getElementById('siRef').value,
+                    deadline: document.getElementById('siDeadline').value,
+                    status: 'issued',
+                    timestamp: new Date().toISOString()
+                });
                 saveData(appData);
             });
         }
 
         function showFABMenu() {
-            const c = document.getElementById('modalContainer');
-            c.innerHTML = '<div class="modal-overlay" id="fo" style="align-items:flex-end;justify-content:center;"><div class="modal" style="text-align:center;"><h2 style="margin-bottom:14px;">Add New</h2><button class="btn btn-primary" style="margin-bottom:6px;width:100%;" onclick="closeModal();showDiaryForm();">Diary Entry</button><button class="btn btn-primary" style="margin-bottom:6px;width:100%;background:var(--green);" onclick="closeModal();showInspectionForm();">Inspection</button><button class="btn btn-primary" style="margin-bottom:6px;width:100%;background:var(--red);" onclick="closeModal();showNCRForm();">Raise NCR</button><button class="btn btn-primary" style="margin-bottom:6px;width:100%;background:var(--orange);" onclick="closeModal();showInstructionForm();">Site Instruction</button><button class="btn btn-secondary" style="width:100%;" onclick="closeModal();">Cancel</button></div></div>';
-            document.getElementById('fo').addEventListener('click', e => { if (e.target.id==='fo') closeModal(); });
+            const container = document.getElementById('modalContainer');
+            container.innerHTML = '' +
+                '<div class="modal-overlay" id="fabOverlay" style="align-items:flex-end;justify-content:center;">' +
+                    '<div class="modal" style="text-align:center;max-width:400px;margin:0 auto;">' +
+                        '<h2 style="justify-content:center;">➕ Add New Entry</h2>' +
+                        '<button class="btn btn-primary" style="margin-bottom:8px;width:100%;" onclick="closeModal();showDiaryForm();">📔 Detailed Diary Entry</button>' +
+                        '<button class="btn btn-primary" style="margin-bottom:8px;width:100%;background:var(--green);" onclick="closeModal();showInspectionForm();">✅ Inspection Checklist</button>' +
+                        '<button class="btn btn-primary" style="margin-bottom:8px;width:100%;background:var(--red);" onclick="closeModal();showNCRForm();">🚨 Raise NCR</button>' +
+                        '<button class="btn btn-primary" style="margin-bottom:8px;width:100%;background:var(--yellow);color:#0d1117;" onclick="closeModal();showInstructionForm();">📋 Site Instruction</button>' +
+                        '<button class="btn btn-secondary" style="width:100%;" onclick="closeModal();">Cancel</button>' +
+                    '</div>' +
+                '</div>';
+            document.getElementById('fabOverlay').addEventListener('click', e => {
+                if (e.target.id === 'fabOverlay') closeModal();
+            });
         }
 
-        function deleteEntry(type, id) { if (!confirm('Delete?')) return; appData[type] = appData[type].filter(e => e.id !== id); saveData(appData); renderAll(); }
-        function closeNCR(id) { const ncr = appData.ncrs.find(n => n.id === id); if (ncr) { ncr.status = 'closed'; ncr.closedDate = new Date().toISOString(); saveData(appData); renderAll(); } }
-        function ackSI(id) { const si = appData.instructions.find(s => s.id === id); if (si) { si.status = 'acknowledged'; si.acknowledgedDate = new Date().toISOString(); saveData(appData); renderAll(); } }
-
-        function exportReport() {
-            const today = new Date().toISOString().split('T')[0];
-            let r = 'COW DAILY REPORT - ' + new Date().toLocaleDateString('en-KE',{dateStyle:'full'}) + '\n';
-            r += 'Project: ' + document.getElementById('projectName').textContent + '\n';
-            r += 'Weather: ' + document.getElementById('weatherSelect').value + '\n';
-            r += '='.repeat(40) + '\n\n';
-            r += 'DIARY:\n'; appData.diary.filter(e => e.timestamp.startsWith(today)).forEach(e => { r += '- ' + e.title + ': ' + e.description + '\n'; });
-            r += '\nINSPECTIONS:\n'; appData.inspections.filter(e => e.timestamp.startsWith(today)).forEach(e => { r += '- ' + e.checklistType + ': ' + e.result + '\n'; });
-            r += '\nNCRs:\n'; appData.ncrs.filter(e => e.timestamp.startsWith(today)).forEach(e => { r += '- [' + e.severity + '] ' + e.title + '\n'; });
-            navigator.clipboard.writeText(r).then(() => alert('Report copied!'));
+        // ============================================
+        // ACTIONS
+        // ============================================
+        function deleteEntry(type, id) {
+            if (!confirm('Delete this entry? This cannot be undone.')) return;
+            appData[type] = appData[type].filter(e => e.id !== id);
+            saveData(appData);
+            renderAll();
+            showToast('🗑️ Entry deleted');
         }
 
+        function closeNCR(id) {
+            const ncr = appData.ncrs.find(n => n.id === id);
+            if (!ncr) return;
+            const comment = prompt('Closeout verification comment:');
+            if (comment === null) return;
+            ncr.status = 'closed';
+            ncr.closeoutComment = comment;
+            ncr.closedDate = new Date().toISOString();
+            saveData(appData);
+            renderAll();
+            showToast('✅ NCR closed');
+        }
+
+        function acknowledgeSI(id) {
+            const si = appData.instructions.find(s => s.id === id);
+            if (!si) return;
+            si.status = 'acknowledged';
+            si.acknowledgedDate = new Date().toISOString();
+            saveData(appData);
+            renderAll();
+            showToast('✍️ Site Instruction acknowledged');
+        }
+
+        function copyReport() {
+            const report = window._currentReport || '';
+            navigator.clipboard.writeText(report).then(() => {
+                showToast('📋 Report copied to clipboard!');
+            }).catch(() => {
+                // Fallback: select text
+                const el = document.getElementById('reportText');
+                if (el) {
+                    const range = document.createRange();
+                    range.selectNode(el);
+                    window.getSelection().removeAllRanges();
+                    window.getSelection().addRange(range);
+                    showToast('📋 Report selected — copy manually');
+                }
+            });
+        }
+
+        function saveReport() {
+            const report = window._currentReport || '';
+            const reportNo = document.getElementById('reportNo').value || 'COW-001';
+            appData.dailyReports.push({
+                id: genId('rpt'),
+                reportNo,
+                content: report,
+                date: getToday(),
+                timestamp: new Date().toISOString()
+            });
+            // Increment report counter
+            const current = parseInt((settings.reportCounter || 1));
+            settings.reportCounter = current + 1;
+            saveSettings(settings);
+            document.getElementById('reportNo').value = 'COW-' + String(current + 1).padStart(3, '0');
+            saveData(appData);
+            showToast('💾 Report saved & counter incremented');
+        }
+
+        function shareReport() {
+            const report = window._currentReport || '';
+            if (navigator.share) {
+                navigator.share({
+                    title: 'COW Daily Report — ' + getToday(),
+                    text: report
+                }).catch(() => {});
+            } else {
+                copyReport();
+            }
+        }
+
+        // ============================================
+        // INIT
+        // ============================================
         function init() {
-            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-KE', { weekday:'short', year:'numeric', month:'short', day:'numeric' });
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-KE', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+
+            bindSettings();
+
+            // Tab switching
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.addEventListener('click', () => {
                     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
                     tab.classList.add('active');
-                    document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+                    const panelId = 'panel-' + tab.dataset.tab;
+                    const panel = document.getElementById(panelId);
+                    if (panel) panel.classList.add('active');
+                    // Render report when tab selected
+                    if (tab.dataset.tab === 'report') renderReport();
                 });
             });
+
+            // FAB
             document.getElementById('fabBtn').addEventListener('click', showFABMenu);
+
+            // Search
             document.getElementById('diarySearch').addEventListener('input', e => renderDiary(e.target.value));
-            const eb = document.createElement('button');
-            eb.textContent = 'Report';
-            eb.style.cssText = 'background:var(--muted);color:var(--text);border:1px solid var(--border);padding:3px 8px;border-radius:5px;font-size:0.65rem;cursor:pointer;';
-            eb.addEventListener('click', exportReport);
-            document.querySelector('.header-top').appendChild(eb);
+
+            // Settings auto-save
+            document.getElementById('weatherSelect').addEventListener('change', () => {
+                settings.weather = document.getElementById('weatherSelect').value;
+                saveSettings(settings);
+            });
+
+            // Initial render
             renderAll();
         }
+
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
