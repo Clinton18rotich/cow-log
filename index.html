@@ -6,43 +6,39 @@
     <style>
         :root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;--accent:#f78166;--green:#3fb950;--red:#f85149;--yellow:#d2991d;--blue:#58a6ff;--purple:#a371f7;--cyan:#39d2c0;--orange:#ff8c42;--pink:#f778ba}
         *{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:100px;font-size:15px;line-height:1.5}
-        .header{background:var(--card);padding:14px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}.header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.header h1{font-size:1.1rem;color:var(--accent)}.header .date{font-size:.75rem;color:var(--muted)}.settings-toggle{background:var(--border);color:var(--text);border:none;padding:3px 8px;border-radius:5px;font-size:.65rem;cursor:pointer}
+        .header{background:var(--card);padding:14px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}.header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.header h1{font-size:1.1rem;color:var(--accent)}.date{font-size:.75rem;color:var(--muted)}
         .stats-row{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:8px 12px}
         .stat-card{background:var(--card);padding:6px 3px;border-radius:8px;text-align:center;border:1px solid var(--border)}.stat-card .count{font-size:1.1rem;font-weight:700}.stat-card .label{font-size:.45rem;color:var(--muted);text-transform:uppercase;margin-top:1px}
         .count.red{color:var(--red)}.count.green{color:var(--green)}.count.blue{color:var(--blue)}.count.yellow{color:var(--yellow)}.count.purple{color:var(--purple)}.count.orange{color:var(--orange)}
         .tabs{display:flex;gap:1px;padding:0 8px;margin-bottom:6px;overflow-x:auto;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.tab{padding:5px 7px;border-radius:14px;font-size:.58rem;white-space:nowrap;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-weight:500}.tab.active{background:var(--accent);border-color:var(--accent);color:#0d1117;font-weight:600}
         .content{padding:0 10px}.panel{display:none}.panel.active{display:block}
         .entry-card{background:var(--card);border-radius:8px;padding:8px;margin-bottom:5px;border:1px solid var(--border);border-left:3px solid var(--border)}
-        .diary-card{border-left-color:var(--blue)}.inspection-card{border-left-color:var(--green)}.ncr-card{border-left-color:var(--red)}.instruction-card{border-left-color:var(--yellow)}
         .entry-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px;gap:3px}.entry-title{font-weight:600;font-size:.75rem}
-        .badge{font-size:.5rem;padding:2px 5px;border-radius:6px;font-weight:600;white-space:nowrap}.badge-pass{background:rgba(63,185,80,.15);color:var(--green)}.badge-fail{background:rgba(248,81,73,.15);color:var(--red)}.badge-open{background:rgba(248,81,73,.15);color:var(--red)}.badge-closed{background:rgba(63,185,80,.15);color:var(--green)}.badge-pending{background:rgba(210,153,29,.15);color:var(--yellow)}.badge-info{background:rgba(88,166,255,.15);color:var(--blue)}
+        .badge{font-size:.5rem;padding:2px 5px;border-radius:6px;font-weight:600;white-space:nowrap}.badge-pass{background:rgba(63,185,80,.15);color:var(--green)}.badge-fail{background:rgba(248,81,73,.15);color:var(--red)}.badge-open{background:rgba(248,81,73,.15);color:var(--red)}.badge-closed{background:rgba(63,185,80,.15);color:var(--green)}.badge-info{background:rgba(88,166,255,.15);color:var(--blue)}.badge-ai{background:rgba(167,113,247,.2);color:var(--purple)}
         .entry-meta{font-size:.58rem;color:var(--muted);margin-bottom:3px;display:flex;flex-wrap:wrap;gap:6px}.entry-desc{font-size:.68rem;line-height:1.3;color:#c9d1d9}.entry-section{background:var(--bg);border-radius:5px;padding:5px 6px;margin-top:3px;font-size:.63rem}.section-label{font-size:.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px}
         .fab{position:fixed;bottom:18px;right:18px;width:46px;height:46px;border-radius:50%;background:var(--accent);color:#0d1117;border:none;font-size:1.2rem;cursor:pointer;box-shadow:0 4px 14px rgba(247,129,102,.3);z-index:200;font-weight:700}
         .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;display:flex;align-items:flex-end}.modal{background:var(--card);width:100%;border-radius:16px 16px 0 0;padding:14px;max-height:85vh;overflow-y:auto;border:1px solid var(--border)}.modal h2{font-size:.85rem;margin-bottom:10px;color:var(--accent)}
-        .form-group{margin-bottom:7px}.form-group label{display:block;font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px;font-weight:600}.modal input,.modal textarea,.modal select{width:100%;padding:7px;border-radius:5px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.72rem;font-family:inherit}.modal textarea{min-height:50px;resize:vertical}
-        .btn-row{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap}.btn{padding:7px 12px;border-radius:7px;border:none;font-weight:600;font-size:.7rem;cursor:pointer;flex:1;min-width:50px}.btn-primary{background:var(--accent);color:#0d1117}.btn-secondary{background:var(--border);color:var(--text)}.btn-small{padding:3px 7px;font-size:.55rem;border-radius:4px;flex:0}
-        .report-preview{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;font-family:monospace;font-size:.6rem;line-height:1.5;white-space:pre-wrap;max-height:45vh;overflow-y:auto}
-        .search-bar{margin-bottom:6px}.search-bar input{width:100%;padding:7px 10px;border-radius:7px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:.72rem}
+        .form-group{margin-bottom:7px}.form-group label{display:block;font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px;font-weight:600}.modal input,.modal textarea,.modal select{width:100%;padding:7px;border-radius:5px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.72rem;font-family:inherit}
+        .btn{padding:7px 12px;border-radius:7px;border:none;font-weight:600;font-size:.7rem;cursor:pointer;flex:1}.btn-primary{background:var(--accent);color:#0d1117}.btn-secondary{background:var(--border);color:var(--text)}.btn-small{padding:3px 7px;font-size:.55rem;border-radius:4px;flex:0}.btn-ai{background:linear-gradient(135deg,var(--purple),var(--pink));color:#fff}
+        .ai-result{background:linear-gradient(135deg,rgba(167,113,247,.1),rgba(247,120,186,.1));border:1px solid var(--purple);border-radius:8px;padding:10px;margin:8px 0}
+        .ai-loading{text-align:center;padding:20px;color:var(--muted)}
+        .ai-loading .spinner{width:30px;height:30px;border:3px solid var(--border);border-top-color:var(--purple);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 10px}
+        @keyframes spin{to{transform:rotate(360deg)}}
         .empty-state{text-align:center;padding:25px 10px;color:var(--muted)}.empty-state .icon{font-size:1.8rem;margin-bottom:6px;opacity:.5}
         .toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:var(--green);color:#0d1117;padding:5px 14px;border-radius:14px;font-weight:600;font-size:.65rem;z-index:400}
         .settings-panel{display:none;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px;margin-bottom:6px}.settings-panel.show{display:block}
-        .trade-category{background:var(--card);border-radius:8px;padding:8px;margin-bottom:6px;border:1px solid var(--border)}
-        .trade-category h3{font-size:.75rem;margin-bottom:6px;color:var(--accent);border-bottom:1px solid var(--border);padding-bottom:4px}
-        .checklist-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px}
-        .checklist-btn{padding:8px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:.65rem;text-align:left;cursor:pointer}
-        .checklist-btn:active{background:var(--accent);color:#0d1117}
-        @media print{body{background:#fff;color:#000}.header,.stats-row,.tabs,.fab,.btn,.search-bar,.modal-overlay,.toast,.settings-panel{display:none!important}.panel{display:none!important}#panel-report{display:block!important}.report-preview{background:#fff;border:none;color:#000;max-height:none;overflow:visible}}
-        @media(min-width:600px){.content{max-width:700px;margin:0 auto}.stats-row{max-width:700px;margin:0 auto}}
+        .drawing-card{border-left-color:var(--purple)!important}
+        @media print{body{background:#fff;color:#000}.header,.stats-row,.tabs,.fab,.btn,.search-bar,.modal-overlay,.toast,.settings-panel{display:none!important}.panel{display:none!important}#panel-report{display:block!important}}
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="header-row"><h1>🦺 CoW Log Pro</h1><div style="display:flex;align-items:center;gap:4px;"><button class="settings-toggle" id="settingsToggle">⚙️</button><span class="date" id="currentDate"></span></div></div>
-        <div class="settings-panel" id="settingsPanel"><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:.65rem;"><div><div class="section-label">Project</div><input type="text" id="projectName"></div><div><div class="section-label">Contract No</div><input type="text" id="contractNo"></div><div><div class="section-label">Contractor</div><input type="text" id="contractorName"></div><div><div class="section-label">Default Location</div><input type="text" id="defaultLocation"></div><div><div class="section-label">CoW Name</div><input type="text" id="cowName"></div><div><div class="section-label">PIN (4 digits)</div><input type="password" id="appPin" maxlength="4" placeholder="0000=off"></div><div style="grid-column:1/-1;"><button class="btn btn-primary btn-small" onclick="saveProjectSettings()">💾 Save</button><button class="btn btn-secondary btn-small" onclick="restoreData()" style="margin-left:4px;">📥 Restore</button></div></div></div>
-        <div id="compactInfo" style="font-size:.58rem;color:var(--muted);display:flex;gap:8px;"><span>🏗️ <strong id="displayProject">—</strong></span><span>👷 <strong id="displayContractor">—</strong></span></div>
+        <div class="header-row"><h1>🦺 CoW Log Pro</h1><div style="display:flex;align-items:center;gap:4px;"><button class="btn btn-small btn-secondary" id="settingsToggle">⚙️</button><span class="date" id="currentDate"></span></div></div>
+        <div class="settings-panel" id="settingsPanel"><div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:.65rem;"><div><div class="section-label">Project</div><input type="text" id="projectName"></div><div><div class="section-label">Contract No</div><input type="text" id="contractNo"></div><div><div class="section-label">Contractor</div><input type="text" id="contractorName"></div><div><div class="section-label">Location</div><input type="text" id="defaultLocation"></div><div><div class="section-label">CoW Name</div><input type="text" id="cowName"></div><div><div class="section-label">🤖 Gemini API Key</div><input type="password" id="geminiKey" placeholder="AIzaSy... from aistudio.google.com"></div><div style="grid-column:1/-1;"><button class="btn btn-primary btn-small" onclick="saveProjectSettings()">💾 Save</button><button class="btn btn-secondary btn-small" onclick="restoreData()">📥 Restore</button></div></div></div>
+        <div id="compactInfo" style="font-size:.58rem;color:var(--muted);display:flex;gap:8px;"><span>🏗️ <strong id="displayProject">—</strong></span><span>👷 <strong id="displayContractor">—</strong></span><span id="aiStatus" style="color:var(--purple);"></span></div>
     </div>
-    <div class="stats-row"><div class="stat-card"><div class="count blue" id="diaryCount">0</div><div class="label">Diary</div></div><div class="stat-card"><div class="count green" id="inspectionCount">0</div><div class="label">Insp</div></div><div class="stat-card"><div class="count red" id="ncrCount">0</div><div class="label">NCRs</div></div><div class="stat-card"><div class="count orange" id="matLowCount">0</div><div class="label">Stock</div></div><div class="stat-card"><div class="count purple" id="rfiCount">0</div><div class="label">RFIs</div></div></div>
-    <div class="tabs"><button class="tab active" data-tab="diary">📔</button><button class="tab" data-tab="inspections">✅</button><button class="tab" data-tab="ncr">🚨</button><button class="tab" data-tab="instructions">📋</button><button class="tab" data-tab="rfi">📤RFI</button><button class="tab" data-tab="drawings">📐</button><button class="tab" data-tab="materials">🧱</button><button class="tab" data-tab="concrete">🧪</button><button class="tab" data-tab="tests">🔬</button><button class="tab" data-tab="delays">🚧</button><button class="tab" data-tab="attendance">👷</button><button class="tab" data-tab="photos">📸</button><button class="tab" data-tab="report">📄</button></div>
+    <div class="stats-row"><div class="stat-card"><div class="count blue" id="diaryCount">0</div><div class="label">Diary</div></div><div class="stat-card"><div class="count green" id="inspectionCount">0</div><div class="label">Insp</div></div><div class="stat-card"><div class="count red" id="ncrCount">0</div><div class="label">NCRs</div></div><div class="stat-card"><div class="count orange" id="matLowCount">0</div><div class="label">Stock</div></div><div class="stat-card"><div class="count purple" id="rfiCount">0</div><div class="label">AI</div></div></div>
+    <div class="tabs"><button class="tab active" data-tab="diary">📔</button><button class="tab" data-tab="inspections">✅</button><button class="tab" data-tab="ncr">🚨</button><button class="tab" data-tab="instructions">📋</button><button class="tab" data-tab="rfi">📤</button><button class="tab" data-tab="drawings">📐🤖</button><button class="tab" data-tab="materials">🧱</button><button class="tab" data-tab="concrete">🧪</button><button class="tab" data-tab="tests">🔬</button><button class="tab" data-tab="delays">🚧</button><button class="tab" data-tab="attendance">👷</button><button class="tab" data-tab="photos">📸</button><button class="tab" data-tab="report">📄</button></div>
     <div class="content">
         <div class="panel active" id="panel-diary"><div class="search-bar"><input type="text" placeholder="🔍 Search..." id="diarySearch"></div><div id="diaryEntries"></div></div>
         <div class="panel" id="panel-inspections"><div id="inspectionEntries"></div></div>
@@ -59,22 +55,19 @@
         <div class="panel" id="panel-report"><div id="reportContent"></div></div>
     </div>
     <button class="fab" id="fabBtn">+</button>
-    <div id="modalContainer"></div><div id="toastContainer"></div><div id="mediaViewer"></div>
+    <div id="modalContainer"></div><div id="toastContainer"></div>
 
     <script>
-    // ============================================
-    // COMPLETE DATA STORE
-    // ============================================
-    const MK='cowlog_media_v9',AK='cowlog_app_v9',PK='cowlog_project_v7';
-    function loadProject(){try{const r=localStorage.getItem(PK);return r?JSON.parse(r):{projectName:'',contractNo:'',contractorName:'',defaultLocation:'',cowName:'CoW',weather:'☀️ Sunny',reportCounter:1,pin:'',lastBackup:''};}catch(e){return{projectName:'',contractNo:'',contractorName:'',defaultLocation:'',cowName:'CoW',weather:'☀️ Sunny',reportCounter:1,pin:'',lastBackup:''};}}
+    // DATA
+    const MK='cowlog_media_v11',AK='cowlog_app_v11',PK='cowlog_project_v9';
+    function loadProject(){try{const r=localStorage.getItem(PK);return r?JSON.parse(r):{projectName:'',contractNo:'',contractorName:'',defaultLocation:'',cowName:'CoW',geminiKey:'',reportCounter:1,pin:''};}catch(e){return{projectName:'',contractNo:'',contractorName:'',defaultLocation:'',cowName:'CoW',geminiKey:'',reportCounter:1,pin:''};}}
     function saveProject(p){localStorage.setItem(PK,JSON.stringify(p));}
     let project=loadProject();
     function loadMedia(){try{const r=localStorage.getItem(MK);return r?JSON.parse(r):[];}catch(e){return[];}}
     function saveMedia(arr){if(arr.length>50)arr=arr.slice(-35);try{localStorage.setItem(MK,JSON.stringify(arr));}catch(e){}}
-    function loadApp(){try{const r=localStorage.getItem(AK);return r?JSON.parse(r):{diary:[],inspections:[],ncrs:[],instructions:[],rfis:[],drawings:[],materials:[],materialLog:[],concrete:[],materialTests:[],delays:[],attendance:[],dailyReports:[]};}catch(e){return{diary:[],inspections:[],ncrs:[],instructions:[],rfis:[],drawings:[],materials:[],materialLog:[],concrete:[],materialTests:[],delays:[],attendance:[],dailyReports:[]};}}
+    function loadApp(){try{const r=localStorage.getItem(AK);return r?JSON.parse(r):{diary:[],inspections:[],ncrs:[],instructions:[],rfis:[],drawings:[],dimensions:[],structuralElements:[],materials:[],materialLog:[],concrete:[],materialTests:[],delays:[],attendance:[],dailyReports:[]};}catch(e){return{diary:[],inspections:[],ncrs:[],instructions:[],rfis:[],drawings:[],dimensions:[],structuralElements:[],materials:[],materialLog:[],concrete:[],materialTests:[],delays:[],attendance:[],dailyReports:[]};}}
     function saveApp(d){localStorage.setItem(AK,JSON.stringify(d));}
     let media=loadMedia(),app=loadApp(),pendingMedia=[];
-    window._report='';
     function genId(p){return p+'-'+Date.now()+'-'+Math.random().toString(36).substr(2,5);}
     function fmt(ts){return new Date(ts).toLocaleString('en-KE',{weekday:'short',year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}
     function fmtDate(ts){return new Date(ts).toLocaleDateString('en-KE',{year:'numeric',month:'short',day:'numeric'});}
@@ -82,252 +75,316 @@
     function toast(msg){const c=document.getElementById('toastContainer');c.innerHTML='<div class="toast">'+msg+'</div>';setTimeout(()=>c.innerHTML='',2000);}
     function loc(){return project.defaultLocation||'Site';}
     function contractor(){return project.contractorName||'Contractor';}
-    function updateStats(){document.getElementById('diaryCount').textContent=app.diary.length;document.getElementById('inspectionCount').textContent=app.inspections.length;document.getElementById('ncrCount').textContent=app.ncrs.filter(n=>n.status==='open').length;document.getElementById('matLowCount').textContent=app.materials.filter(m=>parseFloat(m.currentStock||0)<=parseFloat(m.minStock||0)).length;document.getElementById('rfiCount').textContent=app.rfis.filter(r=>r.status==='open').length;}
-    function populateProjectFields(){document.getElementById('projectName').value=project.projectName||'';document.getElementById('contractNo').value=project.contractNo||'';document.getElementById('contractorName').value=project.contractorName||'';document.getElementById('defaultLocation').value=project.defaultLocation||'';document.getElementById('cowName').value=project.cowName||'';document.getElementById('appPin').value=project.pin||'';updateCompactDisplay();}
-    function updateCompactDisplay(){document.getElementById('displayProject').textContent=project.projectName||'—';document.getElementById('displayContractor').textContent=project.contractorName||'—';}
-    function saveProjectSettings(){project.projectName=document.getElementById('projectName').value.trim();project.contractNo=document.getElementById('contractNo').value.trim();project.contractorName=document.getElementById('contractorName').value.trim();project.defaultLocation=document.getElementById('defaultLocation').value.trim();project.cowName=document.getElementById('cowName').value.trim()||'CoW';project.pin=document.getElementById('appPin').value.trim();saveProject(project);updateCompactDisplay();document.getElementById('settingsPanel').classList.remove('show');toast('✅ Saved!');}
+    function hasAI(){return project.geminiKey&&project.geminiKey.length>10;}
+    function updateStats(){document.getElementById('diaryCount').textContent=app.diary.length;document.getElementById('inspectionCount').textContent=app.inspections.length;document.getElementById('ncrCount').textContent=app.ncrs.filter(n=>n.status==='open').length;document.getElementById('matLowCount').textContent=app.materials.filter(m=>parseFloat(m.currentStock||0)<=parseFloat(m.minStock||0)).length;document.getElementById('rfiCount').textContent=app.drawings.length;}
+    function populateProjectFields(){document.getElementById('projectName').value=project.projectName||'';document.getElementById('contractNo').value=project.contractNo||'';document.getElementById('contractorName').value=project.contractorName||'';document.getElementById('defaultLocation').value=project.defaultLocation||'';document.getElementById('cowName').value=project.cowName||'';document.getElementById('geminiKey').value=project.geminiKey||'';updateCompactDisplay();}
+    function updateCompactDisplay(){document.getElementById('displayProject').textContent=project.projectName||'—';document.getElementById('displayContractor').textContent=project.contractorName||'—';document.getElementById('aiStatus').textContent=hasAI()?'🤖 AI Ready':'🤖 (set API key)';}
+    function saveProjectSettings(){project.projectName=document.getElementById('projectName').value.trim();project.contractNo=document.getElementById('contractNo').value.trim();project.contractorName=document.getElementById('contractorName').value.trim();project.defaultLocation=document.getElementById('defaultLocation').value.trim();project.cowName=document.getElementById('cowName').value.trim()||'CoW';project.geminiKey=document.getElementById('geminiKey').value.trim();saveProject(project);updateCompactDisplay();document.getElementById('settingsPanel').classList.remove('show');toast('✅ Saved!');}
     document.addEventListener('DOMContentLoaded',()=>{document.getElementById('settingsToggle').addEventListener('click',()=>{const p=document.getElementById('settingsPanel');p.classList.toggle('show');if(p.classList.contains('show'))populateProjectFields();});});
 
-    // MEDIA
-    function openCamera(){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.setAttribute('capture','environment');inp.style.display='none';document.body.appendChild(inp);inp.addEventListener('change',async function(){for(let f of this.files)await processFile(f);refreshMediaPreview();toast('📸 '+this.files.length+' captured');document.body.removeChild(inp);});inp.click();}
-    function openGallery(){const inp=document.createElement('input');inp.type='file';inp.accept='image/*,video/*';inp.multiple=true;inp.style.display='none';document.body.appendChild(inp);inp.addEventListener('change',async function(){for(let f of this.files)await processFile(f);refreshMediaPreview();toast('🖼️ '+this.files.length+' added');document.body.removeChild(inp);});inp.click();}
-    function processFile(file){return new Promise(resolve=>{const reader=new FileReader();reader.onload=function(e){let dataUrl=e.target.result;const type=file.type.startsWith('video/')?'video':'image';if(type==='image'&&dataUrl.length>150000){const img=new Image();img.onload=function(){const c=document.createElement('canvas');let w=img.width,h=img.height;if(w>700){h=Math.round(h*(700/w));w=700;}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);dataUrl=c.toDataURL('image/jpeg',0.4);addPending(dataUrl,type,file.name);resolve();};img.src=dataUrl;}else{addPending(dataUrl,type,file.name);resolve();}};reader.readAsDataURL(file);});}
-    function addPending(dataUrl,type,name){pendingMedia.push({id:genId('med'),type,dataUrl,fileName:name||'photo.jpg',timestamp:new Date().toISOString(),label:'',entryId:null});}
-    function refreshMediaPreview(){const c=document.getElementById('mediaPreviewContainer');if(!c){setTimeout(refreshMediaPreview,100);return;}if(!pendingMedia.length){c.innerHTML='<p style="font-size:.6rem;color:var(--muted);text-align:center;padding:6px;">Tap 📷 or 🖼️</p>';return;}c.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:3px;">'+pendingMedia.map((m,i)=>'<div style="width:50px;height:50px;border-radius:5px;overflow:hidden;position:relative;"><img src="'+m.dataUrl+'" style="width:100%;height:100%;object-fit:cover;"><button style="position:absolute;top:1px;right:1px;background:var(--red);color:#fff;width:14px;height:14px;border-radius:50%;border:none;font-size:.45rem;cursor:pointer;" onclick="removePending('+i+')">✕</button></div>').join('')+'</div>';}
-    function removePending(i){pendingMedia.splice(i,1);refreshMediaPreview();}
-    function commitMedia(entryId){if(!pendingMedia.length)return;pendingMedia.forEach(m=>{m.entryId=entryId;media.push({...m});});saveMedia(media);pendingMedia=[];updateStats();}
+    // ============================================
+    // 🤖 AI DRAWING ANALYSIS ENGINE
+    // ============================================
+    async function analyzeDrawingWithAI(drawingId){
+        if(!hasAI()){toast('Set Gemini API key in ⚙️ Settings first');return;}
+        const drawing=app.drawings.find(d=>d.id===drawingId);
+        if(!drawing||!drawing.imageData){toast('No drawing image found');return;}
+
+        // Show loading modal
+        const mc=document.getElementById('modalContainer');
+        mc.innerHTML='<div class="modal-overlay" id="mo"><div class="modal"><h2>🤖 AI Analyzing Drawing...</h2><div class="ai-loading"><div class="spinner"></div><p style="font-size:.7rem;">Uploading to Gemini Vision...</p><p style="font-size:.6rem;color:var(--muted);">'+drawing.number+' — '+drawing.title+'</p></div></div></div>';
+
+        try{
+            const prompt=`You are a structural engineer analyzing a construction drawing. Extract ALL of the following in JSON format:
+
+1. DRAWING TYPE: What type of drawing is this? (Structural, Architectural, Plumbing, Electrical, etc.)
+2. SCALE: What scale is indicated? (e.g., 1:50, 1:100)
+3. DIMENSIONS: List all visible dimensions with their values and what they measure (e.g., "Column spacing: 6000mm", "Slab thickness: 200mm", "Beam depth: 450mm")
+4. STRUCTURAL ELEMENTS: List all columns (with size if visible), beams (with size if visible), slabs, walls, foundations
+5. GRID LINES: List all grid references visible (e.g., Grid A, Grid 1, etc.)
+6. NOTES: Any important notes, specifications, or references on the drawing
+7. MATERIALS: Any materials specified
+8. REINFORCEMENT: Any rebar details visible (bar sizes, spacing)
+
+Return ONLY valid JSON. No markdown, no explanation — just the JSON object.`;
+
+            const imageBase64=drawing.imageData.split(',')[1]||drawing.imageData;
+            
+            const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${project.geminiKey}`,{
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({
+                    contents:[{parts:[{text:prompt},{inlineData:{mimeType:'image/jpeg',data:imageBase64}}]}],
+                    generationConfig:{temperature:0.1,maxOutputTokens:2000}
+                })
+            });
+
+            const data=await response.json();
+            closeModal();
+            
+            if(data.error){toast('AI Error: '+data.error.message);return;}
+            
+            const aiText=data.candidates[0].content.parts[0].text;
+            // Extract JSON from response
+            const jsonMatch=aiText.match(/\{[\s\S]*\}/);
+            if(!jsonMatch){toast('AI response format error');return;}
+            
+            const extracted=JSON.parse(jsonMatch[0]);
+            
+            // Save dimensions
+            if(extracted.DIMENSIONS||extracted.dimensions){
+                const dims=extracted.DIMENSIONS||extracted.dimensions;
+                if(Array.isArray(dims))dims.forEach(d=>{app.dimensions.push({id:genId('dim'),drawingId,label:typeof d==='string'?d:d.label||d,value:typeof d==='string'?'':d.value||'',timestamp:new Date().toISOString()});});
+            }
+            
+            // Save structural elements
+            if(extracted.STRUCTURAL_ELEMENTS||extracted.structural_elements){
+                const elems=extracted.STRUCTURAL_ELEMENTS||extracted.structural_elements;
+                if(Array.isArray(elems))elems.forEach(e=>{app.structuralElements.push({id:genId('se'),drawingId,name:typeof e==='string'?e:e.name||e,size:typeof e==='string'?'':e.size||'',type:typeof e==='string'?'unknown':e.type||'',timestamp:new Date().toISOString()});});
+            }
+            
+            // Store AI analysis on drawing
+            drawing.aiAnalysis={extracted,timestamp:new Date().toISOString()};
+            saveApp(app);
+            
+            // Show results
+            showAIResults(drawingId,extracted);
+        }catch(err){
+            closeModal();
+            toast('AI Error: '+err.message);
+            console.error(err);
+        }
+    }
+
+    function showAIResults(drawingId,data){
+        const drawing=app.drawings.find(d=>d.id===drawingId);
+        let html='<h2>🤖 AI Analysis Results</h2>';
+        html+='<p style="font-size:.65rem;color:var(--muted);margin-bottom:8px;">'+drawing.number+' — '+drawing.title+'</p>';
+        
+        if(data.DRAWING_TYPE||data.drawing_type)html+='<div class="entry-section"><div class="section-label">Drawing Type</div>'+(data.DRAWING_TYPE||data.drawing_type)+'</div>';
+        if(data.SCALE||data.scale)html+='<div class="entry-section"><div class="section-label">Scale</div>'+(data.SCALE||data.scale)+'</div>';
+        
+        const dims=data.DIMENSIONS||data.dimensions;
+        if(dims&&Array.isArray(dims)&&dims.length){
+            html+='<div class="entry-section"><div class="section-label">📏 Extracted Dimensions ('+dims.length+')</div>';
+            dims.forEach(d=>{html+='<div style="padding:2px 0;font-size:.65rem;">📏 '+ (typeof d==='string'?d:(d.label||d))+'</div>';});
+            html+='</div>';
+        }
+        
+        const elems=data.STRUCTURAL_ELEMENTS||data.structural_elements;
+        if(elems&&Array.isArray(elems)&&elems.length){
+            html+='<div class="entry-section"><div class="section-label">🏗️ Structural Elements ('+elems.length+')</div>';
+            elems.forEach(e=>{html+='<div style="padding:2px 0;font-size:.65rem;">🏗️ '+ (typeof e==='string'?e:(e.name||e))+'</div>';});
+            html+='</div>';
+        }
+        
+        if(data.GRID_LINES||data.grid_lines){
+            const grids=data.GRID_LINES||data.grid_lines;
+            html+='<div class="entry-section"><div class="section-label">📐 Grid Lines</div>'+ (Array.isArray(grids)?grids.join(', '):grids)+'</div>';
+        }
+        
+        if(data.NOTES||data.notes)html+='<div class="entry-section"><div class="section-label">📝 Notes</div>'+ (Array.isArray(data.NOTES||data.notes)?(data.NOTES||data.notes).join('<br>'):(data.NOTES||data.notes))+'</div>';
+        if(data.MATERIALS||data.materials)html+='<div class="entry-section"><div class="section-label">🧱 Materials</div>'+ (Array.isArray(data.MATERIALS||data.materials)?(data.MATERIALS||data.materials).join(', '):(data.MATERIALS||data.materials))+'</div>';
+        if(data.REINFORCEMENT||data.reinforcement)html+='<div class="entry-section"><div class="section-label">🔩 Reinforcement</div>'+ (Array.isArray(data.REINFORCEMENT||data.reinforcement)?(data.REINFORCEMENT||data.reinforcement).join('<br>'):(data.REINFORCEMENT||data.reinforcement))+'</div>';
+        
+        html+='<button class="btn btn-secondary" style="margin-top:10px;width:100%;" onclick="closeModal()">Close</button>';
+        
+        const mc=document.getElementById('modalContainer');
+        mc.innerHTML='<div class="modal-overlay" id="mo" onclick="if(event.target.id==\'mo\')closeModal()"><div class="modal">'+html+'</div></div>';
+    }
+
+    function compareDrawingsWithAI(id1,id2){
+        if(!hasAI()){toast('Set Gemini API key first');return;}
+        const d1=app.drawings.find(d=>d.id===id1);
+        const d2=app.drawings.find(d=>d.id===id2);
+        if(!d1||!d2||!d1.imageData||!d2.imageData){toast('Both drawings need images');return;}
+
+        const mc=document.getElementById('modalContainer');
+        mc.innerHTML='<div class="modal-overlay" id="mo"><div class="modal"><h2>🤖 AI Comparing Drawings...</h2><div class="ai-loading"><div class="spinner"></div><p style="font-size:.7rem;">Finding differences...</p><p style="font-size:.6rem;color:var(--muted);">'+d1.number+' vs '+d2.number+'</p></div></div></div>';
+
+        const prompt=`Compare these two construction drawings and identify ALL differences. Focus on:
+1. Dimensional changes (what changed, from what to what)
+2. Structural element changes (columns, beams, slabs added/removed/resized)
+3. Layout changes (walls moved, openings changed)
+4. Annotation/note changes
+5. Material specification changes
+6. Any new elements added
+7. Any elements removed
+
+Return as JSON: {"differences":[{"category":"...","description":"...","severity":"Major/Minor"}]}`;
+
+        const img1=d1.imageData.split(',')[1]||d1.imageData;
+        const img2=d2.imageData.split(',')[1]||d2.imageData;
+
+        fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${project.geminiKey}`,{
+            method:'POST',headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({contents:[{parts:[{text:prompt},{inlineData:{mimeType:'image/jpeg',data:img1}},{inlineData:{mimeType:'image/jpeg',data:img2}}]}]})
+        }).then(r=>r.json()).then(data=>{
+            closeModal();
+            if(data.error){toast('Error: '+data.error.message);return;}
+            const text=data.candidates[0].content.parts[0].text;
+            const json=text.match(/\{[\s\S]*\}/);
+            if(!json){toast('Parse error');return;}
+            const diffs=JSON.parse(json[0]);
+            let html='<h2>🤖 Drawing Comparison</h2><p style="font-size:.65rem;color:var(--muted);">'+d1.number+' (Rev '+d1.revision+') vs '+d2.number+' (Rev '+d2.revision+')</p>';
+            if(diffs.differences&&diffs.differences.length){
+                diffs.differences.forEach(d=>{html+='<div class="entry-section" style="border-left:3px solid '+(d.severity==='Major'?'var(--red)':'var(--yellow)')+';"><div class="section-label">'+(d.severity==='Major'?'🔴':'🟡')+' '+d.category+'</div>'+d.description+'</div>';});
+            }
+            html+='<button class="btn btn-secondary" style="margin-top:10px;width:100%;" onclick="closeModal()">Close</button>';
+            document.getElementById('modalContainer').innerHTML='<div class="modal-overlay" id="mo" onclick="if(event.target.id==\'mo\')closeModal()"><div class="modal">'+html+'</div></div>';
+        }).catch(err=>{closeModal();toast('Error: '+err.message);});
+    }
 
     // ============================================
-    // COMPLETE INSPECTION CHECKLISTS — ALL TRADES
+    // DRAWING REGISTER WITH AI
     // ============================================
-    const ALL_CHECKLISTS = {
-        // EARTHWORKS & EXCAVATION
-        'Excavation — General':['Setting out checked & approved','Depth to formation level correct','Bottom of excavation firm & undisturbed','Safety batter/slope provided (or shoring)','Dewatering system working','Services located & protected','Spoil placed >2m from edge','Approval obtained before blinding'],
-        'Trench Excavation':['Line & level checked','Trench width as per drawing','Depth to invert correct','Bottom graded to falls','Pipe bedding prepared','Shoring in place if >1.5m deep','Safe access/egress provided','Groundwater controlled'],
-        'Backfill & Compaction':['Material approved (selected fill)','Compaction tested (min 95% MDD)','Layers max 150mm thick','Moisture content optimal','No debris/organic matter','Services protected before backfill','Compaction record kept'],
-
-        // CONCRETE WORKS
-        'Concrete — Pre-Pour':['Formwork inspected — dimensions, alignment','Reinforcement as per structural drawings','Cover blocks placed (correct size)','Concrete grade confirmed','Slump test equipment ready','Poker vibrators available (2 min)','Curing plan in place','Pour card signed by Engineer','Area clean & free of debris'],
-        'Concrete — During Pour':['Slump test done & recorded','Concrete placed within 30 min of mixing','No segregation observed','Compaction adequate (no honeycombing)','Construction joints at correct locations','Cube samples taken & labelled','Pour completed within planned section'],
-        'Concrete — Post-Pour':['Curing started within 2 hours','Curing method correct (water/membrane)','Formwork not removed before min time','Surface finished as specified','No cracks/honeycomb observed','Cube samples delivered to lab','Temperature monitored if mass concrete'],
-
-        // FORMWORK
-        'Formwork Inspection':['Material as specified (steel/timber)','Dimensions correct','Plumb & level within tolerance','Joints tight (no grout loss)','Release agent applied','Ties & bracing adequate','Propping system to approved design','Openings & box-outs correct'],
-
-        // STEEL REINFORCEMENT
-        'Steel Reinforcement':['Bar sizes & grades as per BBS','Spacing within tolerance (±10mm)','Lap lengths correct (per code)','Couplers torqued to specification','Chairs & spacers at correct spacing','Clean & free from rust/contamination','Approved shop drawings on site','Previous NCRs closed out'],
-
-        // BLOCKWORK & MASONRY
-        'Blockwork / Masonry':['Block type & strength confirmed','Mortar mix ratio 1:4 (cement:sand)','Plumb & level within 5mm/storey','Wall ties at correct spacing','Damp proof course in place','Openings as per drawings','Bond pattern correct','Joints fully filled & struck','Curing applied'],
-        'Stone Masonry':['Stone quality checked','Dressing as specified','Mortar mix correct','Through stones provided','Bond pattern maintained','Plumb & alignment checked','Joint thickness consistent','Curing applied'],
-
-        // STRUCTURAL STEEL
-        'Structural Steel — Erection':['Members as per fabrication drawings','Bolts grade & size correct','Torque applied to spec','Alignment & plumb checked','Base plates grouted','Welds visually inspected','NDT testing arranged','Corrosion protection applied','Hold points signed off'],
-
-        // ROOFING
-        'Roof Structure':['Trusses/rafters as per design','Timber treated if specified','Connections & bracing correct','Anchorage to structure adequate','Sag rods/tie rods installed','Purlin spacing as per spec'],
-        'Roof Covering':['Material as specified (tiles/sheets)','Underlay/insulation installed','Fixing method correct','Laps & joints weatherproof','Ridge & hip details correct','Valley & gutter details correct','Flashings installed','Roof tested for leaks'],
-
-        // WATERPROOFING
-        'Waterproofing — General':['Substrate prepared — smooth, clean, dry','Primer applied per specification','Membrane type & thickness correct','Laps minimum 100mm','Detailing at junctions/penetrations','Protection board placed immediately','Fillets at internal angles','Ponding test completed (24hrs)'],
-        'Tanking / Basement WP':['System as per design','Blinding layer in place','Fillets at wall/floor junction','Membrane continuous up wall','Protection board installed','Drainage system behind walls','Water bars at construction joints'],
-
-        // PLUMBING & DRAINAGE
-        'Plumbing — Supply Pipework':['Pipe material as specification','Pipe sizes correct','Insulation on hot water pipes','Clipping & supports at correct spacing','Stop valves installed at each floor','Backflow prevention fitted','Pressure reducing valves where required','Pipework identified & labelled'],
-        'Plumbing — Pressure Test':['System filled & all air vented','Test pressure applied (1.5x working)','Pressure held for minimum 1 hour','All joints & fittings inspected','No pressure drop observed','Test gauge calibrated & certified','Test certificate completed & signed'],
-        'Plumbing — Drainage Above Ground':['Pipe material & type correct','Gradient checked (min 1:60 for 100mm)','Joints properly sealed','Traps installed on all fixtures','Vent pipes connected to stack','Rodding eyes accessible','Brackets at correct spacing','Sound insulation where required'],
-        'Plumbing — Below Ground Drainage':['Trench line & level checked','Bedding material correct','Pipe laid to correct gradient','Joints tested before backfill','Access chambers at correct positions','Water test on completed runs','Backfill with selected material','Marker tape installed'],
-        'Plumbing — Sanitary Ware':['Fixtures as per schedule','Fixed securely to wall/floor','Level & alignment correct','Connections to services correct','Sealant applied at junctions','All fixtures tested for function','Access panels for concealed cisterns'],
-
-        // ELECTRICAL
-        'Electrical — Containment':['Conduit/trunking type as spec','Route as per drawings','Supports at correct spacing','Joints mechanically continuous','Bends within allowed radius','Sealed against water ingress','Fire barriers where passing through walls'],
-        'Electrical — Cabling':['Cable type & size as per schedule','Installed without damage','Bending radius respected','Identification labels on both ends','Segregation of services maintained','Fire-rated cables where specified','Testing: IR & continuity'],
-        'Electrical — Distribution':['DB location as per drawing','DB securely mounted & level','Incoming supply terminated correctly','MCB/RCD ratings as per schedule','Circuit identification complete','Earth bonding to structure','Test certificates completed'],
-        'Electrical — Lighting & Power':['Fittings as per schedule','Positions as per reflected ceiling plan','Switching correctly wired','Socket outlets at correct height','Earth continuity verified','RCD protection where required','Functional test — all circuits'],
-        'Electrical — Earthing & Lightning':['Earth electrode installed','Earth resistance tested (<10 ohms)','Bonding to all services','Lightning conductors installed','Joints welded or clamped','Test certificates issued'],
-
-        // MECHANICAL / HVAC
-        'HVAC — Ductwork':['Duct size & route as per drawing','Material gauge correct','Joints sealed & airtight','Insulation applied (where specified)','Supports at correct spacing','Fire dampers installed','Volume control dampers accessible','System pressure tested'],
-        'HVAC — Plant Installation':['Equipment as per schedule','Foundations/plinths correct','Anti-vibration mounts installed','Services connected correctly','Controls wired & calibrated','Test run completed','Noise levels checked','O&M manuals received'],
-
-        // FIRE SERVICES
-        'Fire Fighting — Pipework':['Pipe material & size as spec','Route as per approved drawing','Supports fire-rated','Joints mechanically sound','Pressure test at 1.5x working','Flow test completed','Valves accessible & labelled'],
-        'Fire Fighting — Equipment':['Hose reels installed & tested','Fire extinguishers in place','Sprinkler heads unobstructed','Fire hydrants accessible','Alarm system connected','Fire panel operational','Cause & effect tested'],
-
-        // CEILINGS & PARTITIONS
-        'Ceilings — Suspended':['Grid layout as per drawing','Hanger wires at correct spacing','Perimeter trim level & fixed','Tiles as per specification','Cut tiles neatly at edges','Access hatches for services','Light fittings coordinated','Expansion joints provided'],
-        'Partitions — Drywall':['Track & stud size as spec','Fixing at correct spacing','Plumb & alignment checked','Insulation in cavities','Service penetrations sealed','Board fixing correct','Joint taping & filling done','Corners reinforced'],
-
-        // PLASTERING & RENDERING
-        'Plastering — Internal':['Background prepared — joints raked','Chicken mesh at column/block interface','Screeds/guides in place','Mix ratio correct','Thickness max 15mm per coat','Curing between coats (24hrs)','Surface finish as specified','No hollow spots on sounding'],
-        'Rendering — External':['Background clean & dampened','Mesh at dissimilar materials','Bellcast beads at DPC','Mix ratio as per spec','Thickness controlled','Weather protection during curing','Movement joints provided','Finish as per sample'],
-
-        // FLOORING & TILING
-        'Floor Screeding':['Substrate prepared & primed','Level pegs/screeds set','Mix ratio correct','Thickness as specified','Compaction adequate','Surface finish to receive floor covering','Curing applied','Falls to drainage checked'],
-        'Tiling — Floor & Wall':['Tile type & size as per schedule','Adhesive as specified','Grout joints consistent','Level & alignment checked','Falls to drainage (wet areas)','Expansion joints provided','Grout sealed (wet areas)','No hollow/drummy tiles'],
-
-        // JOINERY & CARPENTRY
-        'Doors & Windows — Installation':['Frame size as per schedule','Plumb, level & square','Anchored securely to structure','Ironmongery as per schedule','Operation smooth (open/close)','Locks & latches functional','Sealant applied externally','Glazing beads secure'],
-        'Joinery — General':['Timber type & grade correct','Moisture content checked','Joints tight & glued','Finish sanding done','Ironmongery fitted correctly','Pre-finish treatment applied','Clearances correct'],
-
-        // PAINTING & DECORATION
-        'Painting — Internal':['Surface prepared & primed','Filling & sanding done','Undercoat applied','Finish coats — correct colour/sheen','No runs, sags or brush marks','Cutting in neat at edges','Minimum number of coats applied','Protection of adjacent surfaces'],
-        'Painting — External':['Surface clean & dry','Weather conditions suitable','Primer/sealer applied','Finish coats as specified','Uniform colour & sheen','No visible defects','Protection from weather during curing'],
-
-        // GLAZING
-        'Glazing':['Glass type & thickness correct','Glass size correct for opening','Setting blocks in place','Glazing gasket continuous','Beading secure & neat','No cracks or damage','Safety glass where specified','Manifestation where required'],
-
-        // ROADS & PAVING
-        'Roads — Sub-base & Base':['Subgrade compacted & approved','Material type as spec','Layer thickness correct','Compaction tested (min 95% MDD)','Camber/crossfall correct','Levels checked','DCP/CBR tests done'],
-        'Roads — Surfacing':['Prime coat/tack coat applied','Asphalt temperature correct','Laying rate as per design','Compaction achieved','Joints properly formed','Surface texture correct','Core samples taken','Line markings applied'],
-
-        // EXTERNAL WORKS
-        'Drainage — External':['Pipe gradient correct','Manholes at correct positions','Benching formed in manholes','Channels smooth','Step irons installed','Covers & frames correct grade','Water test passed','Backfill with selected material'],
-        'Paving & Hardstanding':['Sub-base compacted','Bedding course prepared','Paving units as per schedule','Pattern & alignment correct','Joint width consistent','Joint filling completed','Falls to drainage correct','Compaction of completed paving'],
-
-        // FINISHES & SNAGGING
-        'Final Snagging':['All rooms inspected','Walls — no cracks/hollows','Ceilings — no cracks/stains','Floors — no cracks/lippage','Doors/windows — operation OK','Plumbing — no leaks, function OK','Electrical — all points working','Painting — no defects','Cleaning completed'],
-    };
-
-    function renderInspections(){
-        const c=document.getElementById('inspectionEntries');
-        const entries=[...app.inspections].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
-        let h='<button class="btn btn-primary btn-small" style="margin-bottom:8px;" onclick="showInspectionMenu()">✅ New Inspection</button>';
-        if(!entries.length){h+='<div class="empty-state"><div class="icon">✅</div><p>No inspections yet</p><p style="font-size:.6rem;">50+ checklists covering all construction trades</p></div>';c.innerHTML=h;return;}
-        h+=entries.map(e=>'<div class="entry-card inspection-card"><div class="entry-header"><span class="entry-title">✅ '+e.checklistType+'</span><span class="badge '+(e.result==='pass'?'badge-pass':'badge-fail')+'">'+e.result.toUpperCase()+'</span></div><div class="entry-meta"><span>'+fmt(e.timestamp)+'</span><span>📍 '+e.location+'</span><span>'+e.items.filter(i=>i.passed).length+'/'+e.items.length+' OK</span></div><div class="entry-section">'+e.items.map(i=>'<div style="padding:1px 0;font-size:.62rem;">'+(i.passed?'✅':'❌')+' '+i.label+'</div>').join('')+'</div>'+(e.notes?'<div class="entry-section">'+e.notes+'</div>':'')+'<div style="margin-top:3px;"><button class="btn btn-small btn-secondary" onclick="deleteEntry(\'inspections\',\''+e.id+'\')">🗑️</button></div></div>').join('');
+    function renderDrawings(){
+        const c=document.getElementById('drawingEntries');
+        const entries=[...app.drawings].sort((a,b)=>a.number.localeCompare(b.number));
+        let h='<div style="display:flex;gap:3px;margin-bottom:6px;flex-wrap:wrap;"><button class="btn btn-primary btn-small" onclick="showDrawingForm()">➕ Add Drawing</button><button class="btn btn-ai btn-small" onclick="uploadDrawingForAI()">🤖 Upload & Analyze</button></div>';
+        if(!entries.length){h+='<div class="empty-state"><div class="icon">📐</div><p>No drawings registered</p><p style="font-size:.6rem;">Upload drawings for AI to extract measurements & structural elements</p></div>';c.innerHTML=h;return;}
+        entries.forEach(e=>{
+            h+='<div class="entry-card drawing-card"><div class="entry-header"><span class="entry-title">📐 '+e.number+'</span><span class="badge badge-info">Rev '+e.revision+'</span>'+(e.aiAnalysis?'<span class="badge badge-ai">🤖 Analyzed</span>':'')+'</div><div class="entry-meta"><span>'+e.title+'</span><span>'+fmtDate(e.dateReceived)+'</span>'+(e.discipline?'<span>'+e.discipline+'</span>':'')+'</div>';
+            if(e.imageData)h+='<div style="margin:4px 0;"><img src="'+e.imageData+'" style="width:100%;max-height:200px;object-fit:contain;border-radius:4px;cursor:pointer;" onclick="viewDrawing(\''+e.id+'\')"></div>';
+            // Show dimensions if analyzed
+            const dims=app.dimensions.filter(d=>d.drawingId===e.id);
+            const elems=app.structuralElements.filter(s=>s.drawingId===e.id);
+            if(dims.length||elems.length){
+                h+='<div class="entry-section"><div class="section-label">🤖 AI Extracted</div>';
+                if(dims.length)h+='<div>📏 '+dims.length+' dimensions</div>';
+                if(elems.length)h+='<div>🏗️ '+elems.length+' structural elements</div>';
+                h+='</div>';
+            }
+            h+='<div style="margin-top:4px;display:flex;gap:3px;flex-wrap:wrap;">';
+            if(e.imageData&&hasAI()&&!e.aiAnalysis)h+='<button class="btn btn-ai btn-small" onclick="analyzeDrawingWithAI(\''+e.id+'\')">🤖 Analyze</button>';
+            if(e.aiAnalysis)h+='<button class="btn btn-small btn-secondary" onclick="showAIResults(\''+e.id+'\',app.drawings.find(d=>d.id===\''+e.id+'\').aiAnalysis.extracted)">📊 Results</button>';
+            h+='<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'drawings\',\''+e.id+'\')">🗑️</button></div></div>';
+        });
         c.innerHTML=h;
     }
 
-    function showInspectionMenu(){
-        // Group checklists by trade
-        const groups={
-            '🏗️ EARTHWORKS & EXCAVATION':['Excavation — General','Trench Excavation','Backfill & Compaction'],
-            '🧱 CONCRETE WORKS':['Concrete — Pre-Pour','Concrete — During Pour','Concrete — Post-Pour','Formwork Inspection'],
-            '🔩 STEEL & STRUCTURE':['Steel Reinforcement','Structural Steel — Erection'],
-            '🧱 MASONRY':['Blockwork / Masonry','Stone Masonry'],
-            '🏠 ROOFING':['Roof Structure','Roof Covering'],
-            '💧 WATERPROOFING':['Waterproofing — General','Tanking / Basement WP'],
-            '🚿 PLUMBING & DRAINAGE':['Plumbing — Supply Pipework','Plumbing — Pressure Test','Plumbing — Drainage Above Ground','Plumbing — Below Ground Drainage','Plumbing — Sanitary Ware'],
-            '⚡ ELECTRICAL':['Electrical — Containment','Electrical — Cabling','Electrical — Distribution','Electrical — Lighting & Power','Electrical — Earthing & Lightning'],
-            '🌀 HVAC / MECHANICAL':['HVAC — Ductwork','HVAC — Plant Installation'],
-            '🔥 FIRE SERVICES':['Fire Fighting — Pipework','Fire Fighting — Equipment'],
-            '🪟 CEILINGS & PARTITIONS':['Ceilings — Suspended','Partitions — Drywall'],
-            '🎨 FINISHES':['Plastering — Internal','Rendering — External','Floor Screeding','Tiling — Floor & Wall','Painting — Internal','Painting — External'],
-            '🚪 JOINERY':['Doors & Windows — Installation','Joinery — General','Glazing'],
-            '🛣️ ROADS & EXTERNAL':['Roads — Sub-base & Base','Roads — Surfacing','Drainage — External','Paving & Hardstanding'],
-            '✓ FINAL':['Final Snagging']
-        };
-        let html='<div style="max-height:70vh;overflow-y:auto;">';
-        Object.keys(groups).forEach(group=>{
-            html+='<div class="trade-category"><h3>'+group+'</h3><div class="checklist-grid">';
-            groups[group].forEach(name=>{
-                html+='<button class="checklist-btn" onclick="closeModal();startInspection(\''+name+'\')">'+name+'</button>';
-            });
-            html+='</div></div>';
-        });
-        html+='<button class="btn btn-secondary" style="width:100%;margin-top:8px;" onclick="closeModal()">Cancel</button></div>';
-        const mc=document.getElementById('modalContainer');
-        mc.innerHTML='<div class="modal-overlay" id="mo" onclick="if(event.target.id==\'mo\')closeModal()"><div class="modal"><h2>✅ Select Inspection Type</h2>'+html+'</div></div>';
-    }
-
-    function startInspection(name){
-        const items=ALL_CHECKLISTS[name];
-        if(!items)return;
-        let h='<div class="form-group"><label>Checklist</label><input type="text" value="'+name+'" disabled></div>';
-        h+='<div class="form-group"><label>Location</label><input type="text" id="il" value="'+loc()+'"></div>';
-        h+='<div class="form-group"><label>Items ('+items.length+')</label><div style="background:var(--bg);border-radius:5px;padding:4px 6px;border:1px solid var(--border);">';
-        items.forEach((item,i)=>{h+='<div style="display:flex;align-items:center;gap:5px;padding:4px 0;border-bottom:1px solid var(--border);font-size:.65rem;"><input type="checkbox" id="it'+i+'" checked><label for="it'+i+'">'+item+'</label></div>';});
-        h+='</div></div><div class="form-group"><label>Notes</label><textarea id="in"></textarea></div><div class="form-group"><label>📸 Photos</label><div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;"><button type="button" class="btn btn-primary btn-small" onclick="openCamera()">📷</button><button type="button" class="btn btn-secondary btn-small" onclick="openGallery()">🖼️</button></div><div id="mediaPreviewContainer" style="margin-top:3px;"></div></div>';
+    function showDrawingForm(){
+        const h='<div class="form-group"><label>Drawing Number *</label><input type="text" id="dwNo" placeholder="e.g., S-301"></div><div class="form-group"><label>Title *</label><input type="text" id="dwTitle" placeholder="e.g., Column Layout Plan"></div><div class="form-group"><label>Discipline</label><select id="dwDisc"><option>Structural</option><option>Architectural</option><option>Plumbing</option><option>Electrical</option><option>HVAC</option><option>Civil</option></select></div><div class="form-group"><label>Revision</label><input type="text" id="dwRev" value="A"></div><div class="form-group"><label>Date Received</label><input type="date" id="dwDate" value="'+today()+'"></div><div class="form-group"><label>📸 Upload Drawing Image</label><div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;"><button type="button" class="btn btn-primary btn-small" onclick="captureDrawing()">📷 Photo</button><button type="button" class="btn btn-secondary btn-small" onclick="pickDrawingFile()">🖼️ File</button></div><div id="drawingPreview" style="margin-top:4px;"></div></div>';
         pendingMedia=[];
-        showModal('✅ '+name,h,()=>{
-            const cbs=document.querySelectorAll('#it'+Array.from({length:items.length},(_,i)=>i).join(', #it'));
-            const checkedItems=items.map((item,i)=>({label:item,passed:document.getElementById('it'+i)?.checked||false}));
-            const entry={id:genId('ins'),checklistType:name,location:document.getElementById('il').value,items:checkedItems,result:checkedItems.every(i=>i.passed)?'pass':'fail',notes:document.getElementById('in').value,timestamp:new Date().toISOString()};
-            app.inspections.push(entry);
-            commitMedia(entry.id);
+        showModal('📐 Add Drawing',h,()=>{
+            const n=document.getElementById('dwNo').value.trim(),t=document.getElementById('dwTitle').value.trim();
+            if(!n||!t)return false;
+            const drawing={id:genId('dw'),number:n,title:t,discipline:document.getElementById('dwDisc').value,revision:document.getElementById('dwRev').value,dateReceived:document.getElementById('dwDate').value,timestamp:new Date().toISOString(),imageData:pendingMedia.length?pendingMedia[0].dataUrl:null,aiAnalysis:null};
+            app.drawings.push(drawing);
+            if(pendingMedia.length){commitMedia(drawing.id);}
             saveApp(app);
+            // Auto-analyze if AI is set up
+            if(drawing.imageData&&hasAI()){setTimeout(()=>analyzeDrawingWithAI(drawing.id),500);}
         });
-        setTimeout(refreshMediaPreview,200);
     }
 
-    // ============================================
-    // RENDERERS (compact)
-    // ============================================
-    function renderDiary(filter=''){const c=document.getElementById('diaryEntries');let entries=app.diary;if(filter){const q=filter.toLowerCase();entries=entries.filter(e=>e.title.toLowerCase().includes(q)||e.description.toLowerCase().includes(q));}entries.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty-state"><div class="icon">📔</div><p>No diary entries</p></div>';return;}c.innerHTML=entries.map(e=>'<div class="entry-card diary-card"><div class="entry-header"><span class="entry-title">📔 '+e.title+'</span></div><div class="entry-meta"><span>'+fmt(e.timestamp)+'</span><span>📍 '+e.location+'</span></div><div class="entry-desc">'+e.description.replace(/\n/g,'<br>')+'</div><div style="margin-top:3px;"><button class="btn btn-small btn-secondary" onclick="deleteEntry(\'diary\',\''+e.id+'\')">🗑️</button></div></div>').join('');}
-    function renderNCRs(){const c=document.getElementById('ncrEntries');const entries=[...app.ncrs].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty-state"><div class="icon">🚨</div><p>No NCRs</p></div>';return;}c.innerHTML=entries.map(e=>'<div class="entry-card ncr-card"><div class="entry-header"><span class="entry-title">🚨 '+e.title+'</span><span class="badge '+(e.status==='open'?'badge-open':'badge-closed')+'">'+e.status.toUpperCase()+'</span></div><div class="entry-meta"><span>'+fmt(e.timestamp)+'</span><span>📍 '+e.location+'</span></div><div class="entry-section">'+e.description+'</div><div class="entry-section" style="border-left:3px solid var(--yellow);">'+e.actionRequired+'</div>'+(e.closeoutComment?'<div class="entry-section" style="border-left:3px solid var(--green);">'+e.closeoutComment+'</div>':'')+'<div style="margin-top:3px;">'+(e.status!=='closed'?'<button class="btn btn-small btn-primary" onclick="closeNCR(\''+e.id+'\')">✅</button>':'')+'<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'ncrs\',\''+e.id+'\')">🗑️</button></div></div>').join('');}
-    function renderInstructions(){const c=document.getElementById('instructionEntries');const entries=[...app.instructions].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty-state"><div class="icon">📋</div><p>No instructions</p></div>';return;}c.innerHTML=entries.map(e=>'<div class="entry-card instruction-card"><div class="entry-header"><span class="entry-title">📋 SI-'+e.id.split('-')[1]+'</span><span class="badge '+(e.status==='acknowledged'?'badge-closed':'badge-open')+'">'+e.status.toUpperCase()+'</span></div><div class="entry-meta"><span>'+fmt(e.timestamp)+'</span><span>👷 '+e.issuedTo+'</span></div><div class="entry-desc">'+e.description+'</div><div style="margin-top:3px;">'+(e.status!=='acknowledged'?'<button class="btn btn-small btn-primary" onclick="ackSI(\''+e.id+'\')">✍️</button>':'')+'<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'instructions\',\''+e.id+'\')">🗑️</button></div></div>').join('');}
-
-    function renderRFIs(){const c=document.getElementById('rfiEntries');const entries=[...app.rfis].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty-state"><div class="icon">📤</div><p>No RFIs</p><button class="btn btn-primary btn-small" style="margin-top:6px;" onclick="showRFIForm()">➕</button></div>';return;}c.innerHTML='<button class="btn btn-primary btn-small" style="margin-bottom:6px;" onclick="showRFIForm()">➕ RFI</button>'+entries.map(e=>'<div class="entry-card" style="border-left-color:var(--pink);"><div class="entry-header"><span class="entry-title">📤 '+e.subject+'</span><span class="badge '+(e.status==='open'?'badge-open':'badge-pass')+'">'+e.status+'</span></div><div class="entry-meta"><span>'+fmt(e.timestamp)+'</span><span>To: '+e.sentTo+'</span></div>'+(e.response?'<div class="entry-section" style="border-left:3px solid var(--green);">'+e.response+'</div>':'')+'<div style="margin-top:3px;">'+(e.status==='open'?'<button class="btn btn-small btn-primary" onclick="respondRFI(\''+e.id+'\')">📩</button>':'')+'<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'rfis\',\''+e.id+'\')">🗑️</button></div></div>').join('');}
-    function showRFIForm(){const h='<div class="form-group"><label>Subject *</label><input type="text" id="rfiSubj"></div><div class="form-group"><label>Sent To *</label><input type="text" id="rfiTo"></div><div class="form-group"><label>Question *</label><textarea id="rfiQ"></textarea></div>';showModal('📤 RFI',h,()=>{const s=document.getElementById('rfiSubj').value.trim(),q=document.getElementById('rfiQ').value.trim(),t=document.getElementById('rfiTo').value.trim();if(!s||!q||!t)return false;app.rfis.push({id:genId('rfi'),subject:s,sentTo:t,question:q,status:'open',timestamp:new Date().toISOString(),response:null});saveApp(app);});}
-    function respondRFI(id){const rfi=app.rfis.find(r=>r.id===id);const resp=prompt('Response:');if(!resp)return;rfi.response=resp;rfi.responseDate=new Date().toISOString();rfi.status='responded';saveApp(app);refreshAll();}
-
-    function renderDrawings(){const c=document.getElementById('drawingEntries');const entries=[...app.drawings].sort((a,b)=>a.number.localeCompare(b.number));if(!entries.length){c.innerHTML='<div class="empty-state"><div class="icon">📐</div><p>No drawings</p><button class="btn btn-primary btn-small" onclick="showDrawingForm()">➕</button></div>';return;}c.innerHTML='<button class="btn btn-primary btn-small" style="margin-bottom:6px;" onclick="showDrawingForm()">➕ Drawing</button>'+entries.map(e=>'<div class="entry-card" style="border-left-color:var(--blue);"><div class="entry-header"><span class="entry-title">📐 '+e.number+'</span><span class="badge badge-info">Rev '+e.revision+'</span></div><div class="entry-meta"><span>'+e.title+'</span><span>'+fmtDate(e.dateReceived)+'</span></div></div>').join('');}
-    function showDrawingForm(){const h='<div class="form-group"><label>Number *</label><input type="text" id="dwNo"></div><div class="form-group"><label>Title *</label><input type="text" id="dwTitle"></div><div class="form-group"><label>Revision</label><input type="text" id="dwRev" value="A"></div><div class="form-group"><label>Date Received</label><input type="date" id="dwDate" value="'+today()+'"></div>';showModal('📐 Drawing',h,()=>{const n=document.getElementById('dwNo').value.trim(),t=document.getElementById('dwTitle').value.trim();if(!n||!t)return false;app.drawings.push({id:genId('dw'),number:n,title:t,revision:document.getElementById('dwRev').value,dateReceived:document.getElementById('dwDate').value,timestamp:new Date().toISOString()});saveApp(app);});}
-
-    function renderMaterials(){const c=document.getElementById('materialEntries');if(!app.materials.length){c.innerHTML='<div class="empty-state"><div class="icon">🧱</div><p>No materials</p><button class="btn btn-primary btn-small" onclick="showMaterialForm()">➕</button></div>';return;}let h='<div style="display:flex;gap:3px;margin-bottom:6px;"><button class="btn btn-primary btn-small" onclick="showMaterialForm()">➕</button><button class="btn btn-secondary btn-small" onclick="showMaterialUseForm()">📝</button><button class="btn btn-secondary btn-small" onclick="showMaterialDeliveryForm()">🚚</button></div><table style="width:100%;border-collapse:collapse;font-size:.6rem;">';app.materials.forEach(m=>{const s=parseFloat(m.currentStock||0),min=parseFloat(m.minStock||0);const pct=min>0?Math.min(100,(s/min)*100):100;h+='<tr><td><strong>'+m.name+'</strong></td><td style="color:'+(s<=0?'var(--red)':s<=min?'var(--orange)':'var(--text)')+'">'+s+'</td><td>'+m.unit+'</td><td><button class="btn btn-small btn-primary" onclick="quickUse(\''+m.id+'\')">-</button> <button class="btn btn-small btn-secondary" onclick="quickDeliver(\''+m.id+'\')">+</button></td></tr>';});h+='</table>';c.innerHTML=h;}
-    function showMaterialForm(eid){const ex=eid?app.materials.find(m=>m.id===eid):null;const h='<div class="form-group"><label>Name *</label><input type="text" id="mn" value="'+(ex?ex.name:'')+'"></div><div class="form-group"><label>Unit</label><select id="mu"><option>Bags (50kg)</option><option>Tonnes</option><option>m³</option><option>Pieces</option><option>Litres</option><option>m²</option><option>kg</option></select></div><div class="form-group"><label>Stock</label><input type="number" id="ms" value="'+(ex?ex.initialStock:'0')+'" step="any"></div><div class="form-group"><label>Min Level</label><input type="number" id="mmin" value="'+(ex?ex.minStock:'0')+'" step="any"></div>';showModal('🧱 Material',h,()=>{const n=document.getElementById('mn').value.trim();if(!n)return false;const entry={id:ex?ex.id:genId('mat'),name:n,unit:document.getElementById('mu').value,initialStock:parseFloat(document.getElementById('ms').value)||0,currentStock:ex?ex.currentStock:parseFloat(document.getElementById('ms').value)||0,minStock:parseFloat(document.getElementById('mmin').value)||0};if(ex){const i=app.materials.findIndex(m=>m.id===eid);if(i>-1)app.materials[i]=entry;}else{app.materials.push(entry);}saveApp(app);});}
-    function showMaterialUseForm(){if(!app.materials.length)return;let h='<div class="form-group"><label>Material</label><select id="matId">'+app.materials.map(m=>'<option value="'+m.id+'">'+m.name+'</option>').join('')+'</select></div><div class="form-group"><label>Qty *</label><input type="number" id="mq" step="any"></div>';showModal('📝 Use',h,()=>{const mid=document.getElementById('matId').value,qty=parseFloat(document.getElementById('mq').value);if(!qty)return false;const m=app.materials.find(m=>m.id===mid);m.currentStock=Math.max(0,(m.currentStock||0)-qty);app.materialLog.push({id:genId('mlog'),materialId:mid,type:'usage',quantity:qty,unit:m.unit,date:today(),timestamp:new Date().toISOString()});saveApp(app);});}
-    function showMaterialDeliveryForm(){if(!app.materials.length)return;let h='<div class="form-group"><label>Material</label><select id="matIdD">'+app.materials.map(m=>'<option value="'+m.id+'">'+m.name+'</option>').join('')+'</select></div><div class="form-group"><label>Qty *</label><input type="number" id="mqd" step="any"></div>';showModal('🚚 Delivery',h,()=>{const mid=document.getElementById('matIdD').value,qty=parseFloat(document.getElementById('mqd').value);if(!qty)return false;const m=app.materials.find(m=>m.id===mid);m.currentStock=(m.currentStock||0)+qty;app.materialLog.push({id:genId('mlog'),materialId:mid,type:'delivery',quantity:qty,unit:m.unit,date:today(),timestamp:new Date().toISOString()});saveApp(app);});}
-    function quickUse(id){const m=app.materials.find(m=>m.id===id);const q=prompt('Qty used ('+m.unit+'):');if(!q||isNaN(q))return;m.currentStock=Math.max(0,(m.currentStock||0)-parseFloat(q));app.materialLog.push({id:genId('mlog'),materialId:id,type:'usage',quantity:parseFloat(q),unit:m.unit,date:today(),timestamp:new Date().toISOString()});saveApp(app);refreshAll();}
-    function quickDeliver(id){const m=app.materials.find(m=>m.id===id);const q=prompt('Qty delivered ('+m.unit+'):');if(!q||isNaN(q))return;m.currentStock=(m.currentStock||0)+parseFloat(q);app.materialLog.push({id:genId('mlog'),materialId:id,type:'delivery',quantity:parseFloat(q),unit:m.unit,date:today(),timestamp:new Date().toISOString()});saveApp(app);refreshAll();}
-
-    function renderConcrete(){const c=document.getElementById('concreteEntries');const entries=[...app.concrete].sort((a,b)=>new Date(b.pourDate)-new Date(a.pourDate));if(!entries.length){c.innerHTML='<div class="empty-state"><div class="icon">🧪</div><p>No cubes</p><button class="btn btn-primary btn-small" onclick="showConcreteForm()">➕</button></div>';return;}c.innerHTML='<button class="btn btn-primary btn-small" style="margin-bottom:6px;" onclick="showConcreteForm()">➕ Cube</button>'+entries.map(e=>{const ts=today();const d28=new Date(e.pourDate);d28.setDate(d28.getDate()+28);const due=ts>=d28.toISOString().split('T')[0]&&!e.result28;return '<div class="entry-card" style="border-left-color:var(--cyan);'+(due?'border-left-color:var(--red)':'')+'"><div class="entry-header"><span>🧪 '+e.cubeId+'</span>'+(due?'<span class="badge badge-open">DUE</span>':'')+'</div><div class="entry-meta"><span>Pour: '+fmtDate(e.pourDate)+'</span><span>'+e.grade+'</span></div><div style="display:grid;grid-template-columns:repeat(3,1fr);text-align:center;font-size:.58rem;"><div>7d: '+(e.result7||'—')+'</div><div>14d: '+(e.result14||'—')+'</div><div>28d: '+(e.result28||'—')+'</div></div><div style="margin-top:3px;">'+['7','14','28'].filter(d=>!e['result'+d]).map(d=>'<button class="btn btn-small btn-primary" onclick="addCubeResult(\''+e.id+'\','+d+')">'+d+'d</button>').join('')+'</div></div>';}).join('');}
-    function showConcreteForm(){const h='<div class="form-group"><label>Cube ID</label><input type="text" id="cubeId" value="CUBE-'+Date.now().toString().slice(-6)+'"></div><div class="form-group"><label>Pour Date</label><input type="date" id="cubeDate" value="'+today()+'"></div><div class="form-group"><label>Location</label><input type="text" id="cubeLoc" value="'+loc()+'"></div><div class="form-group"><label>Grade</label><select id="cubeGrade"><option>C25/30</option><option>C30/37</option><option>C35/45</option><option>C40/50</option></select></div>';showModal('🧪 Cube',h,()=>{app.concrete.push({id:genId('cube'),cubeId:document.getElementById('cubeId').value,pourDate:document.getElementById('cubeDate').value,location:document.getElementById('cubeLoc').value,grade:document.getElementById('cubeGrade').value,result7:null,result14:null,result28:null});saveApp(app);});}
-    function addCubeResult(id,days){const cube=app.concrete.find(c=>c.id===id);const r=prompt(days+'-day (N/mm²):');if(!r||isNaN(r))return;cube['result'+days]=parseFloat(r);saveApp(app);refreshAll();}
-
-    function renderTests(){const c=document.getElementById('testEntries');const entries=[...app.materialTests].sort((a,b)=>new Date(b.testDate)-new Date(a.testDate));if(!entries.length){c.innerHTML='<div class="empty-state"><div class="icon">🔬</div><p>No tests</p><button class="btn btn-primary btn-small" onclick="showTestForm()">➕</button></div>';return;}c.innerHTML='<button class="btn btn-primary btn-small" style="margin-bottom:6px;" onclick="showTestForm()">➕ Test</button>'+entries.map(e=>'<div class="entry-card" style="border-left-color:var(--green);"><div class="entry-header"><span>🔬 '+e.material+' — '+e.testType+'</span><span class="badge '+(e.result==='Pass'?'badge-pass':'badge-fail')+'">'+e.result+'</span></div><div class="entry-meta"><span>'+fmtDate(e.testDate)+'</span><span>'+e.lab+'</span></div></div>').join('');}
-    function showTestForm(){const h='<div class="form-group"><label>Material</label><select id="testMat"><option>Concrete</option><option>Steel</option><option>Soil</option><option>Aggregates</option><option>Cement</option><option>Blocks</option></select></div><div class="form-group"><label>Test Type</label><select id="testType"><option>Compressive Strength</option><option>Tensile Strength</option><option>Sieve Analysis</option><option>Proctor Density</option><option>Slump Test</option></select></div><div class="form-group"><label>Date</label><input type="date" id="testDate" value="'+today()+'"></div><div class="form-group"><label>Lab</label><input type="text" id="testLab"></div><div class="form-group"><label>Result</label><select id="testResult"><option>Pass</option><option>Fail</option><option>Pending</option></select></div><div class="form-group"><label>Value</label><input type="text" id="testValue"></div>';showModal('🔬 Test',h,()=>{app.materialTests.push({id:genId('tst'),material:document.getElementById('testMat').value,testType:document.getElementById('testType').value,testDate:document.getElementById('testDate').value,lab:document.getElementById('testLab').value,result:document.getElementById('testResult').value,testValue:document.getElementById('testValue').value});saveApp(app);});}
-
-    function renderDelays(){const c=document.getElementById('delayEntries');const entries=[...app.delays].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty-state"><div class="icon">🚧</div><p>No delays</p><button class="btn btn-primary btn-small" onclick="showDelayForm()">➕</button></div>';return;}c.innerHTML='<button class="btn btn-primary btn-small" style="margin-bottom:6px;" onclick="showDelayForm()">➕ Delay</button>'+entries.map(e=>'<div class="entry-card" style="border-left-color:var(--red);"><div class="entry-header"><span>🚧 '+e.cause+'</span><span class="badge badge-open">'+e.duration+'d</span></div><div class="entry-meta"><span>'+fmtDate(e.date)+'</span><span>📍 '+e.location+'</span></div></div>').join('');}
-    function showDelayForm(){const h='<div class="form-group"><label>Date</label><input type="date" id="delayDate" value="'+today()+'"></div><div class="form-group"><label>Cause *</label><input type="text" id="delayCause"></div><div class="form-group"><label>Days</label><input type="number" id="delayDays" value="1"></div><div class="form-group"><label>Impact</label><select id="delayImpact"><option>Minor</option><option>Moderate</option><option>Major</option><option>Critical</option></select></div>';showModal('🚧 Delay',h,()=>{const c=document.getElementById('delayCause').value.trim();if(!c)return false;app.delays.push({id:genId('dly'),date:document.getElementById('delayDate').value,cause:c,duration:document.getElementById('delayDays').value,impact:document.getElementById('delayImpact').value,location:loc()});saveApp(app);});}
-
-    function renderAttendance(){const c=document.getElementById('attendanceEntries');const td=today();const todayE=app.attendance.filter(e=>e.date===td);if(!todayE.length){c.innerHTML='<div class="empty-state"><div class="icon">👷</div><p>No attendance</p><button class="btn btn-primary btn-small" onclick="showAttendanceForm()">➕</button></div>';return;}const groups={};todayE.forEach(e=>{if(!groups[e.category])groups[e.category]=[];groups[e.category].push(e);});let h='<div style="display:flex;gap:3px;margin-bottom:6px;"><span class="badge badge-info">'+fmtDate(td)+'</span><span class="badge badge-pending">👷 '+todayE.reduce((s,e)=>s+(parseInt(e.count)||0),0)+'</span></div>';Object.keys(groups).forEach(cat=>{h+='<div class="entry-card"><div class="entry-header"><span>👷 '+cat+'</span><span class="badge badge-info">'+groups[cat].reduce((s,e)=>s+(parseInt(e.count)||0),0)+'</span></div></div>';});h+='<button class="btn btn-small btn-primary" onclick="showAttendanceForm()">➕</button>';c.innerHTML=h;}
-    function showAttendanceForm(){const h='<div class="form-group"><label>Category</label><select id="attCat"><option>Contractor Staff</option><option>Skilled Labour</option><option>Unskilled Labour</option><option>Subcontractor</option><option>Visitor</option></select></div><div class="form-group"><label>Name</label><input type="text" id="attName"></div><div class="form-group"><label>Count</label><input type="number" id="attCount" value="1"></div>';showModal('👷 Add',h,()=>{app.attendance.push({id:genId('att'),date:today(),category:document.getElementById('attCat').value,name:document.getElementById('attName').value,count:document.getElementById('attCount').value});saveApp(app);});}
-
-    function renderPhotos(){const c=document.getElementById('photoGallery');if(!media.length){c.innerHTML='<div class="empty-state"><div class="icon">📸</div><p>No media</p></div>';return;}c.innerHTML='<div style="display:flex;gap:3px;margin-bottom:6px;"><button class="btn btn-small btn-primary" onclick="openCamera()">📷</button><button class="btn btn-small btn-secondary" onclick="openGallery()">🖼️</button></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3px;">'+[...media].reverse().map(m=>'<div style="aspect-ratio:1;background:var(--card);border-radius:5px;overflow:hidden;cursor:pointer;" onclick="viewMedia(\''+m.id+'\')"><img src="'+m.dataUrl+'" style="width:100%;height:100%;object-fit:cover;" loading="lazy"></div>').join('')+'</div>';}
-    function viewMedia(id){const item=media.find(m=>m.id===id);if(!item)return;document.getElementById('mediaViewer').innerHTML='<div style="position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:500;display:flex;align-items:center;justify-content:center;" onclick="this.remove()"><img src="'+item.dataUrl+'" style="max-width:95%;max-height:80vh;border-radius:6px;"></div>';}
-
-    function renderReport(){
-        const td=today();const dt=app.diary.filter(e=>e.timestamp.startsWith(td));const it=app.inspections.filter(e=>e.timestamp.startsWith(td));const no=app.ncrs.filter(e=>e.status==='open');const at=app.attendance.filter(e=>e.date===td);const ml=app.materialLog.filter(e=>e.date===td);const lowMat=app.materials.filter(m=>parseFloat(m.currentStock||0)<=parseFloat(m.minStock||0));
-        const rdate=new Date().toLocaleDateString('en-KE',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-        const pn=project.projectName||'Project',con=project.contractorName||'N/A';
-        let tr='══════════════════════════════\n  CLERK OF WORKS — DAILY REPORT\n══════════════════════════════\n\nPROJECT: '+pn+'  CONTRACTOR: '+con+'\nDATE: '+rdate+'\n\n1. WORK PROGRESS\n';
-        dt.length?dt.forEach((e,i)=>{tr+='\n'+(i+1)+'. '+e.title+'\n   '+e.description.substring(0,120)+'\n';}):tr+='\n   No entries.\n';
-        tr+='\n2. INSPECTIONS ('+it.length+')\n';it.length?it.forEach(e=>{tr+='   '+e.checklistType+' — '+e.result.toUpperCase()+' ('+e.items.filter(i=>i.passed).length+'/'+e.items.length+')\n';}):tr+='   None.\n';
-        tr+='\n3. NCRs OPEN: '+no.length+'\n';no.length?no.forEach(e=>{tr+='   • '+e.title+'\n';}):tr+='   None.\n';
-        tr+='\n4. ATTENDANCE: '+(at.reduce((s,e)=>s+(parseInt(e.count)||0),0)||0)+'\n';
-        tr+='\n5. MATERIALS\n   Used: '+ml.filter(l=>l.type==='usage').reduce((s,l)=>s+parseFloat(l.quantity||0),0)+'\n   Delivered: '+ml.filter(l=>l.type==='delivery').length+' items\n';
-        if(lowMat.length){tr+='   ⚠️ LOW: ';lowMat.forEach(m=>{tr+=m.name+'('+m.currentStock+') ';});tr+='\n';}
-        tr+='\n══════════════════════════════\n  '+(project.cowName||'CoW')+'\n';
-        window._report=tr;
-        document.getElementById('reportContent').innerHTML='<div style="display:flex;gap:3px;margin-bottom:8px;"><button class="btn btn-small btn-primary" onclick="copyReport()">📋</button><button class="btn btn-small btn-secondary" onclick="printReport()">🖨️</button><button class="btn btn-small btn-secondary" onclick="shareWA(window._report)">📱</button><button class="btn btn-small btn-secondary" onclick="saveReport()">💾</button></div><div class="report-preview">'+tr+'</div>';
+    function uploadDrawingForAI(){
+        if(!hasAI()){toast('Set Gemini API key in ⚙️ Settings first');return;}
+        const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.style.display='none';document.body.appendChild(inp);
+        inp.addEventListener('change',async function(){
+            const file=inp.files[0];
+            if(!file)return;
+            const reader=new FileReader();
+            reader.onload=async function(e){
+                const drawing={id:genId('dw'),number:'UPLOAD-'+Date.now().toString().slice(-6),title:file.name,discipline:'Unknown',revision:'A',dateReceived:today(),timestamp:new Date().toISOString(),imageData:e.target.result,aiAnalysis:null};
+                app.drawings.push(drawing);
+                saveApp(app);
+                refreshAll();
+                toast('📐 Uploaded! Analyzing with AI...');
+                await analyzeDrawingWithAI(drawing.id);
+            };
+            reader.readAsDataURL(file);
+            document.body.removeChild(inp);
+        });
+        inp.click();
     }
+
+    function captureDrawing(){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.setAttribute('capture','environment');inp.style.display='none';document.body.appendChild(inp);inp.addEventListener('change',function(){if(inp.files[0]){const reader=new FileReader();reader.onload=function(e){addPending(e.target.result,'image',inp.files[0].name);refreshDrawingPreview();};reader.readAsDataURL(inp.files[0]);}document.body.removeChild(inp);});inp.click();}
+    function pickDrawingFile(){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.style.display='none';document.body.appendChild(inp);inp.addEventListener('change',function(){if(inp.files[0]){const reader=new FileReader();reader.onload=function(e){addPending(e.target.result,'image',inp.files[0].name);refreshDrawingPreview();};reader.readAsDataURL(inp.files[0]);}document.body.removeChild(inp);});inp.click();}
+    function refreshDrawingPreview(){const c=document.getElementById('drawingPreview');if(!c)return;if(!pendingMedia.length){c.innerHTML='';return;}c.innerHTML='<img src="'+pendingMedia[0].dataUrl+'" style="width:100%;max-height:150px;object-fit:contain;border-radius:4px;">';}
+    function addPending(dataUrl,type,name){pendingMedia=[{id:genId('med'),type,dataUrl,fileName:name||'photo.jpg',timestamp:new Date().toISOString(),entryId:null}];}
+    function commitMedia(entryId){if(!pendingMedia.length)return;pendingMedia.forEach(m=>{m.entryId=entryId;media.push({...m});});saveMedia(media);pendingMedia=[];}
+    function viewDrawing(id){const d=app.drawings.find(d=>d.id===id);if(!d||!d.imageData)return;const mc=document.getElementById('modalContainer');mc.innerHTML='<div class="modal-overlay" style="align-items:center;" onclick="closeModal()"><img src="'+d.imageData+'" style="max-width:95%;max-height:80vh;border-radius:8px;"></div>';}
+
+    // ============================================
+    // QUICK RENDERERS
+    // ============================================
+    function renderDiary(filter=''){const c=document.getElementById('diaryEntries');let entries=app.diary;if(filter){const q=filter.toLowerCase();entries=entries.filter(e=>e.title.toLowerCase().includes(q)||e.description.toLowerCase().includes(q));}entries.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty-state"><div class="icon">📔</div><p>No diary entries</p></div>';return;}c.innerHTML=entries.map(e=>'<div class="entry-card" style="border-left-color:var(--blue);"><div class="entry-header"><span class="entry-title">📔 '+e.title+'</span></div><div class="entry-meta"><span>'+fmt(e.timestamp)+'</span><span>📍 '+e.location+'</span></div><div class="entry-desc">'+e.description.replace(/\n/g,'<br>')+'</div><div style="margin-top:3px;"><button class="btn btn-small btn-secondary" onclick="deleteEntry(\'diary\',\''+e.id+'\')">🗑️</button></div></div>').join('');}
+    function renderInspections(){const c=document.getElementById('inspectionEntries');const entries=[...app.inspections].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty-state"><div class="icon">✅</div><p>No inspections</p><button class="btn btn-primary btn-small" onclick="showInspectionMenu()">➕ New</button></div>';return;}let h='<button class="btn btn-primary btn-small" style="margin-bottom:6px;" onclick="showInspectionMenu()">✅ New Inspection</button>';h+=entries.map(e=>'<div class="entry-card" style="border-left-color:var(--green);"><div class="entry-header"><span class="entry-title">✅ '+e.checklistType+'</span><span class="badge '+(e.result==='pass'?'badge-pass':'badge-fail')+'">'+e.result.toUpperCase()+'</span></div><div class="entry-meta"><span>'+fmt(e.timestamp)+'</span><span>'+e.items.filter(i=>i.passed).length+'/'+e.items.length+' OK</span></div></div>').join('');c.innerHTML=h;}
+    function renderNCRs(){const c=document.getElementById('ncrEntries');const entries=[...app.ncrs].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty-state"><div class="icon">🚨</div><p>No NCRs</p></div>';return;}c.innerHTML=entries.map(e=>'<div class="entry-card" style="border-left-color:var(--red);"><div class="entry-header"><span class="entry-title">🚨 '+e.title+'</span><span class="badge '+(e.status==='open'?'badge-open':'badge-closed')+'">'+e.status+'</span></div></div>').join('');}
+    function renderInstructions(){const c=document.getElementById('instructionEntries');const entries=[...app.instructions].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty-state"><div class="icon">📋</div><p>No instructions</p></div>';return;}c.innerHTML=entries.map(e=>'<div class="entry-card" style="border-left-color:var(--yellow);"><div class="entry-header"><span class="entry-title">📋 SI-'+e.id.split('-')[1]+'</span></div></div>').join('');}
+    function renderRFIs(){const c=document.getElementById('rfiEntries');const entries=[...app.rfis].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty-state"><div class="icon">📤</div><p>No RFIs</p></div>';return;}c.innerHTML=entries.map(e=>'<div class="entry-card" style="border-left-color:var(--pink);"><div class="entry-header"><span class="entry-title">📤 '+e.subject+'</span><span class="badge '+(e.status==='open'?'badge-open':'badge-closed')+'">'+e.status+'</span></div></div>').join('');}
+    function renderMaterials(){const c=document.getElementById('materialEntries');if(!app.materials.length){c.innerHTML='<div class="empty-state"><div class="icon">🧱</div><p>No materials</p></div>';return;}let h='<button class="btn btn-primary btn-small" style="margin-bottom:6px;" onclick="showMaterialForm()">➕ Add</button>';app.materials.forEach(m=>{h+='<div class="entry-card" style="border-left-color:var(--orange);"><div class="entry-header"><span>🧱 '+m.name+'</span><span style="color:'+(m.currentStock<=m.minStock?'var(--orange)':'var(--text)')+'">'+m.currentStock+' '+m.unit+'</span></div></div>';});c.innerHTML=h;}
+    function showMaterialForm(){const h='<div class="form-group"><label>Name *</label><input type="text" id="mn"></div><div class="form-group"><label>Unit</label><select id="mu"><option>Bags</option><option>Tonnes</option><option>m³</option><option>Pieces</option></select></div><div class="form-group"><label>Stock</label><input type="number" id="ms" value="0"></div>';showModal('🧱 Material',h,()=>{const n=document.getElementById('mn').value.trim();if(!n)return false;app.materials.push({id:genId('mat'),name:n,unit:document.getElementById('mu').value,currentStock:parseFloat(document.getElementById('ms').value)||0,minStock:0});saveApp(app);});}
+    function renderConcrete(){const c=document.getElementById('concreteEntries');if(!app.concrete.length){c.innerHTML='<div class="empty-state"><div class="icon">🧪</div><p>No cubes</p></div>';return;}c.innerHTML=app.concrete.map(e=>'<div class="entry-card" style="border-left-color:var(--cyan);"><div class="entry-header"><span>🧪 '+e.cubeId+'</span><span>'+e.grade+'</span></div><div>7d:'+(e.result7||'—')+' 14d:'+(e.result14||'—')+' 28d:'+(e.result28||'—')+'</div></div>').join('');}
+    function renderTests(){const c=document.getElementById('testEntries');if(!app.materialTests.length){c.innerHTML='<div class="empty-state"><div class="icon">🔬</div><p>No tests</p></div>';return;}c.innerHTML=app.materialTests.map(e=>'<div class="entry-card" style="border-left-color:var(--green);"><div class="entry-header"><span>🔬 '+e.material+'</span><span>'+e.result+'</span></div></div>').join('');}
+    function renderDelays(){const c=document.getElementById('delayEntries');if(!app.delays.length){c.innerHTML='<div class="empty-state"><div class="icon">🚧</div><p>No delays</p></div>';return;}c.innerHTML=app.delays.map(e=>'<div class="entry-card" style="border-left-color:var(--red);"><div class="entry-header"><span>🚧 '+e.cause+'</span><span>'+e.duration+'d</span></div></div>').join('');}
+    function renderAttendance(){const c=document.getElementById('attendanceEntries');const td=today();const todayE=app.attendance.filter(e=>e.date===td);if(!todayE.length){c.innerHTML='<div class="empty-state"><div class="icon">👷</div><p>No attendance</p></div>';return;}c.innerHTML='<span class="badge badge-info">👷 '+todayE.reduce((s,e)=>s+(parseInt(e.count)||0),0)+' total</span>';}
+    function renderPhotos(){const c=document.getElementById('photoGallery');if(!media.length){c.innerHTML='<div class="empty-state"><div class="icon">📸</div><p>No media</p></div>';return;}c.innerHTML='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3px;">'+[...media].reverse().slice(0,12).map(m=>'<div style="aspect-ratio:1;overflow:hidden;border-radius:4px;"><img src="'+m.dataUrl+'" style="width:100%;height:100%;object-fit:cover;" loading="lazy"></div>').join('')+'</div>';}
+    function renderReport(){const td=today();const dt=app.diary.filter(e=>e.timestamp.startsWith(td));const it=app.inspections.filter(e=>e.timestamp.startsWith(td));const no=app.ncrs.filter(e=>e.status==='open');const rdate=new Date().toLocaleDateString('en-KE',{weekday:'long',year:'numeric',month:'long',day:'numeric'});let tr='══════════════════════\n  COW DAILY REPORT\n══════════════════════\n\nPROJECT: '+(project.projectName||'N/A')+'\nDATE: '+rdate+'\n\nWork: '+dt.length+' entries\nInspections: '+it.length+'\nNCRs Open: '+no.length+'\n\n══════════════════════\n';window._report=tr;document.getElementById('reportContent').innerHTML='<button class="btn btn-small btn-primary" onclick="copyReport()">📋 Copy</button><button class="btn btn-small btn-secondary" onclick="printReport()">🖨️ Print</button><div class="report-preview">'+tr+'</div>';}
 
     function refreshAll(){renderDiary();renderInspections();renderNCRs();renderInstructions();renderRFIs();renderDrawings();renderMaterials();renderConcrete();renderTests();renderDelays();renderAttendance();renderPhotos();updateStats();}
 
-    function showModal(title,html,cb){const mc=document.getElementById('modalContainer');mc.innerHTML='<div class="modal-overlay" id="mo"><div class="modal"><h2>'+title+'</h2><div id="mf">'+html+'</div><div class="btn-row"><button class="btn btn-secondary" onclick="closeModal()">Cancel</button><button class="btn btn-primary" id="ms">Save</button></div></div></div>';document.getElementById('ms').addEventListener('click',()=>{const r=cb();if(r!==false){closeModal();refreshAll();toast('✅ Saved!');}});document.getElementById('mo').addEventListener('click',e=>{if(e.target.id==='mo')closeModal();});}
+    // MODALS
+    function showModal(title,html,cb){const mc=document.getElementById('modalContainer');mc.innerHTML='<div class="modal-overlay" id="mo"><div class="modal"><h2>'+title+'</h2><div id="mf">'+html+'</div><div class="btn-row" style="display:flex;gap:5px;margin-top:8px;"><button class="btn btn-secondary" onclick="closeModal()">Cancel</button><button class="btn btn-primary" id="ms">Save</button></div></div></div>';document.getElementById('ms').addEventListener('click',()=>{const r=cb();if(r!==false){closeModal();refreshAll();toast('✅ Saved!');}});document.getElementById('mo').addEventListener('click',e=>{if(e.target.id==='mo')closeModal();});}
     function closeModal(){document.getElementById('modalContainer').innerHTML='';}
 
-    function showDiaryForm(editId){const ex=editId?app.diary.find(e=>e.id===editId):null;const h='<div class="form-group"><label>Title *</label><input type="text" id="dt" value="'+(ex?ex.title:'')+'"></div><div class="form-group"><label>Location</label><input type="text" id="dl" value="'+(ex?ex.location:loc())+'"></div><div class="form-group"><label>Description *</label><textarea id="dd">'+(ex?ex.description:'')+'</textarea></div><div class="form-group"><label>📸 Photos</label><div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;"><button type="button" class="btn btn-primary btn-small" onclick="openCamera()">📷</button><button type="button" class="btn btn-secondary btn-small" onclick="openGallery()">🖼️</button></div><div id="mediaPreviewContainer" style="margin-top:3px;"></div></div>';pendingMedia=[];showModal(ex?'✏️ Edit':'📔 New Diary',h,()=>{const t=document.getElementById('dt').value.trim(),d=document.getElementById('dd').value.trim();if(!t||!d)return false;const entry={id:ex?ex.id:genId('di'),title:t,location:document.getElementById('dl').value,description:d,timestamp:ex?ex.timestamp:new Date().toISOString()};if(ex){const i=app.diary.findIndex(e=>e.id===editId);if(i>-1)app.diary[i]=entry;}else{app.diary.push(entry);}commitMedia(entry.id);saveApp(app);});setTimeout(refreshMediaPreview,200);}
-    function showNCRForm(){const h='<div class="form-group"><label>Title *</label><input type="text" id="nt"></div><div class="form-group"><label>Severity</label><select id="ns"><option>Minor</option><option selected>Major</option><option>Critical</option></select></div><div class="form-group"><label>Location</label><input type="text" id="nl" value="'+loc()+'"></div><div class="form-group"><label>Description *</label><textarea id="nd"></textarea></div><div class="form-group"><label>Action *</label><textarea id="na"></textarea></div>';showModal('🚨 NCR',h,()=>{const t=document.getElementById('nt').value.trim(),d=document.getElementById('nd').value.trim(),a=document.getElementById('na').value.trim();if(!t||!d||!a)return false;app.ncrs.push({id:genId('ncr'),title:t,severity:document.getElementById('ns').value,location:document.getElementById('nl').value,description:d,actionRequired:a,status:'open',timestamp:new Date().toISOString()});saveApp(app);});}
-    function showInstructionForm(){const h='<div class="form-group"><label>Issued To *</label><input type="text" id="st" value="'+contractor()+'"></div><div class="form-group"><label>Instruction *</label><textarea id="sd"></textarea></div>';showModal('📋 SI',h,()=>{const t=document.getElementById('st').value.trim(),d=document.getElementById('sd').value.trim();if(!t||!d)return false;app.instructions.push({id:genId('si'),issuedTo:t,description:d,location:loc(),status:'issued',timestamp:new Date().toISOString()});saveApp(app);});}
+    // 50+ INSPECTION CHECKLISTS
+    const ALL_CHECKLISTS={
+        '🏗️ EARTHWORKS':{'Excavation — General':['Setting out checked','Depth correct','Bottom firm','Safety batter','Dewatering','Blinding approval'],'Trench Excavation':['Line & level','Width correct','Depth to invert','Pipe bedding','Shoring if >1.5m','Safe access'],'Backfill':['Material approved','Compaction >95%','Layers <150mm','No debris','Services protected']},
+        '🧱 CONCRETE':{'Pre-Pour':['Formwork checked','Reinforcement correct','Cover blocks placed','Grade confirmed','Slump test ready','Vibrators ready','Pour card signed'],'During Pour':['Slump recorded','No segregation','Compaction adequate','Joints correct','Cubes taken'],'Post-Pour':['Curing started','Formwork time OK','No cracks','Cubes to lab']},
+        '🔩 STEEL':{'Reinforcement':['Bar sizes correct','Spacing OK','Lap lengths correct','Chairs placed','Clean & rust-free']},
+        '🧱 MASONRY':{'Blockwork':['Block type correct','Mortar 1:4','Plumb & level','Wall ties','DPC in place','Openings correct']},
+        '💧 WATERPROOFING':{'Waterproofing':['Surface prepared','Primer applied','Membrane lapped','Detailing correct','Protection board','Ponding test']},
+        '🚿 PLUMBING':{'Pressure Test':['System filled','1.5x working pressure','Held 1 hour','No leaks','Gauge calibrated','Certificate signed'],'Drainage':['Gradient correct','Joints sealed','Traps installed','Vents connected','Water test OK','Rodding eyes']},
+        '⚡ ELECTRICAL':{'Containment':['Conduit type correct','Route as drawing','Supports OK','Bends OK','Fire barriers'],'Cabling':['Cable type correct','No damage','Labels on','Segregation OK','IR test done']},
+        '🎨 FINISHES':{'Plastering':['Background prepared','Mesh at joints','Mix correct','Thickness OK','Curing done','No hollow spots'],'Tiling':['Tile type correct','Adhesive OK','Grout consistent','Level checked','Falls correct','No drummy tiles'],'Painting':['Surface prepared','Primer applied','Undercoat done','Finish correct','No runs/sags','Coats OK']},
+        '🚪 JOINERY':{'Doors/Windows':['Frame size correct','Plumb & level','Anchored securely','Ironmongery OK','Operation smooth','Sealant applied']},
+        '🛣️ EXTERNAL':{'Paving':['Sub-base compacted','Bedding prepared','Paving laid','Joints filled','Falls correct'],'Drainage':['Pipe gradient OK','Manholes correct','Benching done','Water test passed']},
+        '✓ FINAL':{'Snagging':['All rooms inspected','Walls OK','Ceilings OK','Floors OK','Doors/Windows OK','Plumbing OK','Electrical OK','Painting OK','Cleaning done']}
+    };
 
-    function showFABMenu(){const mc=document.getElementById('modalContainer');mc.innerHTML='<div class="modal-overlay" id="fo" style="align-items:flex-end;justify-content:center;"><div class="modal" style="text-align:center;max-width:320px;"><h2>➕ Add New</h2><button class="btn btn-primary" style="margin-bottom:2px;width:100%;" onclick="closeModal();showDiaryForm();">📔 Diary</button><button class="btn btn-primary" style="margin-bottom:2px;width:100%;background:var(--green);" onclick="closeModal();showInspectionMenu();">✅ Inspection</button><button class="btn btn-primary" style="margin-bottom:2px;width:100%;background:var(--red);" onclick="closeModal();showNCRForm();">🚨 NCR</button><button class="btn btn-primary" style="margin-bottom:2px;width:100%;background:var(--yellow);color:#0d1117;" onclick="closeModal();showInstructionForm();">📋 SI</button><button class="btn btn-primary" style="margin-bottom:2px;width:100%;background:var(--pink);" onclick="closeModal();showRFIForm();">📤 RFI</button><button class="btn btn-primary" style="margin-bottom:2px;width:100%;background:var(--orange);" onclick="closeModal();showMaterialForm();">🧱 Material</button><button class="btn btn-primary" style="margin-bottom:2px;width:100%;background:var(--cyan);" onclick="closeModal();showConcreteForm();">🧪 Cube</button><button class="btn btn-primary" style="margin-bottom:2px;width:100%;background:var(--green);" onclick="closeModal();showTestForm();">🔬 Test</button><button class="btn btn-primary" style="margin-bottom:2px;width:100%;background:var(--red);" onclick="closeModal();showDelayForm();">🚧 Delay</button><button class="btn btn-primary" style="margin-bottom:2px;width:100%;background:var(--purple);" onclick="closeModal();showAttendanceForm();">👷 Attend</button><button class="btn btn-primary" style="margin-bottom:2px;width:100%;background:var(--blue);" onclick="closeModal();showDrawingForm();">📐 Drawing</button><button class="btn btn-secondary" style="width:100%;" onclick="closeModal();">Cancel</button></div></div>';document.getElementById('fo').addEventListener('click',e=>{if(e.target.id==='fo')closeModal();});}
+    function showInspectionMenu(){
+        let html='<div style="max-height:65vh;overflow-y:auto;">';
+        Object.keys(ALL_CHECKLISTS).forEach(group=>{
+            html+='<div class="trade-category"><h3>'+group+'</h3><div class="checklist-grid">';
+            Object.keys(ALL_CHECKLISTS[group]).forEach(name=>{html+='<button class="checklist-btn" onclick="closeModal();startInspection(\''+name+'\',\''+group+'\')">'+name+'</button>';});
+            html+='</div></div>';
+        });
+        html+='<button class="btn btn-secondary" style="width:100%;margin-top:8px;" onclick="closeModal()">Cancel</button></div>';
+        document.getElementById('modalContainer').innerHTML='<div class="modal-overlay" id="mo" onclick="if(event.target.id==\'mo\')closeModal()"><div class="modal"><h2>✅ Select Inspection</h2>'+html+'</div></div>';
+    }
 
-    function deleteEntry(type,id){if(!confirm('Delete?'))return;app[type]=app[type].filter(e=>e.id!==id);saveApp(app);refreshAll();}
-    function closeNCR(id){const n=app.ncrs.find(n=>n.id===id);const c=prompt('Closeout:');if(c===null)return;n.status='closed';n.closeoutComment=c;n.closedDate=new Date().toISOString();saveApp(app);refreshAll();}
-    function ackSI(id){const s=app.instructions.find(s=>s.id===id);s.status='acknowledged';saveApp(app);refreshAll();}
+    function startInspection(name,group){
+        const items=ALL_CHECKLISTS[group][name];
+        let h='<div class="form-group"><label>Checklist</label><input type="text" value="'+name+'" disabled></div><div class="form-group"><label>Location</label><input type="text" id="il" value="'+loc()+'"></div><div class="form-group"><label>Items</label><div style="background:var(--bg);border-radius:5px;padding:4px 6px;border:1px solid var(--border);">';
+        items.forEach((item,i)=>{h+='<div style="display:flex;align-items:center;gap:5px;padding:4px 0;border-bottom:1px solid var(--border);font-size:.65rem;"><input type="checkbox" id="it'+i+'" checked><label for="it'+i+'">'+item+'</label></div>';});
+        h+='</div></div><div class="form-group"><label>Notes</label><textarea id="in"></textarea></div>';
+        showModal('✅ '+name,h,()=>{
+            const checked=items.map((item,i)=>({label:item,passed:document.getElementById('it'+i).checked}));
+            app.inspections.push({id:genId('ins'),checklistType:name,location:document.getElementById('il').value,items:checked,result:checked.every(i=>i.passed)?'pass':'fail',notes:document.getElementById('in').value,timestamp:new Date().toISOString()});
+            saveApp(app);
+        });
+    }
+
+    function showDiaryForm(){const h='<div class="form-group"><label>Title *</label><input type="text" id="dt"></div><div class="form-group"><label>Location</label><input type="text" id="dl" value="'+loc()+'"></div><div class="form-group"><label>Description *</label><textarea id="dd"></textarea></div>';showModal('📔 New Diary',h,()=>{const t=document.getElementById('dt').value.trim(),d=document.getElementById('dd').value.trim();if(!t||!d)return false;app.diary.push({id:genId('di'),title:t,location:document.getElementById('dl').value,description:d,timestamp:new Date().toISOString()});saveApp(app);});}
+    function showNCRForm(){const h='<div class="form-group"><label>Title *</label><input type="text" id="nt"></div><div class="form-group"><label>Description *</label><textarea id="nd"></textarea></div><div class="form-group"><label>Action *</label><textarea id="na"></textarea></div>';showModal('🚨 NCR',h,()=>{const t=document.getElementById('nt').value.trim(),d=document.getElementById('nd').value.trim(),a=document.getElementById('na').value.trim();if(!t||!d||!a)return false;app.ncrs.push({id:genId('ncr'),title:t,description:d,actionRequired:a,status:'open',location:loc(),timestamp:new Date().toISOString()});saveApp(app);});}
+    function showRFIForm(){const h='<div class="form-group"><label>Subject *</label><input type="text" id="rs"></div><div class="form-group"><label>Question *</label><textarea id="rq"></textarea></div>';showModal('📤 RFI',h,()=>{const s=document.getElementById('rs').value.trim(),q=document.getElementById('rq').value.trim();if(!s||!q)return false;app.rfis.push({id:genId('rfi'),subject:s,question:q,status:'open',sentTo:'Engineer',timestamp:new Date().toISOString()});saveApp(app);});}
+    function showDelayForm(){const h='<div class="form-group"><label>Cause *</label><input type="text" id="dc"></div><div class="form-group"><label>Days</label><input type="number" id="dd" value="1"></div>';showModal('🚧 Delay',h,()=>{const c=document.getElementById('dc').value.trim();if(!c)return false;app.delays.push({id:genId('dly'),cause:c,duration:document.getElementById('dd').value,date:today(),location:loc()});saveApp(app);});}
+    function showAttendanceForm(){const h='<div class="form-group"><label>Category</label><select id="ac"><option>Staff</option><option>Skilled</option><option>Unskilled</option></select></div><div class="form-group"><label>Count</label><input type="number" id="an" value="1"></div>';showModal('👷 Add',h,()=>{app.attendance.push({id:genId('att'),date:today(),category:document.getElementById('ac').value,count:document.getElementById('an').value});saveApp(app);});}
+
+    function showFABMenu(){const mc=document.getElementById('modalContainer');mc.innerHTML='<div class="modal-overlay" id="fo" style="align-items:flex-end;justify-content:center;"><div class="modal" style="text-align:center;max-width:320px;"><h2>➕ Add New</h2><button class="btn btn-primary" style="margin:2px 0;width:100%;" onclick="closeModal();showDiaryForm();">📔 Diary</button><button class="btn btn-primary" style="margin:2px 0;width:100%;background:var(--green);" onclick="closeModal();showInspectionMenu();">✅ Inspection</button><button class="btn btn-primary" style="margin:2px 0;width:100%;background:var(--red);" onclick="closeModal();showNCRForm();">🚨 NCR</button><button class="btn btn-primary" style="margin:2px 0;width:100%;background:var(--pink);" onclick="closeModal();showRFIForm();">📤 RFI</button><button class="btn btn-ai" style="margin:2px 0;width:100%;" onclick="closeModal();uploadDrawingForAI();">🤖 AI Analyze Drawing</button><button class="btn btn-primary" style="margin:2px 0;width:100%;background:var(--purple);" onclick="closeModal();showDrawingForm();">📐 Add Drawing</button><button class="btn btn-secondary" style="width:100%;margin-top:4px;" onclick="closeModal();">Cancel</button></div></div>';document.getElementById('fo').addEventListener('click',e=>{if(e.target.id==='fo')closeModal();});}
+
+    function deleteEntry(type,id){app[type]=app[type].filter(e=>e.id!==id);saveApp(app);refreshAll();}
     function copyReport(){navigator.clipboard.writeText(window._report||'').then(()=>toast('📋 Copied!'));}
     function printReport(){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelector('[data-tab="report"]').classList.add('active');document.getElementById('panel-report').classList.add('active');renderReport();setTimeout(()=>window.print(),400);}
-    function saveReport(){project.reportCounter=(project.reportCounter||1)+1;saveProject(project);app.dailyReports.push({id:genId('rpt'),content:window._report||'',date:today()});saveApp(app);toast('💾 Saved!');}
-    function shareWA(text){window.open('https://wa.me/?text='+encodeURIComponent(text.substring(0,1500)),'_blank');}
-    function backupData(){const backup={project,app,media,date:new Date().toISOString()};const blob=new Blob([JSON.stringify(backup)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cowlog-backup-'+today()+'.json';a.click();project.lastBackup=today();saveProject(project);toast('💾 Backup!');}
-    function restoreData(){const inp=document.createElement('input');inp.type='file';inp.accept='.json';inp.style.display='none';document.body.appendChild(inp);inp.addEventListener('change',function(){const reader=new FileReader();reader.onload=function(e){try{const data=JSON.parse(e.target.result);if(!data.project||!data.app)return;if(!confirm('Restore?'))return;project=data.project;app=data.app;media=data.media||[];saveProject(project);saveApp(app);saveMedia(media);refreshAll();populateProjectFields();toast('✅ Restored!');}catch(err){}};reader.readAsText(this.files[0]);document.body.removeChild(inp);});inp.click();}
+    function backupData(){const backup={project,app,media,date:new Date().toISOString()};const blob=new Blob([JSON.stringify(backup)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='cowlog-backup-'+today()+'.json';a.click();toast('💾 Backup!');}
+    function restoreData(){const inp=document.createElement('input');inp.type='file';inp.accept='.json';inp.style.display='none';document.body.appendChild(inp);inp.addEventListener('change',function(){const reader=new FileReader();reader.onload=function(e){try{const data=JSON.parse(e.target.result);if(!data.project)return;project=data.project;app=data.app;media=data.media||[];saveProject(project);saveApp(app);saveMedia(media);refreshAll();populateProjectFields();toast('✅ Restored!');}catch(err){}};reader.readAsText(this.files[0]);document.body.removeChild(inp);});inp.click();}
 
     function init(){
         document.getElementById('currentDate').textContent=new Date().toLocaleDateString('en-KE',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
         populateProjectFields();updateCompactDisplay();
-        document.querySelectorAll('.tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));tab.classList.add('active');const panel=document.getElementById('panel-'+tab.dataset.tab);if(panel)panel.classList.add('active');if(tab.dataset.tab==='report')renderReport();});});
+        document.querySelectorAll('.tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));tab.classList.add('active');document.getElementById('panel-'+tab.dataset.tab).classList.add('active');if(tab.dataset.tab==='report')renderReport();});});
         document.getElementById('fabBtn').addEventListener('click',showFABMenu);
         document.getElementById('diarySearch').addEventListener('input',e=>renderDiary(e.target.value));
         refreshAll();
