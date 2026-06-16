@@ -1,10 +1,16 @@
 {
   "name": "CoW Log — Clerk of Works",
   "short_name": "CoW Log",
-  "description": "Professional site documentation & daily reports for Clerks of Works",
+  "description": "Site documentation with photo/video capture, reports & sharing",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#0d1117",
   "theme_color": "#0d1117",
-  "orientation": "portrait"
+  "orientation": "any",
+  "icons": [{
+    "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦺</text></svg>",
+    "sizes": "100x100",
+    "type": "image/svg+xml",
+    "purpose": "any maskable"
+  }]
 }

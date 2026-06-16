@@ -39,7 +39,6 @@
             top: 0;
             z-index: 100;
             border-bottom: 1px solid var(--border);
-            backdrop-filter: blur(10px);
         }
         .header-row {
             display: flex;
@@ -47,16 +46,8 @@
             align-items: center;
             margin-bottom: 8px;
         }
-        .header h1 {
-            font-size: 1.2rem;
-            color: var(--accent);
-            letter-spacing: -0.5px;
-        }
-        .header .date {
-            font-size: 0.8rem;
-            color: var(--muted);
-            text-align: right;
-        }
+        .header h1 { font-size: 1.2rem; color: var(--accent); }
+        .header .date { font-size: 0.8rem; color: var(--muted); text-align: right; }
         .project-info {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -69,10 +60,6 @@
             font-size: 0.65rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-        }
-        .project-info .value {
-            color: var(--text);
-            font-weight: 500;
         }
         .project-info input, .project-info select {
             background: var(--bg);
@@ -97,23 +84,13 @@
             text-align: center;
             border: 1px solid var(--border);
         }
-        .stat-card .count {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-        .stat-card .label {
-            font-size: 0.6rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 2px;
-        }
+        .stat-card .count { font-size: 1.5rem; font-weight: 700; }
+        .stat-card .label { font-size: 0.6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
         .stat-card .count.red { color: var(--red); }
         .stat-card .count.green { color: var(--green); }
         .stat-card .count.yellow { color: var(--yellow); }
         .stat-card .count.blue { color: var(--blue); }
         .stat-card .count.purple { color: var(--purple); }
-
         .tabs {
             display: flex;
             gap: 4px;
@@ -132,20 +109,12 @@
             background: transparent;
             color: var(--muted);
             cursor: pointer;
-            transition: all 0.15s;
             font-weight: 500;
         }
-        .tab.active {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #0d1117;
-            font-weight: 600;
-        }
-
+        .tab.active { background: var(--accent); border-color: var(--accent); color: #0d1117; font-weight: 600; }
         .content { padding: 0 16px; }
         .panel { display: none; }
         .panel.active { display: block; }
-
         .entry-card {
             background: var(--card);
             border-radius: var(--radius);
@@ -158,7 +127,6 @@
         .entry-card.inspection-card { border-left-color: var(--green); }
         .entry-card.ncr-card { border-left-color: var(--red); }
         .entry-card.instruction-card { border-left-color: var(--yellow); }
-
         .entry-header {
             display: flex;
             justify-content: space-between;
@@ -166,18 +134,13 @@
             margin-bottom: 8px;
             gap: 8px;
         }
-        .entry-title {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--text);
-        }
+        .entry-title { font-weight: 600; font-size: 0.9rem; }
         .badge {
             font-size: 0.65rem;
             padding: 4px 10px;
             border-radius: 12px;
             font-weight: 600;
             white-space: nowrap;
-            letter-spacing: 0.3px;
         }
         .badge-pass { background: rgba(63,185,80,0.15); color: var(--green); }
         .badge-fail { background: rgba(248,81,73,0.15); color: var(--red); }
@@ -185,21 +148,8 @@
         .badge-closed { background: rgba(63,185,80,0.15); color: var(--green); }
         .badge-pending { background: rgba(210,153,29,0.15); color: var(--yellow); }
         .badge-info { background: rgba(88,166,255,0.15); color: var(--blue); }
-
-        .entry-meta {
-            font-size: 0.7rem;
-            color: var(--muted);
-            margin-bottom: 8px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .entry-meta span { display: flex; align-items: center; gap: 4px; }
-        .entry-desc {
-            font-size: 0.8rem;
-            line-height: 1.6;
-            color: #c9d1d9;
-        }
+        .entry-meta { font-size: 0.7rem; color: var(--muted); margin-bottom: 8px; display: flex; flex-wrap: wrap; gap: 12px; }
+        .entry-desc { font-size: 0.8rem; line-height: 1.6; color: #c9d1d9; }
         .entry-section {
             background: var(--bg);
             border-radius: 8px;
@@ -214,7 +164,6 @@
             letter-spacing: 0.5px;
             margin-bottom: 6px;
         }
-
         .fab {
             position: fixed;
             bottom: 24px;
@@ -230,10 +179,8 @@
             box-shadow: 0 4px 20px rgba(247,129,102,0.3);
             z-index: 200;
             font-weight: 700;
-            transition: transform 0.15s;
         }
         .fab:active { transform: scale(0.92); }
-
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -254,17 +201,8 @@
             border: 1px solid var(--border);
             border-bottom: none;
         }
-        .modal h2 {
-            font-size: 1rem;
-            margin-bottom: 16px;
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .form-group {
-            margin-bottom: 12px;
-        }
+        .modal h2 { font-size: 1rem; margin-bottom: 16px; color: var(--accent); display: flex; align-items: center; gap: 8px; }
+        .form-group { margin-bottom: 12px; }
         .form-group label {
             display: block;
             font-size: 0.7rem;
@@ -283,14 +221,13 @@
             color: var(--text);
             font-size: 0.85rem;
             font-family: inherit;
-            transition: border-color 0.15s;
         }
         .modal input:focus, .modal textarea:focus, .modal select:focus {
             outline: none;
             border-color: var(--accent);
         }
         .modal textarea { min-height: 90px; resize: vertical; }
-        .btn-row { display: flex; gap: 10px; margin-top: 16px; }
+        .btn-row { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
         .btn {
             padding: 12px 20px;
             border-radius: 10px;
@@ -300,18 +237,14 @@
             cursor: pointer;
             flex: 1;
             transition: opacity 0.15s;
+            min-width: 80px;
         }
         .btn:active { opacity: 0.8; }
         .btn-primary { background: var(--accent); color: #0d1117; }
         .btn-secondary { background: var(--border); color: var(--text); }
         .btn-danger { background: var(--red); color: white; }
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 0.7rem;
-            border-radius: 6px;
-            flex: 0;
-        }
-
+        .btn-whatsapp { background: #25D366; color: white; }
+        .btn-small { padding: 6px 12px; font-size: 0.7rem; border-radius: 6px; flex: 0; }
         .checklist-item {
             display: flex;
             align-items: center;
@@ -320,13 +253,9 @@
             border-bottom: 1px solid var(--border);
             font-size: 0.8rem;
             cursor: pointer;
+            flex-wrap: wrap;
         }
-        .checklist-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            accent-color: var(--green);
-        }
-
+        .checklist-item input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--green); }
         .report-preview {
             background: var(--bg);
             border: 1px solid var(--border);
@@ -340,10 +269,7 @@
             overflow-y: auto;
             color: var(--text);
         }
-
-        .search-bar {
-            margin-bottom: 12px;
-        }
+        .search-bar { margin-bottom: 12px; }
         .search-bar input {
             width: 100%;
             padding: 12px 16px;
@@ -353,14 +279,8 @@
             color: var(--text);
             font-size: 0.85rem;
         }
-        .empty-state {
-            text-align: center;
-            padding: 48px 20px;
-            color: var(--muted);
-        }
+        .empty-state { text-align: center; padding: 48px 20px; color: var(--muted); }
         .empty-state .icon { font-size: 3rem; margin-bottom: 12px; opacity: 0.5; }
-        .empty-state p { font-size: 0.85rem; }
-
         .toast {
             position: fixed;
             bottom: 100px;
@@ -377,6 +297,150 @@
         }
         @keyframes toastIn { from { opacity: 0; transform: translateX(-50%) translateY(20px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
 
+        /* MEDIA GALLERY */
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+        }
+        .media-thumb {
+            aspect-ratio: 1;
+            background: var(--card);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+        .media-thumb img, .media-thumb video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .media-thumb .placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--muted);
+        }
+        .media-thumb .media-badge {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            font-size: 0.55rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .media-viewer {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .media-viewer img, .media-viewer video {
+            max-width: 95%;
+            max-height: 70vh;
+            border-radius: 8px;
+        }
+        .media-viewer .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--red);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        .media-viewer .media-info {
+            color: var(--text);
+            font-size: 0.8rem;
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        /* CAMERA / UPLOAD BUTTONS */
+        .media-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .media-actions .btn {
+            padding: 14px;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+        .media-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        .media-preview-item {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            position: relative;
+        }
+        .media-preview-item img, .media-preview-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .media-preview-item .remove-media {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: var(--red);
+            color: white;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: none;
+            font-size: 0.7rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* PRINT STYLES */
+        @media print {
+            body { background: white; color: black; font-size: 11pt; }
+            .header, .stats-row, .tabs, .fab, .btn, .search-bar, .modal-overlay, .toast { display: none !important; }
+            .content { padding: 0; max-width: 100%; }
+            .panel { display: block !important; }
+            .panel:not(#panel-report) { display: none !important; }
+            #panel-report { display: block !important; }
+            .report-preview {
+                background: white;
+                border: none;
+                color: black;
+                font-family: 'Courier New', monospace;
+                font-size: 10pt;
+                max-height: none;
+                overflow: visible;
+                white-space: pre-wrap;
+            }
+            .entry-card { border: 1px solid #ccc; background: white; margin-bottom: 8px; page-break-inside: avoid; }
+            .entry-card .badge { border: 1px solid #999; }
+        }
+
         @media (min-width: 600px) {
             .content { max-width: 600px; margin: 0 auto; }
             .stats-row { max-width: 600px; margin: 0 auto; }
@@ -385,6 +449,10 @@
     </style>
 </head>
 <body>
+    <!-- Hidden file input -->
+    <input type="file" id="hiddenFileInput" accept="image/*,video/*" capture="environment" multiple style="display:none;">
+    <input type="file" id="hiddenGalleryInput" accept="image/*,video/*" multiple style="display:none;">
+
     <!-- HEADER -->
     <div class="header">
         <div class="header-row">
@@ -430,26 +498,11 @@
 
     <!-- STATS -->
     <div class="stats-row">
-        <div class="stat-card">
-            <div class="count blue" id="diaryCount">0</div>
-            <div class="label">Diary</div>
-        </div>
-        <div class="stat-card">
-            <div class="count green" id="inspectionCount">0</div>
-            <div class="label">Inspections</div>
-        </div>
-        <div class="stat-card">
-            <div class="count red" id="ncrCount">0</div>
-            <div class="label">Open NCRs</div>
-        </div>
-        <div class="stat-card">
-            <div class="count yellow" id="instructionCount">0</div>
-            <div class="label">SI Issued</div>
-        </div>
-        <div class="stat-card">
-            <div class="count purple" id="photoCount">0</div>
-            <div class="label">Photos</div>
-        </div>
+        <div class="stat-card"><div class="count blue" id="diaryCount">0</div><div class="label">Diary</div></div>
+        <div class="stat-card"><div class="count green" id="inspectionCount">0</div><div class="label">Inspections</div></div>
+        <div class="stat-card"><div class="count red" id="ncrCount">0</div><div class="label">Open NCRs</div></div>
+        <div class="stat-card"><div class="count yellow" id="instructionCount">0</div><div class="label">SI</div></div>
+        <div class="stat-card"><div class="count purple" id="photoCount">0</div><div class="label">Media</div></div>
     </div>
 
     <!-- TABS -->
@@ -457,8 +510,8 @@
         <button class="tab active" data-tab="diary">📔 Diary</button>
         <button class="tab" data-tab="inspections">✅ Inspections</button>
         <button class="tab" data-tab="ncr">🚨 NCRs</button>
-        <button class="tab" data-tab="instructions">📋 Site Instructions</button>
-        <button class="tab" data-tab="photos">📸 Photos</button>
+        <button class="tab" data-tab="instructions">📋 SI</button>
+        <button class="tab" data-tab="photos">📸 Media</button>
         <button class="tab" data-tab="report">📄 Report</button>
     </div>
 
@@ -478,13 +531,15 @@
     <button class="fab" id="fabBtn">+</button>
     <div id="modalContainer"></div>
     <div id="toastContainer"></div>
+    <div id="mediaViewer"></div>
 
     <script>
         // ============================================
         // DATA STORE
         // ============================================
-        const STORAGE_KEY = 'cowlog_v2';
+        const STORAGE_KEY = 'cowlog_v3';
         const SETTINGS_KEY = 'cowlog_settings';
+        const MEDIA_KEY = 'cowlog_media';
 
         function loadData() {
             try {
@@ -495,69 +550,210 @@
             }
         }
 
-        function saveData(data) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        function saveData(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+
+        // Media stored separately due to size
+        function loadMedia() {
+            try {
+                const raw = localStorage.getItem(MEDIA_KEY);
+                return raw ? JSON.parse(raw) : [];
+            } catch(e) { return []; }
+        }
+
+        function saveMedia(media) {
+            // Limit to 50 media items to avoid storage issues
+            if (media.length > 50) media = media.slice(-50);
+            localStorage.setItem(MEDIA_KEY, JSON.stringify(media));
         }
 
         function loadSettings() {
-            try {
-                const raw = localStorage.getItem(SETTINGS_KEY);
-                return raw ? JSON.parse(raw) : {};
-            } catch(e) { return {}; }
+            try { const raw = localStorage.getItem(SETTINGS_KEY); return raw ? JSON.parse(raw) : {}; }
+            catch(e) { return {}; }
         }
 
-        function saveSettings(s) {
-            localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
-        }
+        function saveSettings(s) { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); }
 
         let appData = loadData();
+        let mediaStore = loadMedia();
         let settings = loadSettings();
 
-        // Restore settings
-        if (settings.projectName) document.addEventListener('DOMContentLoaded', () => {
-            if (settings.projectName) document.getElementById('projectName').value = settings.projectName;
-            if (settings.contractNo) document.getElementById('contractNo').value = settings.contractNo;
-            if (settings.contractorName) document.getElementById('contractorName').value = settings.contractorName;
-        });
+        function genId(prefix) { return prefix + '-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6); }
 
-        // Auto-save settings on change
-        function bindSettings() {
-            ['projectName','contractNo','contractorName'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.addEventListener('change', () => {
-                        settings[id] = el.value;
-                        saveSettings(settings);
+        function timeFormat(ts) { return new Date(ts).toLocaleString('en-KE', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+        function dateOnly(ts) { return new Date(ts).toLocaleDateString('en-KE', { year: 'numeric', month: 'short', day: 'numeric' }); }
+        function getToday() { return new Date().toISOString().split('T')[0]; }
+
+        // ============================================
+        // MEDIA HANDLING
+        // ============================================
+        let pendingMedia = []; // For current form
+        let pendingMediaForEntry = null; // For adding to existing entry
+
+        function compressImage(dataUrl, maxWidth, quality) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let w = img.width, h = img.height;
+                    if (w > maxWidth) { h = h * (maxWidth / w); w = maxWidth; }
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, w, h);
+                    resolve(canvas.toDataURL('image/jpeg', quality || 0.7));
+                };
+                img.src = dataUrl;
+            });
+        }
+
+        async function addMediaFromFile(file) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    let dataUrl = e.target.result;
+                    let type = file.type.startsWith('video/') ? 'video' : 'image';
+
+                    // Compress images
+                    if (type === 'image' && dataUrl.length > 500000) {
+                        dataUrl = await compressImage(dataUrl, 1200, 0.6);
+                    }
+
+                    // For video, limit size (take first frame or compress)
+                    if (type === 'video' && dataUrl.length > 2000000) {
+                        // Store as placeholder for video (actual video too large for localStorage)
+                        type = 'video-large';
+                    }
+
+                    const mediaItem = {
+                        id: genId('media'),
+                        type: type,
+                        dataUrl: type === 'video-large' ? null : dataUrl,
+                        fileName: file.name,
+                        fileSize: file.size,
+                        timestamp: new Date().toISOString(),
+                        label: ''
+                    };
+                    pendingMedia.push(mediaItem);
+                    resolve(mediaItem);
+                };
+                if (file.type.startsWith('video/') && file.size > 2000000) {
+                    // For large videos, just store metadata
+                    resolve({
+                        id: genId('media'),
+                        type: 'video-large',
+                        dataUrl: null,
+                        fileName: file.name,
+                        fileSize: file.size,
+                        timestamp: new Date().toISOString(),
+                        label: '(Large video — stored as reference)'
                     });
-                    // Set initial value
-                    if (settings[id]) el.value = settings[id];
+                } else {
+                    reader.readAsDataURL(file);
                 }
             });
-            // Report number auto-increment
-            const reportEl = document.getElementById('reportNo');
-            if (reportEl) {
-                const saved = settings.reportCounter || 1;
-                reportEl.value = 'COW-' + String(saved).padStart(3, '0');
+        }
+
+        function triggerCamera() {
+            const input = document.getElementById('hiddenFileInput');
+            input.setAttribute('capture', 'environment');
+            input.click();
+        }
+
+        function triggerGallery() {
+            const input = document.getElementById('hiddenGalleryInput');
+            input.removeAttribute('capture');
+            input.click();
+        }
+
+        function renderMediaPreview() {
+            const container = document.getElementById('mediaPreviewContainer');
+            if (!container) return;
+            if (pendingMedia.length === 0) {
+                container.innerHTML = '<p style="font-size:0.7rem;color:var(--muted);">No media added yet</p>';
+                return;
+            }
+            container.innerHTML = pendingMedia.map((m, i) => '' +
+                '<div class="media-preview-item">' +
+                    (m.type === 'video' || m.type === 'video-large' ? '<div class="placeholder">🎬</div>' : '<img src="' + (m.dataUrl || '') + '" alt="media">') +
+                    '<button class="remove-media" onclick="removePendingMedia(' + i + ')">✕</button>' +
+                '</div>'
+            ).join('');
+        }
+
+        function removePendingMedia(index) {
+            pendingMedia.splice(index, 1);
+            renderMediaPreview();
+        }
+
+        function savePendingMedia(entryId) {
+            pendingMedia.forEach(m => {
+                m.entryId = entryId;
+                mediaStore.push(m);
+            });
+            saveMedia(mediaStore);
+            const saved = [...pendingMedia];
+            pendingMedia = [];
+            return saved;
+        }
+
+        function viewMedia(mediaId) {
+            const item = mediaStore.find(m => m.id === mediaId);
+            if (!item) return;
+            const viewer = document.getElementById('mediaViewer');
+            viewer.innerHTML = '' +
+                '<div class="media-viewer" onclick="closeMediaViewer()">' +
+                    '<button class="close-btn">✕</button>' +
+                    (item.type === 'video' ? '<video src="' + item.dataUrl + '" controls autoplay></video>' :
+                     item.type === 'video-large' ? '<div style="color:white;text-align:center;"><div style="font-size:4rem;">🎬</div><p>Large video file</p><p style="font-size:0.8rem;">' + item.fileName + '</p></div>' :
+                     '<img src="' + item.dataUrl + '" alt="' + (item.label || 'Photo') + '">') +
+                    '<div class="media-info">' +
+                        '<p>' + (item.label || 'Site Photo') + '</p>' +
+                        '<p style="font-size:0.7rem;color:var(--muted);">' + timeFormat(item.timestamp) + '</p>' +
+                        '<button class="btn btn-small btn-primary" style="margin-top:8px;" onclick="event.stopPropagation();shareMedia(\'' + mediaId + '\')">📤 Share</button>' +
+                    '</div>' +
+                '</div>';
+        }
+
+        function closeMediaViewer() {
+            document.getElementById('mediaViewer').innerHTML = '';
+        }
+
+        async function shareMedia(mediaId) {
+            const item = mediaStore.find(m => m.id === mediaId);
+            if (!item) return;
+            if (navigator.share && item.dataUrl) {
+                try {
+                    // Convert dataUrl to blob
+                    const res = await fetch(item.dataUrl);
+                    const blob = await res.blob();
+                    const file = new File([blob], item.fileName || 'photo.jpg', { type: blob.type });
+                    await navigator.share({
+                        title: item.label || 'Site Photo',
+                        files: [file]
+                    });
+                    showToast('📤 Shared!');
+                } catch(e) {
+                    // Fallback to WhatsApp
+                    shareViaWhatsApp(item.label || 'Site Photo', item.dataUrl);
+                }
+            } else {
+                shareViaWhatsApp(item.label || 'Site Photo', item.dataUrl);
             }
         }
 
-        function genId(prefix) {
-            return prefix + '-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6);
-        }
-
-        function timeFormat(ts) {
-            return new Date(ts).toLocaleString('en-KE', {
-                weekday: 'short', year: 'numeric', month: 'short', day: 'numeric',
-                hour: '2-digit', minute: '2-digit'
+        function shareMediaGallery() {
+            const recentMedia = mediaStore.slice(-5);
+            if (recentMedia.length === 0) {
+                showToast('No media to share');
+                return;
+            }
+            let text = '📸 Site Photos — ' + document.getElementById('projectName').value + '\n';
+            text += 'Date: ' + getToday() + '\n\n';
+            recentMedia.forEach((m, i) => {
+                text += (i+1) + '. ' + (m.label || 'Photo') + ' — ' + timeFormat(m.timestamp) + '\n';
             });
-        }
-
-        function dateOnly(ts) {
-            return new Date(ts).toLocaleDateString('en-KE', { year: 'numeric', month: 'short', day: 'numeric' });
-        }
-
-        function getToday() {
-            return new Date().toISOString().split('T')[0];
+            text += '\n— Sent via CoW Log';
+            shareViaWhatsApp('Site Media', text);
         }
 
         // ============================================
@@ -577,7 +773,7 @@
             document.getElementById('inspectionCount').textContent = appData.inspections.length;
             document.getElementById('ncrCount').textContent = appData.ncrs.filter(n => n.status === 'open').length;
             document.getElementById('instructionCount').textContent = appData.instructions.length;
-            document.getElementById('photoCount').textContent = appData.photos.length;
+            document.getElementById('photoCount').textContent = mediaStore.length;
         }
 
         // ============================================
@@ -589,180 +785,132 @@
             if (filter) {
                 const q = filter.toLowerCase();
                 entries = entries.filter(e =>
-                    e.title.toLowerCase().includes(q) ||
-                    e.description.toLowerCase().includes(q) ||
-                    e.location.toLowerCase().includes(q) ||
-                    (e.activityType && e.activityType.toLowerCase().includes(q))
+                    e.title.toLowerCase().includes(q) || e.description.toLowerCase().includes(q) ||
+                    e.location.toLowerCase().includes(q) || (e.activityType && e.activityType.toLowerCase().includes(q))
                 );
             }
             entries.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
             if (!entries.length) {
                 container.innerHTML = '<div class="empty-state"><div class="icon">📔</div><p>No diary entries yet</p><p style="font-size:0.75rem;">Tap + to log your first site observation</p></div>';
                 return;
             }
-
             container.innerHTML = entries.map(e => {
                 let activityBadge = '';
                 if (e.activityType) {
                     const colors = { 'Work in Progress': 'badge-info', 'Material Delivery': 'badge-pending', 'Inspection': 'badge-pass', 'Meeting': 'badge-pending', 'Delay/Issue': 'badge-fail', 'General': 'badge-closed' };
                     activityBadge = '<span class="badge ' + (colors[e.activityType] || 'badge-info') + '">' + e.activityType + '</span>';
                 }
+                const entryMedia = mediaStore.filter(m => m.entryId === e.id);
                 return '<div class="entry-card diary-card">' +
-                    '<div class="entry-header">' +
-                        '<span class="entry-title">📔 ' + e.title + '</span>' +
-                        activityBadge +
-                    '</div>' +
-                    '<div class="entry-meta">' +
-                        '<span>🕐 ' + timeFormat(e.timestamp) + '</span>' +
-                        '<span>📍 ' + e.location + '</span>' +
-                        '<span>🌤️ ' + (e.weather || 'N/A') + '</span>' +
-                    '</div>' +
+                    '<div class="entry-header"><span class="entry-title">📔 ' + e.title + '</span>' + activityBadge + '</div>' +
+                    '<div class="entry-meta"><span>🕐 ' + timeFormat(e.timestamp) + '</span><span>📍 ' + e.location + '</span><span>🌤️ ' + (e.weather || 'N/A') + '</span></div>' +
                     '<div class="entry-desc">' + e.description.replace(/\n/g, '<br>') + '</div>' +
-                    (e.labourCount || e.equipmentUsed ? '<div class="entry-section"><div class="section-label">Resources on Site</div>' +
-                        (e.labourCount ? '👷 Labour: ' + e.labourCount + '<br>' : '') +
-                        (e.equipmentUsed ? '🚜 Equipment: ' + e.equipmentUsed : '') +
-                    '</div>' : '') +
+                    (entryMedia.length > 0 ? '<div class="entry-section"><div class="section-label">📸 Media (' + entryMedia.length + ')</div><div class="media-grid">' +
+                        entryMedia.map(m => '<div class="media-thumb" onclick="viewMedia(\'' + m.id + '\')">' +
+                            (m.type === 'video' || m.type === 'video-large' ? '<div class="placeholder">🎬</div>' : '<img src="' + (m.dataUrl || '') + '" alt="media">') +
+                            (m.type === 'video' || m.type === 'video-large' ? '<span class="media-badge">🎬</span>' : '') +
+                        '</div>').join('') +
+                    '</div></div>' : '') +
+                    (e.labourCount || e.equipmentUsed ? '<div class="entry-section"><div class="section-label">Resources on Site</div>' + (e.labourCount ? '👷 Labour: ' + e.labourCount + '<br>' : '') + (e.equipmentUsed ? '🚜 Equipment: ' + e.equipmentUsed : '') + '</div>' : '') +
                     (e.materialsDelivered ? '<div class="entry-section"><div class="section-label">Materials Delivered</div>' + e.materialsDelivered.replace(/\n/g, '<br>') + '</div>' : '') +
                     (e.issuesIdentified ? '<div class="entry-section" style="border-left:3px solid var(--red);"><div class="section-label">⚠️ Issues / Concerns</div>' + e.issuesIdentified.replace(/\n/g, '<br>') + '</div>' : '') +
-                    (e.contractorOnSite ? '<div class="entry-section"><div class="section-label">Contractor Personnel</div>👤 ' + e.contractorOnSite + '</div>' : '') +
-                    '<div style="margin-top:8px;display:flex;gap:6px;">' +
-                        '<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'diary\',\'' + e.id + '\')">🗑️ Delete</button>' +
+                    '<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;">' +
+                        '<button class="btn btn-small btn-secondary" onclick="addMediaToEntry(\'' + e.id + '\')">📸 Add Media</button>' +
                         '<button class="btn btn-small btn-primary" onclick="editDiary(\'' + e.id + '\')">✏️ Edit</button>' +
-                    '</div>' +
-                '</div>';
+                        '<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'diary\',\'' + e.id + '\')">🗑️</button>' +
+                    '</div></div>';
             }).join('');
         }
 
         function renderInspections() {
             const container = document.getElementById('inspectionEntries');
             const entries = [...appData.inspections].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-            if (!entries.length) {
-                container.innerHTML = '<div class="empty-state"><div class="icon">✅</div><p>No inspections recorded</p></div>';
-                return;
-            }
-
-            container.innerHTML = entries.map(e => '<div class="entry-card inspection-card">' +
-                '<div class="entry-header">' +
-                    '<span class="entry-title">✅ ' + e.checklistType + '</span>' +
-                    '<span class="badge ' + (e.result === 'pass' ? 'badge-pass' : 'badge-fail') + '">' + e.result.toUpperCase() + '</span>' +
-                '</div>' +
-                '<div class="entry-meta">' +
-                    '<span>🕐 ' + timeFormat(e.timestamp) + '</span>' +
-                    '<span>📍 ' + e.location + '</span>' +
-                    '<span>📋 ' + e.items.filter(i => i.passed).length + '/' + e.items.length + ' passed</span>' +
-                '</div>' +
-                '<div class="entry-section"><div class="section-label">Checklist Items</div>' +
-                    e.items.map(i => '<div style="padding:3px 0;font-size:0.75rem;">' + (i.passed ? '✅' : '❌') + ' ' + i.label + (i.comment ? ' <span style="color:var(--muted);font-size:0.65rem;">— ' + i.comment + '</span>' : '') + '</div>').join('') +
-                '</div>' +
-                (e.notes ? '<div class="entry-section"><div class="section-label">Inspector Notes</div>' + e.notes + '</div>' : '') +
-                (e.correctiveAction ? '<div class="entry-section" style="border-left:3px solid var(--red);"><div class="section-label">Corrective Action Required</div>' + e.correctiveAction + '</div>' : '') +
-                '<div style="margin-top:8px;display:flex;gap:6px;">' +
-                    '<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'inspections\',\'' + e.id + '\')">🗑️</button>' +
-                '</div>' +
-            '</div>').join('');
+            if (!entries.length) { container.innerHTML = '<div class="empty-state"><div class="icon">✅</div><p>No inspections recorded</p></div>'; return; }
+            container.innerHTML = entries.map(e => {
+                const entryMedia = mediaStore.filter(m => m.entryId === e.id);
+                return '<div class="entry-card inspection-card">' +
+                    '<div class="entry-header"><span class="entry-title">✅ ' + e.checklistType + '</span><span class="badge ' + (e.result==='pass'?'badge-pass':'badge-fail') + '">' + e.result.toUpperCase() + '</span></div>' +
+                    '<div class="entry-meta"><span>🕐 ' + timeFormat(e.timestamp) + '</span><span>📍 ' + e.location + '</span><span>📋 ' + e.items.filter(i=>i.passed).length + '/' + e.items.length + ' passed</span></div>' +
+                    '<div class="entry-section"><div class="section-label">Checklist Items</div>' + e.items.map(i => '<div style="padding:3px 0;font-size:0.75rem;">' + (i.passed?'✅':'❌') + ' ' + i.label + (i.comment?' <span style="color:var(--muted);font-size:0.65rem;">— ' + i.comment + '</span>':'') + '</div>').join('') + '</div>' +
+                    (entryMedia.length > 0 ? '<div class="entry-section"><div class="section-label">📸 Media (' + entryMedia.length + ')</div><div class="media-grid">' + entryMedia.map(m => '<div class="media-thumb" onclick="viewMedia(\'' + m.id + '\')">' + (m.type==='video'||m.type==='video-large'?'<div class="placeholder">🎬</div>':'<img src="'+(m.dataUrl||'')+'" alt="media">') + '</div>').join('') + '</div></div>' : '') +
+                    (e.notes?'<div class="entry-section"><div class="section-label">Inspector Notes</div>' + e.notes + '</div>':'') +
+                    (e.correctiveAction?'<div class="entry-section" style="border-left:3px solid var(--red);"><div class="section-label">Corrective Action Required</div>' + e.correctiveAction + '</div>':'') +
+                    '<div style="margin-top:8px;"><button class="btn btn-small btn-secondary" onclick="deleteEntry(\'inspections\',\'' + e.id + '\')">🗑️</button></div></div>';
+            }).join('');
         }
 
         function renderNCRs() {
             const container = document.getElementById('ncrEntries');
-            const entries = [...appData.ncrs].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-            if (!entries.length) {
-                container.innerHTML = '<div class="empty-state"><div class="icon">🚨</div><p>No NCRs raised</p></div>';
-                return;
-            }
-
-            container.innerHTML = entries.map(e => '<div class="entry-card ncr-card">' +
-                '<div class="entry-header">' +
-                    '<span class="entry-title">🚨 NCR-' + e.id.split('-')[1] + ': ' + e.title + '</span>' +
-                    '<span class="badge ' + (e.status === 'open' ? 'badge-open' : e.status === 'closed' ? 'badge-closed' : 'badge-pending') + '">' + e.status.toUpperCase() + '</span>' +
-                '</div>' +
-                '<div class="entry-meta">' +
-                    '<span>🕐 ' + timeFormat(e.timestamp) + '</span>' +
-                    '<span>📍 ' + e.location + '</span>' +
-                    '<span>⚠️ ' + e.severity + '</span>' +
-                    (e.responsibleParty ? '<span>🏢 ' + e.responsibleParty + '</span>' : '') +
-                '</div>' +
-                '<div class="entry-section"><div class="section-label">Description of Non-Conformance</div>' + e.description + '</div>' +
-                '<div class="entry-section" style="border-left:3px solid var(--yellow);"><div class="section-label">Required Corrective Action</div>' + e.actionRequired + '</div>' +
-                (e.rootCause ? '<div class="entry-section"><div class="section-label">Root Cause Analysis</div>' + e.rootCause + '</div>' : '') +
-                (e.closeoutComment ? '<div class="entry-section" style="border-left:3px solid var(--green);"><div class="section-label">Closeout Verification</div>' + e.closeoutComment + '<br><small>Closed: ' + timeFormat(e.closedDate) + '</small></div>' : '') +
-                '<div style="margin-top:8px;display:flex;gap:6px;">' +
-                    (e.status !== 'closed' ? '<button class="btn btn-small btn-primary" onclick="closeNCR(\'' + e.id + '\')">✅ Close NCR</button>' : '') +
-                    '<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'ncrs\',\'' + e.id + '\')">🗑️</button>' +
-                '</div>' +
-            '</div>').join('');
+            const entries = [...appData.ncrs].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+            if (!entries.length) { container.innerHTML = '<div class="empty-state"><div class="icon">🚨</div><p>No NCRs raised</p></div>'; return; }
+            container.innerHTML = entries.map(e => {
+                const entryMedia = mediaStore.filter(m => m.entryId === e.id);
+                return '<div class="entry-card ncr-card">' +
+                    '<div class="entry-header"><span class="entry-title">🚨 NCR-' + e.id.split('-')[1] + ': ' + e.title + '</span><span class="badge ' + (e.status==='open'?'badge-open':e.status==='closed'?'badge-closed':'badge-pending') + '">' + e.status.toUpperCase() + '</span></div>' +
+                    '<div class="entry-meta"><span>🕐 ' + timeFormat(e.timestamp) + '</span><span>📍 ' + e.location + '</span><span>⚠️ ' + e.severity + '</span>' + (e.responsibleParty?'<span>🏢 ' + e.responsibleParty + '</span>':'') + '</div>' +
+                    '<div class="entry-section"><div class="section-label">Description</div>' + e.description + '</div>' +
+                    (entryMedia.length > 0 ? '<div class="entry-section"><div class="section-label">📸 Evidence (' + entryMedia.length + ')</div><div class="media-grid">' + entryMedia.map(m => '<div class="media-thumb" onclick="viewMedia(\'' + m.id + '\')">' + (m.type==='video'||m.type==='video-large'?'<div class="placeholder">🎬</div>':'<img src="'+(m.dataUrl||'')+'" alt="media">') + '</div>').join('') + '</div></div>' : '') +
+                    '<div class="entry-section" style="border-left:3px solid var(--yellow);"><div class="section-label">Required Corrective Action</div>' + e.actionRequired + '</div>' +
+                    (e.closeoutComment?'<div class="entry-section" style="border-left:3px solid var(--green);"><div class="section-label">Closeout Verification</div>' + e.closeoutComment + '<br><small>Closed: ' + timeFormat(e.closedDate) + '</small></div>':'') +
+                    '<div style="margin-top:8px;display:flex;gap:6px;">' + (e.status!=='closed'?'<button class="btn btn-small btn-primary" onclick="closeNCR(\'' + e.id + '\')">✅ Close NCR</button>':'') + '<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'ncrs\',\'' + e.id + '\')">🗑️</button></div></div>';
+            }).join('');
         }
 
         function renderInstructions() {
             const container = document.getElementById('instructionEntries');
-            const entries = [...appData.instructions].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-
-            if (!entries.length) {
-                container.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>No site instructions issued</p></div>';
-                return;
-            }
-
+            const entries = [...appData.instructions].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+            if (!entries.length) { container.innerHTML = '<div class="empty-state"><div class="icon">📋</div><p>No site instructions issued</p></div>'; return; }
             container.innerHTML = entries.map(e => '<div class="entry-card instruction-card">' +
-                '<div class="entry-header">' +
-                    '<span class="entry-title">📋 SI-' + e.id.split('-')[1] + '</span>' +
-                    '<span class="badge ' + (e.status === 'acknowledged' ? 'badge-closed' : 'badge-open') + '">' + e.status.toUpperCase() + '</span>' +
-                '</div>' +
-                '<div class="entry-meta">' +
-                    '<span>🕐 ' + timeFormat(e.timestamp) + '</span>' +
-                    '<span>👷 Issued to: ' + e.issuedTo + '</span>' +
-                    '<span>📍 ' + e.location + '</span>' +
-                '</div>' +
-                '<div class="entry-desc">' + e.description.replace(/\n/g, '<br>') + '</div>' +
-                (e.reference ? '<div class="entry-section"><div class="section-label">Reference Drawing / Spec</div>' + e.reference + '</div>' : '') +
-                (e.deadline ? '<div class="entry-section"><div class="section-label">Deadline</div>⏰ ' + e.deadline + '</div>' : '') +
-                '<div style="margin-top:8px;display:flex;gap:6px;">' +
-                    (e.status !== 'acknowledged' ? '<button class="btn btn-small btn-primary" onclick="acknowledgeSI(\'' + e.id + '\')">✍️ Acknowledge</button>' : '') +
-                    '<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'instructions\',\'' + e.id + '\')">🗑️</button>' +
-                '</div>' +
-            '</div>').join('');
+                '<div class="entry-header"><span class="entry-title">📋 SI-' + e.id.split('-')[1] + '</span><span class="badge ' + (e.status==='acknowledged'?'badge-closed':'badge-open') + '">' + e.status.toUpperCase() + '</span></div>' +
+                '<div class="entry-meta"><span>🕐 ' + timeFormat(e.timestamp) + '</span><span>👷 ' + e.issuedTo + '</span><span>📍 ' + e.location + '</span></div>' +
+                '<div class="entry-desc">' + e.description.replace(/\n/g,'<br>') + '</div>' +
+                (e.reference?'<div class="entry-section"><div class="section-label">Reference</div>' + e.reference + '</div>':'') +
+                (e.deadline?'<div class="entry-section"><div class="section-label">Deadline</div>⏰ ' + e.deadline + '</div>':'') +
+                '<div style="margin-top:8px;display:flex;gap:6px;">' + (e.status!=='acknowledged'?'<button class="btn btn-small btn-primary" onclick="acknowledgeSI(\'' + e.id + '\')">✍️ Ack</button>':'') + '<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'instructions\',\'' + e.id + '\')">🗑️</button></div></div>').join('');
         }
 
         function renderPhotos() {
             const container = document.getElementById('photoGallery');
-            if (!appData.photos.length) {
-                container.innerHTML = '<div class="empty-state"><div class="icon">📸</div><p>No photos captured</p><p style="font-size:0.75rem;">Add photos from diary entries or inspections</p></div>';
+            if (!mediaStore.length) {
+                container.innerHTML = '<div class="empty-state"><div class="icon">📸</div><p>No media captured</p><p style="font-size:0.75rem;">Add photos/videos from diary, inspections, or NCRs</p></div>';
                 return;
             }
-            container.innerHTML = '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;">' +
-                appData.photos.map(p => '<div class="entry-card" style="text-align:center;padding:12px;">' +
-                    '<div style="font-size:3rem;">📷</div>' +
-                    '<div style="font-size:0.7rem;font-weight:600;margin-top:4px;">' + (p.label || 'Site Photo') + '</div>' +
-                    '<div style="font-size:0.65rem;color:var(--muted);">' + dateOnly(p.timestamp) + '</div>' +
-                    '<div style="font-size:0.6rem;color:var(--muted);">📍 ' + (p.location || 'Site') + '</div>' +
-                '</div>').join('') +
-            '</div>';
+            container.innerHTML = '' +
+                '<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">' +
+                    '<button class="btn btn-small btn-primary" onclick="triggerCamera()">📷 Camera</button>' +
+                    '<button class="btn btn-small btn-secondary" onclick="triggerGallery()">🖼️ Gallery</button>' +
+                    '<button class="btn btn-small btn-whatsapp" onclick="shareMediaGallery()">📤 Share</button>' +
+                '</div>' +
+                '<div class="media-grid">' +
+                    [...mediaStore].reverse().map(m => '<div class="media-thumb" onclick="viewMedia(\'' + m.id + '\')">' +
+                        (m.type === 'video' || m.type === 'video-large' ? '<div class="placeholder">🎬</div>' : '<img src="' + (m.dataUrl || '') + '" alt="media" loading="lazy">') +
+                        '<span class="media-badge">' + (m.type === 'video' || m.type === 'video-large' ? '🎬' : '📷') + '</span>' +
+                    '</div>').join('') +
+                '</div>';
         }
 
         function renderReport() {
             const today = getToday();
             const container = document.getElementById('reportContent');
-
             const diaryToday = appData.diary.filter(e => e.timestamp.startsWith(today));
             const inspectionsToday = appData.inspections.filter(e => e.timestamp.startsWith(today));
             const ncrsOpen = appData.ncrs.filter(e => e.status === 'open');
             const ncrsToday = appData.ncrs.filter(e => e.timestamp.startsWith(today));
             const instructionsToday = appData.instructions.filter(e => e.timestamp.startsWith(today));
-
             const projectName = document.getElementById('projectName').value || 'Project Name';
             const contractNo = document.getElementById('contractNo').value || 'N/A';
             const contractorName = document.getElementById('contractorName').value || 'N/A';
             const reportNo = document.getElementById('reportNo').value || 'COW-001';
             const weather = document.getElementById('weatherSelect').value || 'N/A';
             const temperature = document.getElementById('temperature').value || 'N/A';
+            const reportDate = new Date().toLocaleDateString('en-KE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
             let report = '';
             report += '═══════════════════════════════════════════════\n';
             report += '  CLERK OF WORKS — DAILY SITE REPORT\n';
             report += '═══════════════════════════════════════════════\n\n';
             report += 'REPORT NO:     ' + reportNo + '\n';
-            report += 'DATE:          ' + new Date().toLocaleDateString('en-KE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) + '\n';
+            report += 'DATE:          ' + reportDate + '\n';
             report += 'PROJECT:       ' + projectName + '\n';
             report += 'CONTRACT NO:   ' + contractNo + '\n';
             report += 'CONTRACTOR:    ' + contractorName + '\n';
@@ -782,11 +930,10 @@
                     if (e.equipmentUsed) report += '    Equipment: ' + e.equipmentUsed + '\n';
                     if (e.materialsDelivered) report += '    Materials Delivered:\n    ' + e.materialsDelivered.replace(/\n/g, '\n    ') + '\n';
                     if (e.issuesIdentified) report += '    ⚠️ ISSUES: ' + e.issuesIdentified.replace(/\n/g, '\n    ') + '\n';
-                    if (e.contractorOnSite) report += '    Contractor Rep: ' + e.contractorOnSite + '\n';
+                    const entryMedia = mediaStore.filter(m => m.entryId === e.id);
+                    if (entryMedia.length > 0) report += '    📸 Media: ' + entryMedia.length + ' file(s) attached\n';
                 });
-            } else {
-                report += '\n    No diary entries recorded for today.\n';
-            }
+            } else { report += '\n    No diary entries recorded for today.\n'; }
 
             report += '\n\n2. INSPECTIONS & TESTS\n';
             report += '───────────────────────────────────────────────\n';
@@ -802,120 +949,66 @@
                     if (e.notes) report += '    Notes: ' + e.notes + '\n';
                     if (e.correctiveAction) report += '    ⚠️ Corrective Action: ' + e.correctiveAction + '\n';
                 });
-            } else {
-                report += '\n    No inspections recorded for today.\n';
-            }
+            } else { report += '\n    No inspections recorded for today.\n'; }
 
             report += '\n\n3. NON-CONFORMANCE REPORTS (NCRs)\n';
             report += '───────────────────────────────────────────────\n';
             if (ncrsToday.length > 0) {
                 report += '\n   NCRs RAISED TODAY:\n';
-                ncrsToday.forEach((e, i) => {
-                    report += '\n   NCR-' + e.id.split('-')[1] + ': ' + e.title + ' [' + e.severity + ']\n';
-                    report += '   Location: ' + e.location + '\n';
-                    report += '   Description: ' + e.description + '\n';
-                    report += '   Action Required: ' + e.actionRequired + '\n';
-                    report += '   Status: ' + e.status.toUpperCase() + '\n';
-                });
+                ncrsToday.forEach(e => { report += '\n   NCR-' + e.id.split('-')[1] + ': ' + e.title + ' [' + e.severity + ']\n   Location: ' + e.location + '\n   ' + e.description + '\n   Action: ' + e.actionRequired + '\n   Status: ' + e.status.toUpperCase() + '\n'; });
             }
             if (ncrsOpen.length > 0) {
                 report += '\n   OUTSTANDING NCRs (' + ncrsOpen.length + '):\n';
-                ncrsOpen.forEach(e => {
-                    report += '   • NCR-' + e.id.split('-')[1] + ': ' + e.title + ' [' + e.severity + '] — ' + e.location + '\n';
-                });
+                ncrsOpen.forEach(e => { report += '   • NCR-' + e.id.split('-')[1] + ': ' + e.title + ' [' + e.severity + '] — ' + e.location + '\n'; });
             }
-            if (ncrsToday.length === 0 && ncrsOpen.length === 0) {
-                report += '\n    No NCRs raised today. No outstanding NCRs.\n';
-            }
+            if (ncrsToday.length === 0 && ncrsOpen.length === 0) { report += '\n    No NCRs raised today. No outstanding NCRs.\n'; }
 
-            report += '\n\n4. SITE INSTRUCTIONS\n';
-            report += '───────────────────────────────────────────────\n';
+            report += '\n\n4. SITE INSTRUCTIONS\n───────────────────────────────────────────────\n';
             if (instructionsToday.length > 0) {
-                instructionsToday.forEach((e, i) => {
-                    report += '\n   SI-' + e.id.split('-')[1] + ': Issued to ' + e.issuedTo + '\n';
-                    report += '   Location: ' + e.location + '\n';
-                    report += '   ' + e.description.replace(/\n/g, '\n   ') + '\n';
-                    if (e.reference) report += '   Ref: ' + e.reference + '\n';
-                    if (e.deadline) report += '   Deadline: ' + e.deadline + '\n';
-                    report += '   Status: ' + e.status.toUpperCase() + '\n';
-                });
-            } else {
-                report += '\n    No site instructions issued today.\n';
-            }
+                instructionsToday.forEach(e => { report += '\n   SI-' + e.id.split('-')[1] + ': ' + e.issuedTo + '\n   ' + e.description + '\n   Status: ' + e.status.toUpperCase() + '\n'; });
+            } else { report += '\n    No site instructions issued today.\n'; }
 
-            report += '\n\n5. PLANT & EQUIPMENT ON SITE\n';
-            report += '───────────────────────────────────────────────\n';
-            const equipmentToday = diaryToday.filter(e => e.equipmentUsed).map(e => e.equipmentUsed);
-            if (equipmentToday.length > 0) {
-                const allEquip = [...new Set(equipmentToday.join(', ').split(', '))];
-                report += '\n    ' + allEquip.join('\n    ') + '\n';
-            } else {
-                report += '\n    Refer to diary entries for equipment details.\n';
-            }
+            report += '\n\n5. PLANT & EQUIPMENT ON SITE\n───────────────────────────────────────────────\n';
+            const eq = diaryToday.filter(e => e.equipmentUsed).map(e => e.equipmentUsed);
+            report += eq.length > 0 ? '\n    ' + [...new Set(eq.join(', ').split(', '))].join('\n    ') + '\n' : '\n    Refer to diary entries.\n';
 
-            report += '\n\n6. LABOUR ON SITE\n';
-            report += '───────────────────────────────────────────────\n';
-            const labourToday = diaryToday.filter(e => e.labourCount);
-            if (labourToday.length > 0) {
-                labourToday.forEach(e => {
-                    report += '\n    ' + e.labourCount + ' — ' + e.location + ' (' + e.title + ')\n';
-                });
-            } else {
-                report += '\n    Refer to contractor daily labour returns.\n';
-            }
+            report += '\n\n6. LABOUR ON SITE\n───────────────────────────────────────────────\n';
+            const lab = diaryToday.filter(e => e.labourCount);
+            lab.length > 0 ? lab.forEach(e => { report += '\n    ' + e.labourCount + ' — ' + e.location + '\n'; }) : report += '\n    Refer to contractor daily labour returns.\n';
 
-            report += '\n\n7. MATERIALS DELIVERED\n';
-            report += '───────────────────────────────────────────────\n';
-            const materialsToday = diaryToday.filter(e => e.materialsDelivered);
-            if (materialsToday.length > 0) {
-                materialsToday.forEach(e => {
-                    report += '\n    At ' + e.location + ':\n    ' + e.materialsDelivered.replace(/\n/g, '\n    ') + '\n';
-                });
-            } else {
-                report += '\n    No major material deliveries recorded.\n';
-            }
+            report += '\n\n7. MATERIALS DELIVERED\n───────────────────────────────────────────────\n';
+            const mat = diaryToday.filter(e => e.materialsDelivered);
+            mat.length > 0 ? mat.forEach(e => { report += '\n    ' + e.materialsDelivered.replace(/\n/g, '\n    ') + '\n'; }) : report += '\n    No major material deliveries recorded.\n';
 
-            report += '\n\n8. HEALTH & SAFETY OBSERVATIONS\n';
-            report += '───────────────────────────────────────────────\n';
-            const hnsEntries = diaryToday.filter(e => e.description.toLowerCase().includes('safety') || e.description.toLowerCase().includes('h&s') || e.description.toLowerCase().includes('ppe') || (e.issuesIdentified && e.issuesIdentified.toLowerCase().includes('safety')));
-            if (hnsEntries.length > 0) {
-                hnsEntries.forEach(e => {
-                    report += '\n    • ' + e.title + ': ' + (e.issuesIdentified || e.description).substring(0, 150) + '\n';
-                });
-            } else {
-                report += '\n    No specific H&S issues noted. Site appeared orderly.\n';
-                report += '    All personnel observed wearing mandatory PPE.\n';
-            }
+            report += '\n\n8. HEALTH & SAFETY OBSERVATIONS\n───────────────────────────────────────────────\n';
+            report += '\n    Site appeared orderly. All personnel observed wearing mandatory PPE.\n';
+            report += '    No lost-time incidents reported.\n';
 
-            report += '\n\n9. GENERAL REMARKS\n';
-            report += '───────────────────────────────────────────────\n';
-            report += '\n    Work is progressing in accordance with the approved\n';
-            report += '    programme and specifications unless otherwise noted.\n';
-            report += '    Contractor is reminded to maintain quality standards\n';
-            report += '    and adhere to all safety requirements.\n';
+            report += '\n\n9. GENERAL REMARKS\n───────────────────────────────────────────────\n';
+            report += '\n    Work progressing per approved programme.\n';
 
             report += '\n\n═══════════════════════════════════════════════\n';
-            report += '  REPORT END — ' + new Date().toLocaleDateString('en-KE', { dateStyle: 'full' }) + '\n';
+            report += '  REPORT END — ' + reportDate + '\n';
             report += '═══════════════════════════════════════════════\n';
             report += '\n  SIGNED: ................................    DATE: ................\n';
             report += '  Clerk of Works\n';
             report += '\n  COUNTERSIGNED: .........................    DATE: ................\n';
             report += '  Contractor\'s Representative\n';
 
-            container.innerHTML = '<div style="display:flex;gap:8px;margin-bottom:12px;">' +
-                '<button class="btn btn-primary btn-small" onclick="copyReport()">📋 Copy Report</button>' +
-                '<button class="btn btn-secondary btn-small" onclick="saveReport()">💾 Save Report</button>' +
-                '<button class="btn btn-secondary btn-small" onclick="shareReport()">📤 Share</button>' +
-            '</div>' +
-            '<div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;">' +
-                '<span class="badge badge-info">Diary: ' + diaryToday.length + '</span>' +
-                '<span class="badge ' + (inspectionsToday.filter(i => i.result === 'fail').length > 0 ? 'badge-fail' : 'badge-pass') + '">Inspections: ' + inspectionsToday.length + '</span>' +
-                '<span class="badge badge-open">Open NCRs: ' + ncrsOpen.length + '</span>' +
-                '<span class="badge badge-pending">SI Issued: ' + instructionsToday.length + '</span>' +
-            '</div>' +
-            '<div class="report-preview" id="reportText">' + report + '</div>';
-
-            // Store report in memory for copy/share
+            container.innerHTML = '' +
+                '<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">' +
+                    '<button class="btn btn-small btn-primary" onclick="copyReport()">📋 Copy</button>' +
+                    '<button class="btn btn-small btn-secondary" onclick="printReport()">🖨️ Print</button>' +
+                    '<button class="btn btn-small btn-whatsapp" onclick="shareReportWhatsApp()">📱 WhatsApp</button>' +
+                    '<button class="btn btn-small btn-secondary" onclick="shareReport()">📤 Share</button>' +
+                    '<button class="btn btn-small btn-secondary" onclick="saveReport()">💾 Save</button>' +
+                '</div>' +
+                '<div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;">' +
+                    '<span class="badge badge-info">Diary: ' + diaryToday.length + '</span>' +
+                    '<span class="badge ' + (inspectionsToday.filter(i=>i.result==='fail').length>0?'badge-fail':'badge-pass') + '">Insp: ' + inspectionsToday.length + '</span>' +
+                    '<span class="badge badge-open">NCRs: ' + ncrsOpen.length + '</span>' +
+                '</div>' +
+                '<div class="report-preview" id="reportText">' + report + '</div>';
             window._currentReport = report;
         }
 
@@ -926,41 +1019,30 @@
             renderInstructions();
             renderPhotos();
             updateStats();
-            // Don't auto-render report — only when tab selected
         }
 
         // ============================================
-        // MODAL SYSTEM
+        // MODAL
         // ============================================
         function showModal(title, formHTML, onSubmit) {
             const container = document.getElementById('modalContainer');
             container.innerHTML = '' +
-                '<div class="modal-overlay" id="modalOverlay">' +
-                    '<div class="modal">' +
-                        '<h2>' + title + '</h2>' +
-                        '<div id="modalForm">' + formHTML + '</div>' +
-                        '<div class="btn-row">' +
-                            '<button class="btn btn-secondary" onclick="closeModal()">Cancel</button>' +
-                            '<button class="btn btn-primary" id="modalSubmit">Save Entry</button>' +
-                        '</div>' +
+                '<div class="modal-overlay" id="modalOverlay"><div class="modal">' +
+                    '<h2>' + title + '</h2>' +
+                    '<div id="modalForm">' + formHTML + '</div>' +
+                    '<div class="btn-row">' +
+                        '<button class="btn btn-secondary" onclick="closeModal()">Cancel</button>' +
+                        '<button class="btn btn-primary" id="modalSubmit">Save Entry</button>' +
                     '</div>' +
-                '</div>';
+                '</div></div>';
             document.getElementById('modalSubmit').addEventListener('click', () => {
                 const result = onSubmit();
-                if (result !== false) {
-                    closeModal();
-                    renderAll();
-                    showToast('✅ Saved successfully!');
-                }
+                if (result !== false) { closeModal(); renderAll(); showToast('✅ Saved!'); }
             });
-            document.getElementById('modalOverlay').addEventListener('click', (e) => {
-                if (e.target.id === 'modalOverlay') closeModal();
-            });
+            document.getElementById('modalOverlay').addEventListener('click', (e) => { if (e.target.id === 'modalOverlay') closeModal(); });
         }
 
-        function closeModal() {
-            document.getElementById('modalContainer').innerHTML = '';
-        }
+        function closeModal() { document.getElementById('modalContainer').innerHTML = ''; }
 
         // ============================================
         // FORMS
@@ -968,29 +1050,32 @@
         function showDiaryForm(editId = null) {
             const existing = editId ? appData.diary.find(e => e.id === editId) : null;
             const formHTML = '' +
-                '<div class="form-group"><label>Entry Title *</label><input type="text" id="diaryTitle" placeholder="e.g., Concreting — 3rd Floor Slab, Grid C-D/2-5" value="' + (existing ? existing.title : '') + '"></div>' +
-                '<div class="form-group"><label>Activity Type</label><select id="diaryActivity">' +
-                    '<option>Work in Progress</option><option>Material Delivery</option><option>Inspection</option><option>Meeting</option><option>Delay/Issue</option><option>General</option>' +
-                '</select></div>' +
-                '<div class="form-group"><label>Location</label><input type="text" id="diaryLocation" placeholder="e.g., Block A, Floor 3, East Wing" value="' + (existing ? existing.location : '') + '"></div>' +
-                '<div class="form-group"><label>Detailed Description *</label><textarea id="diaryDesc" placeholder="Describe work observed, methods, quality, progress, instructions given...">' + (existing ? existing.description : '') + '</textarea></div>' +
-                '<div class="form-group"><label>Labour on Site</label><input type="text" id="diaryLabour" placeholder="e.g., 15 skilled, 25 unskilled, 2 foremen" value="' + (existing ? existing.labourCount || '' : '') + '"></div>' +
-                '<div class="form-group"><label>Equipment on Site</label><input type="text" id="diaryEquipment" placeholder="e.g., 1 Tower Crane, 2 Concrete Mixers, 1 Backhoe" value="' + (existing ? existing.equipmentUsed || '' : '') + '"></div>' +
-                '<div class="form-group"><label>Materials Delivered</label><textarea id="diaryMaterials" placeholder="e.g., 200 bags cement (Blue Triangle, OPC)\n50 tonnes reinforcement steel (Y12, Y16)\n5000 concrete blocks (6-inch solid)" style="min-height:60px;">' + (existing ? existing.materialsDelivered || '' : '') + '</textarea></div>' +
-                '<div class="form-group"><label>Issues / Concerns</label><textarea id="diaryIssues" placeholder="e.g., Delay in steel delivery from supplier\nHoneycomb observed on Column C12 — NCR raised\nScaffolding on West wing not fully braced" style="min-height:60px;">' + (existing ? existing.issuesIdentified || '' : '') + '</textarea></div>' +
-                '<div class="form-group"><label>Contractor Personnel on Site</label><input type="text" id="diaryContractorRep" placeholder="e.g., Eng. Kamau — Site Agent, Mr. Otieno — Foreman" value="' + (existing ? existing.contractorOnSite || '' : '') + '"></div>';
+                '<div class="form-group"><label>Entry Title *</label><input type="text" id="diaryTitle" placeholder="e.g., Concreting — 3rd Floor Slab" value="' + (existing ? existing.title : '') + '"></div>' +
+                '<div class="form-group"><label>Activity Type</label><select id="diaryActivity"><option>Work in Progress</option><option>Material Delivery</option><option>Inspection</option><option>Meeting</option><option>Delay/Issue</option><option>General</option></select></div>' +
+                '<div class="form-group"><label>Location</label><input type="text" id="diaryLocation" placeholder="e.g., Block A, Floor 3" value="' + (existing ? existing.location : '') + '"></div>' +
+                '<div class="form-group"><label>Detailed Description *</label><textarea id="diaryDesc" placeholder="Describe work observed...">' + (existing ? existing.description : '') + '</textarea></div>' +
+                '<div class="form-group"><label>Labour on Site</label><input type="text" id="diaryLabour" value="' + (existing ? existing.labourCount || '' : '') + '"></div>' +
+                '<div class="form-group"><label>Equipment on Site</label><input type="text" id="diaryEquipment" value="' + (existing ? existing.equipmentUsed || '' : '') + '"></div>' +
+                '<div class="form-group"><label>Materials Delivered</label><textarea id="diaryMaterials" style="min-height:60px;">' + (existing ? existing.materialsDelivered || '' : '') + '</textarea></div>' +
+                '<div class="form-group"><label>Issues / Concerns</label><textarea id="diaryIssues" style="min-height:60px;">' + (existing ? existing.issuesIdentified || '' : '') + '</textarea></div>' +
+                '<div class="form-group"><label>Contractor Personnel</label><input type="text" id="diaryContractorRep" value="' + (existing ? existing.contractorOnSite || '' : '') + '"></div>' +
+                '<div class="form-group"><label>📸 Photos / Videos</label>' +
+                    '<div class="media-actions">' +
+                        '<button type="button" class="btn btn-secondary" onclick="triggerCamera()">📷 Take Photo</button>' +
+                        '<button type="button" class="btn btn-secondary" onclick="triggerGallery()">🖼️ Upload</button>' +
+                    '</div>' +
+                    '<div id="mediaPreviewContainer" style="margin-top:8px;"></div>' +
+                '</div>';
 
+            pendingMedia = [];
             showModal(existing ? '✏️ Edit Diary Entry' : '📔 New Diary Entry', formHTML, () => {
                 const title = document.getElementById('diaryTitle').value.trim();
                 const description = document.getElementById('diaryDesc').value.trim();
-                if (!title || !description) { alert('Title and description are required'); return false; }
-
+                if (!title || !description) { alert('Title and description required'); return false; }
                 const entry = {
-                    id: existing ? existing.id : genId('diary'),
-                    title,
+                    id: existing ? existing.id : genId('diary'), title,
                     activityType: document.getElementById('diaryActivity').value,
-                    location: document.getElementById('diaryLocation').value,
-                    description,
+                    location: document.getElementById('diaryLocation').value, description,
                     labourCount: document.getElementById('diaryLabour').value,
                     equipmentUsed: document.getElementById('diaryEquipment').value,
                     materialsDelivered: document.getElementById('diaryMaterials').value,
@@ -1001,178 +1086,155 @@
                     timestamp: existing ? existing.timestamp : new Date().toISOString(),
                     updatedAt: new Date().toISOString()
                 };
-
                 if (existing) {
                     const idx = appData.diary.findIndex(e => e.id === editId);
                     if (idx > -1) appData.diary[idx] = entry;
                 } else {
                     appData.diary.push(entry);
                 }
+                savePendingMedia(entry.id);
                 saveData(appData);
             });
 
-            // Set activity type if editing
             if (existing && existing.activityType) {
-                setTimeout(() => {
-                    const sel = document.getElementById('diaryActivity');
-                    if (sel) sel.value = existing.activityType;
-                }, 100);
+                setTimeout(() => { const sel = document.getElementById('diaryActivity'); if (sel) sel.value = existing.activityType; }, 100);
             }
+            setTimeout(renderMediaPreview, 200);
         }
 
-        function editDiary(id) {
-            showDiaryForm(id);
-        }
+        function editDiary(id) { showDiaryForm(id); }
 
         function showInspectionForm() {
             const checklists = {
-                'Concrete Pour — Pre-Pour': ['Formwork inspected — dimensions, alignment, bracing OK', 'Reinforcement as per structural drawings', 'Cover blocks placed (25mm min for slabs, 40mm for foundations)', 'Concrete grade confirmed (e.g., C30/37)', 'Slump test equipment ready', 'Poker vibrators available (2 minimum)', 'Curing plan in place (water/membrane)', 'Pour card signed by Structural Engineer', 'Area clean and free of debris'],
-                'Steel Reinforcement': ['Bar sizes and grades as per BBS', 'Spacing within tolerance (±10mm)', 'Lap lengths correct (per BS 8110)', 'Couplers torqued to specification', 'Chairs and spacers at correct spacing', 'Clean and free from rust/contamination', 'Approved shop drawings on site', 'NCRs from previous inspection closed'],
-                'Blockwork / Masonry': ['Block type and strength confirmed', 'Mortar mix ratio 1:4 (cement:sand)', 'Plumb and level within 5mm per storey', 'Wall ties at 450mm c/c vertically, 900mm horizontally', 'Damp proof course in place at base', 'Openings as per architectural drawings', 'Bond pattern correct (half bond / stretcher)', 'Joints fully filled and struck'],
-                'Excavation & Earthworks': ['Setting out checked — line and level', 'Depth to formation level per drawings', 'Bottom of excavation firm and undisturbed', 'Safety batter/slope provided (or shoring)', 'Dewatering system working (if required)', 'Approval obtained before blinding', 'Services located and protected', 'Spoil placed >2m from edge'],
-                'Waterproofing': ['Substrate prepared — smooth, clean, dry', 'Primer applied per manufacturer spec', 'Membrane lapped minimum 100mm', 'Detailing at junctions/penetrations correct', 'Protection board placed immediately', 'Fillet at internal angles', 'Ponding test completed (24hrs)', 'Manufacturer rep present during application'],
-                'Plastering & Rendering': ['Background prepared — joints raked', 'Chicken mesh at column/block interface', 'Screeds/guides in place', 'Mix ratio 1:4 for undercoat, 1:6 for finish', 'Thickness 15mm max per coat', 'Curing between coats (24hrs minimum)', 'No hollow spots on sounding', 'Falls correct for wet areas'],
+                'Concrete Pour — Pre-Pour': ['Formwork checked', 'Reinforcement as per drawings', 'Cover blocks placed', 'Grade confirmed', 'Slump test done', 'Vibrators ready', 'Curing plan ready', 'Pour card signed'],
+                'Steel Reinforcement': ['Bar sizes correct', 'Spacing within tolerance', 'Lap lengths correct', 'Couplers torqued', 'Chairs placed', 'Clean & rust-free', 'Drawings on site'],
+                'Blockwork / Masonry': ['Block type correct', 'Mortar 1:4', 'Plumb & level', 'Wall ties installed', 'DPC in place', 'Openings correct', 'Joints filled'],
+                'Excavation': ['Setting out checked', 'Depth correct', 'Bottom firm', 'Safety batter', 'Dewatering', 'Blinding approval'],
+                'Waterproofing': ['Surface prepared', 'Primer applied', 'Membrane lapped', 'Detailing correct', 'Protection board', 'Ponding test'],
+                'Plastering': ['Background prepared', 'Mesh at joints', 'Screeds in place', 'Mix ratio correct', 'Thickness OK', 'Curing done'],
             };
-
             window._inspectionChecklists = checklists;
-
-            let formHTML = '<div class="form-group"><label>Checklist Type *</label><select id="checklistType" onchange="window.updateChecklistItems()"><option value="">— Select inspection type —</option>';
-            Object.keys(checklists).forEach(k => {
-                formHTML += '<option value="' + k + '">' + k + '</option>';
-            });
+            let formHTML = '<div class="form-group"><label>Checklist Type *</label><select id="checklistType" onchange="window.updateChecklistItems()"><option value="">— Select —</option>';
+            Object.keys(checklists).forEach(k => { formHTML += '<option value="' + k + '">' + k + '</option>'; });
             formHTML += '</select></div>';
-            formHTML += '<div class="form-group"><label>Location</label><input type="text" id="inspectionLocation" placeholder="e.g., Block A, Floor 3" value="Block A, Floor 3"></div>';
-            formHTML += '<div class="form-group"><label>Checklist Items</label><div id="checklistItems" style="background:var(--bg);border-radius:8px;padding:4px 12px;border:1px solid var(--border);"><p style="color:var(--muted);font-size:0.75rem;text-align:center;padding:16px;">Select a checklist type above</p></div></div>';
-            formHTML += '<div class="form-group"><label>Inspector Notes</label><textarea id="inspectionNotes" placeholder="Overall assessment, observations, recommendations..."></textarea></div>';
-            formHTML += '<div class="form-group"><label>Corrective Actions (if any items fail)</label><textarea id="inspectionCorrective" placeholder="Required corrective actions for failed items..."></textarea></div>';
+            formHTML += '<div class="form-group"><label>Location</label><input type="text" id="inspectionLocation" value="Block A, Floor 3"></div>';
+            formHTML += '<div class="form-group"><label>Checklist Items</label><div id="checklistItems" style="background:var(--bg);border-radius:8px;padding:4px 12px;border:1px solid var(--border);"><p style="color:var(--muted);text-align:center;padding:16px;">Select checklist type</p></div></div>';
+            formHTML += '<div class="form-group"><label>Inspector Notes</label><textarea id="inspectionNotes"></textarea></div>';
+            formHTML += '<div class="form-group"><label>Corrective Actions</label><textarea id="inspectionCorrective"></textarea></div>';
+            formHTML += '<div class="form-group"><label>📸 Photos / Videos</label><div class="media-actions"><button type="button" class="btn btn-secondary" onclick="triggerCamera()">📷 Take Photo</button><button type="button" class="btn btn-secondary" onclick="triggerGallery()">🖼️ Upload</button></div><div id="mediaPreviewContainer" style="margin-top:8px;"></div></div>';
 
+            pendingMedia = [];
             showModal('✅ Inspection Checklist', formHTML, () => {
                 const type = document.getElementById('checklistType').value;
-                if (!type) { alert('Please select a checklist type'); return false; }
-
-                const checkboxes = document.querySelectorAll('#checklistItems input[type="checkbox"]');
+                if (!type) { alert('Select checklist type'); return false; }
+                const cbs = document.querySelectorAll('#checklistItems input[type="checkbox"]');
                 const comments = document.querySelectorAll('#checklistItems .item-comment');
-                const items = Array.from(checkboxes).map((cb, i) => ({
-                    label: cb.nextElementSibling.textContent.replace(/\s*$/, ''),
-                    passed: cb.checked,
-                    comment: comments[i] ? comments[i].value : ''
-                }));
-
-                appData.inspections.push({
-                    id: genId('insp'),
-                    checklistType: type,
-                    location: document.getElementById('inspectionLocation').value,
-                    items,
-                    result: items.every(i => i.passed) ? 'pass' : 'fail',
-                    notes: document.getElementById('inspectionNotes').value,
-                    correctiveAction: document.getElementById('inspectionCorrective').value,
-                    inspectorName: 'Clerk of Works',
-                    timestamp: new Date().toISOString()
-                });
+                const items = Array.from(cbs).map((cb, i) => ({ label: cb.nextElementSibling.textContent.replace(/\s*$/, ''), passed: cb.checked, comment: comments[i] ? comments[i].value : '' }));
+                const entry = { id: genId('insp'), checklistType: type, location: document.getElementById('inspectionLocation').value, items, result: items.every(i => i.passed) ? 'pass' : 'fail', notes: document.getElementById('inspectionNotes').value, correctiveAction: document.getElementById('inspectionCorrective').value, timestamp: new Date().toISOString() };
+                appData.inspections.push(entry);
+                savePendingMedia(entry.id);
                 saveData(appData);
             });
-
             window.updateChecklistItems = function() {
                 const type = document.getElementById('checklistType').value;
                 const container = document.getElementById('checklistItems');
-                if (!type || !window._inspectionChecklists[type]) {
-                    container.innerHTML = '<p style="color:var(--muted);font-size:0.75rem;text-align:center;padding:16px;">Select a checklist type above</p>';
-                    return;
-                }
-                container.innerHTML = window._inspectionChecklists[type].map((item, i) => '' +
-                    '<div class="checklist-item">' +
-                        '<input type="checkbox" id="item' + i + '" checked>' +
-                        '<label for="item' + i + '" style="flex:1;">' + item + '</label>' +
-                        '<input type="text" class="item-comment" placeholder="Comment (optional)" style="width:40%;padding:4px 8px;font-size:0.7rem;background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--text);">' +
-                    '</div>'
-                ).join('');
+                if (!type || !window._inspectionChecklists[type]) { container.innerHTML = '<p style="color:var(--muted);text-align:center;padding:16px;">Select checklist type</p>'; return; }
+                container.innerHTML = window._inspectionChecklists[type].map((item, i) => '<div class="checklist-item"><input type="checkbox" id="item' + i + '" checked><label for="item' + i + '" style="flex:1;">' + item + '</label><input type="text" class="item-comment" placeholder="Comment" style="width:35%;padding:4px 8px;font-size:0.7rem;background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--text);"></div>').join('');
             };
+            setTimeout(renderMediaPreview, 200);
         }
 
         function showNCRForm() {
             const formHTML = '' +
-                '<div class="form-group"><label>NCR Title *</label><input type="text" id="ncrTitle" placeholder="e.g., Honeycomb on Column C12 — 3rd Floor"></div>' +
-                '<div class="form-group"><label>Severity</label><select id="ncrSeverity"><option value="Minor">Minor — Cosmetic / easily rectified</option><option value="Major" selected>Major — Requires significant rework</option><option value="Critical">Critical — Structural / safety / regulatory concern</option></select></div>' +
-                '<div class="form-group"><label>Location</label><input type="text" id="ncrLocation" placeholder="e.g., Block A, Floor 3, Grid C-D/2-5" value="Block A, Floor 3"></div>' +
-                '<div class="form-group"><label>Responsible Party</label><input type="text" id="ncrResponsible" placeholder="e.g., BuildRight Construction Ltd / Subcontractor Name"></div>' +
-                '<div class="form-group"><label>Description of Non-Conformance *</label><textarea id="ncrDesc" placeholder="Describe in detail what was observed, measurements, photographs taken, reference to specification/drawing violated..."></textarea></div>' +
-                '<div class="form-group"><label>Required Corrective Action *</label><textarea id="ncrAction" placeholder="Specify what must be done, by whom, and by when..."></textarea></div>';
-
-            showModal('🚨 Raise Non-Conformance Report (NCR)', formHTML, () => {
+                '<div class="form-group"><label>NCR Title *</label><input type="text" id="ncrTitle" placeholder="e.g., Honeycomb on Column C12"></div>' +
+                '<div class="form-group"><label>Severity</label><select id="ncrSeverity"><option value="Minor">Minor</option><option value="Major" selected>Major</option><option value="Critical">Critical</option></select></div>' +
+                '<div class="form-group"><label>Location</label><input type="text" id="ncrLocation" value="Block A, Floor 3"></div>' +
+                '<div class="form-group"><label>Responsible Party</label><input type="text" id="ncrResponsible"></div>' +
+                '<div class="form-group"><label>Description *</label><textarea id="ncrDesc"></textarea></div>' +
+                '<div class="form-group"><label>Required Action *</label><textarea id="ncrAction"></textarea></div>' +
+                '<div class="form-group"><label>📸 Evidence</label><div class="media-actions"><button type="button" class="btn btn-secondary" onclick="triggerCamera()">📷 Take Photo</button><button type="button" class="btn btn-secondary" onclick="triggerGallery()">🖼️ Upload</button></div><div id="mediaPreviewContainer" style="margin-top:8px;"></div></div>';
+            pendingMedia = [];
+            showModal('🚨 Raise NCR', formHTML, () => {
                 const title = document.getElementById('ncrTitle').value.trim();
-                const description = document.getElementById('ncrDesc').value.trim();
+                const desc = document.getElementById('ncrDesc').value.trim();
                 const action = document.getElementById('ncrAction').value.trim();
-                if (!title || !description || !action) { alert('Title, description, and action required'); return false; }
-
-                appData.ncrs.push({
-                    id: genId('ncr'),
-                    title,
-                    severity: document.getElementById('ncrSeverity').value,
-                    location: document.getElementById('ncrLocation').value,
-                    responsibleParty: document.getElementById('ncrResponsible').value,
-                    description,
-                    actionRequired: action,
-                    status: 'open',
-                    timestamp: new Date().toISOString()
-                });
+                if (!title || !desc || !action) { alert('All fields required'); return false; }
+                const entry = { id: genId('ncr'), title, severity: document.getElementById('ncrSeverity').value, location: document.getElementById('ncrLocation').value, responsibleParty: document.getElementById('ncrResponsible').value, description: desc, actionRequired: action, status: 'open', timestamp: new Date().toISOString() };
+                appData.ncrs.push(entry);
+                savePendingMedia(entry.id);
                 saveData(appData);
             });
+            setTimeout(renderMediaPreview, 200);
         }
 
         function showInstructionForm() {
             const formHTML = '' +
-                '<div class="form-group"><label>Issued To *</label><input type="text" id="siTo" placeholder="e.g., Site Agent — BuildRight Construction Ltd"></div>' +
-                '<div class="form-group"><label>Location</label><input type="text" id="siLocation" placeholder="e.g., Block A, Floor 3" value="Block A, Floor 3"></div>' +
-                '<div class="form-group"><label>Instruction *</label><textarea id="siDesc" placeholder="Clearly state the instruction, reason, and expected outcome..."></textarea></div>' +
-                '<div class="form-group"><label>Reference (Drawing/Spec)</label><input type="text" id="siRef" placeholder="e.g., Dwg S-301 Rev B / Spec Clause 5.2.3"></div>' +
-                '<div class="form-group"><label>Deadline</label><input type="text" id="siDeadline" placeholder="e.g., 18 June 2026 — Close of business"></div>';
-
+                '<div class="form-group"><label>Issued To *</label><input type="text" id="siTo"></div>' +
+                '<div class="form-group"><label>Location</label><input type="text" id="siLocation" value="Block A, Floor 3"></div>' +
+                '<div class="form-group"><label>Instruction *</label><textarea id="siDesc"></textarea></div>' +
+                '<div class="form-group"><label>Reference</label><input type="text" id="siRef"></div>' +
+                '<div class="form-group"><label>Deadline</label><input type="text" id="siDeadline" placeholder="e.g., 18 June 2026"></div>';
             showModal('📋 Site Instruction', formHTML, () => {
                 const to = document.getElementById('siTo').value.trim();
                 const desc = document.getElementById('siDesc').value.trim();
-                if (!to || !desc) { alert('Issued to and instruction required'); return false; }
-
-                appData.instructions.push({
-                    id: genId('si'),
-                    issuedTo: to,
-                    location: document.getElementById('siLocation').value,
-                    description: desc,
-                    reference: document.getElementById('siRef').value,
-                    deadline: document.getElementById('siDeadline').value,
-                    status: 'issued',
-                    timestamp: new Date().toISOString()
-                });
+                if (!to || !desc) { alert('All fields required'); return false; }
+                appData.instructions.push({ id: genId('si'), issuedTo: to, location: document.getElementById('siLocation').value, description: desc, reference: document.getElementById('siRef').value, deadline: document.getElementById('siDeadline').value, status: 'issued', timestamp: new Date().toISOString() });
                 saveData(appData);
             });
+        }
+
+        function addMediaToEntry(entryId) {
+            pendingMedia = [];
+            pendingMediaForEntry = entryId;
+            const container = document.getElementById('modalContainer');
+            container.innerHTML = '' +
+                '<div class="modal-overlay" id="modalOverlay"><div class="modal">' +
+                    '<h2>📸 Add Media</h2>' +
+                    '<div class="media-actions">' +
+                        '<button class="btn btn-primary" onclick="triggerCamera()">📷 Take Photo</button>' +
+                        '<button class="btn btn-secondary" onclick="triggerGallery()">🖼️ Upload from Gallery</button>' +
+                    '</div>' +
+                    '<div id="mediaPreviewContainer" style="margin-top:12px;"></div>' +
+                    '<div class="btn-row"><button class="btn btn-secondary" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveMediaToEntry(\'' + entryId + '\')">Save Media</button></div>' +
+                '</div></div>';
+            document.getElementById('modalOverlay').addEventListener('click', (e) => { if (e.target.id === 'modalOverlay') closeModal(); });
+            renderMediaPreview();
+        }
+
+        function saveMediaToEntry(entryId) {
+            savePendingMedia(entryId);
+            closeModal();
+            renderAll();
+            showToast('📸 Media added!');
         }
 
         function showFABMenu() {
             const container = document.getElementById('modalContainer');
             container.innerHTML = '' +
                 '<div class="modal-overlay" id="fabOverlay" style="align-items:flex-end;justify-content:center;">' +
-                    '<div class="modal" style="text-align:center;max-width:400px;margin:0 auto;">' +
-                        '<h2 style="justify-content:center;">➕ Add New Entry</h2>' +
-                        '<button class="btn btn-primary" style="margin-bottom:8px;width:100%;" onclick="closeModal();showDiaryForm();">📔 Detailed Diary Entry</button>' +
-                        '<button class="btn btn-primary" style="margin-bottom:8px;width:100%;background:var(--green);" onclick="closeModal();showInspectionForm();">✅ Inspection Checklist</button>' +
+                    '<div class="modal" style="text-align:center;max-width:400px;">' +
+                        '<h2 style="justify-content:center;">➕ Add New</h2>' +
+                        '<button class="btn btn-primary" style="margin-bottom:8px;width:100%;" onclick="closeModal();showDiaryForm();">📔 Diary Entry</button>' +
+                        '<button class="btn btn-primary" style="margin-bottom:8px;width:100%;background:var(--green);" onclick="closeModal();showInspectionForm();">✅ Inspection</button>' +
                         '<button class="btn btn-primary" style="margin-bottom:8px;width:100%;background:var(--red);" onclick="closeModal();showNCRForm();">🚨 Raise NCR</button>' +
                         '<button class="btn btn-primary" style="margin-bottom:8px;width:100%;background:var(--yellow);color:#0d1117;" onclick="closeModal();showInstructionForm();">📋 Site Instruction</button>' +
+                        '<button class="btn btn-primary" style="margin-bottom:8px;width:100%;background:var(--purple);" onclick="closeModal();triggerCamera();">📷 Quick Photo</button>' +
                         '<button class="btn btn-secondary" style="width:100%;" onclick="closeModal();">Cancel</button>' +
-                    '</div>' +
-                '</div>';
-            document.getElementById('fabOverlay').addEventListener('click', e => {
-                if (e.target.id === 'fabOverlay') closeModal();
-            });
+                    '</div></div>';
+            document.getElementById('fabOverlay').addEventListener('click', e => { if (e.target.id === 'fabOverlay') closeModal(); });
         }
 
         // ============================================
         // ACTIONS
         // ============================================
         function deleteEntry(type, id) {
-            if (!confirm('Delete this entry? This cannot be undone.')) return;
+            if (!confirm('Delete this entry?')) return;
             appData[type] = appData[type].filter(e => e.id !== id);
+            mediaStore = mediaStore.filter(m => m.entryId !== id);
             saveData(appData);
+            saveMedia(mediaStore);
             renderAll();
-            showToast('🗑️ Entry deleted');
+            showToast('🗑️ Deleted');
         }
 
         function closeNCR(id) {
@@ -1195,66 +1257,70 @@
             si.acknowledgedDate = new Date().toISOString();
             saveData(appData);
             renderAll();
-            showToast('✍️ Site Instruction acknowledged');
+            showToast('✍️ Acknowledged');
         }
 
         function copyReport() {
-            const report = window._currentReport || '';
-            navigator.clipboard.writeText(report).then(() => {
-                showToast('📋 Report copied to clipboard!');
-            }).catch(() => {
-                // Fallback: select text
-                const el = document.getElementById('reportText');
-                if (el) {
-                    const range = document.createRange();
-                    range.selectNode(el);
-                    window.getSelection().removeAllRanges();
-                    window.getSelection().addRange(range);
-                    showToast('📋 Report selected — copy manually');
-                }
-            });
+            navigator.clipboard.writeText(window._currentReport || '').then(() => showToast('📋 Copied!'));
         }
 
-        function saveReport() {
+        function printReport() {
+            // Switch to report panel and print
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.querySelector('[data-tab="report"]').classList.add('active');
+            document.getElementById('panel-report').classList.add('active');
+            renderReport();
+            setTimeout(() => window.print(), 300);
+        }
+
+        function shareViaWhatsApp(title, text) {
+            const encoded = encodeURIComponent(text);
+            window.open('https://wa.me/?text=' + encoded, '_blank');
+        }
+
+        function shareReportWhatsApp() {
             const report = window._currentReport || '';
-            const reportNo = document.getElementById('reportNo').value || 'COW-001';
-            appData.dailyReports.push({
-                id: genId('rpt'),
-                reportNo,
-                content: report,
-                date: getToday(),
-                timestamp: new Date().toISOString()
-            });
-            // Increment report counter
-            const current = parseInt((settings.reportCounter || 1));
-            settings.reportCounter = current + 1;
-            saveSettings(settings);
-            document.getElementById('reportNo').value = 'COW-' + String(current + 1).padStart(3, '0');
-            saveData(appData);
-            showToast('💾 Report saved & counter incremented');
+            shareViaWhatsApp('COW Daily Report', report);
         }
 
         function shareReport() {
             const report = window._currentReport || '';
             if (navigator.share) {
-                navigator.share({
-                    title: 'COW Daily Report — ' + getToday(),
-                    text: report
-                }).catch(() => {});
+                navigator.share({ title: 'COW Daily Report — ' + getToday(), text: report }).catch(() => {});
             } else {
                 copyReport();
             }
+        }
+
+        function saveReport() {
+            const report = window._currentReport || '';
+            appData.dailyReports.push({ id: genId('rpt'), reportNo: document.getElementById('reportNo').value, content: report, date: getToday(), timestamp: new Date().toISOString() });
+            const current = parseInt((settings.reportCounter || 1));
+            settings.reportCounter = current + 1;
+            saveSettings(settings);
+            document.getElementById('reportNo').value = 'COW-' + String(current + 1).padStart(3, '0');
+            saveData(appData);
+            showToast('💾 Saved');
         }
 
         // ============================================
         // INIT
         // ============================================
         function init() {
-            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-KE', {
-                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-            });
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-KE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
-            bindSettings();
+            // Restore settings
+            if (settings.projectName) document.getElementById('projectName').value = settings.projectName;
+            if (settings.contractNo) document.getElementById('contractNo').value = settings.contractNo;
+            if (settings.contractorName) document.getElementById('contractorName').value = settings.contractorName;
+            if (settings.reportCounter) document.getElementById('reportNo').value = 'COW-' + String(settings.reportCounter).padStart(3, '0');
+
+            // Settings listeners
+            ['projectName','contractNo','contractorName'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('change', () => { settings[id] = el.value; saveSettings(settings); });
+            });
 
             // Tab switching
             document.querySelectorAll('.tab').forEach(tab => {
@@ -1262,11 +1328,10 @@
                     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
                     tab.classList.add('active');
-                    const panelId = 'panel-' + tab.dataset.tab;
-                    const panel = document.getElementById(panelId);
+                    const panel = document.getElementById('panel-' + tab.dataset.tab);
                     if (panel) panel.classList.add('active');
-                    // Render report when tab selected
                     if (tab.dataset.tab === 'report') renderReport();
+                    if (tab.dataset.tab === 'photos') renderPhotos();
                 });
             });
 
@@ -1276,13 +1341,25 @@
             // Search
             document.getElementById('diarySearch').addEventListener('input', e => renderDiary(e.target.value));
 
-            // Settings auto-save
-            document.getElementById('weatherSelect').addEventListener('change', () => {
-                settings.weather = document.getElementById('weatherSelect').value;
-                saveSettings(settings);
+            // File inputs
+            document.getElementById('hiddenFileInput').addEventListener('change', async (e) => {
+                const files = e.target.files;
+                for (let f of files) {
+                    await addMediaFromFile(f);
+                }
+                renderMediaPreview();
+                e.target.value = '';
             });
 
-            // Initial render
+            document.getElementById('hiddenGalleryInput').addEventListener('change', async (e) => {
+                const files = e.target.files;
+                for (let f of files) {
+                    await addMediaFromFile(f);
+                }
+                renderMediaPreview();
+                e.target.value = '';
+            });
+
             renderAll();
         }
 
