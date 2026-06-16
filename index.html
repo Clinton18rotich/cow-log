@@ -68,6 +68,11 @@
         .media-viewer img,.media-viewer video{max-width:95%;max-height:70vh;border-radius:8px}
         .close-btn{position:absolute;top:16px;right:16px;background:var(--red);color:#fff;width:36px;height:36px;border-radius:50%;border:none;font-size:1.1rem;cursor:pointer;z-index:501}
         .report-preview{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px;font-family:monospace;font-size:.68rem;line-height:1.7;white-space:pre-wrap;max-height:55vh;overflow-y:auto}
+        /* Report photos */
+        .report-photo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:8px 0}
+        .report-photo{background:var(--card);border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+        .report-photo img{width:100%;height:auto;display:block}
+        .report-photo .caption{font-size:.6rem;color:var(--muted);padding:4px 8px;background:rgba(0,0,0,.5)}
         .search-bar{margin-bottom:10px}
         .search-bar input{width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:.8rem}
         .empty-state{text-align:center;padding:40px 16px;color:var(--muted)}
@@ -76,8 +81,10 @@
         @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(15px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
         .settings-panel{display:none;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px}
         .settings-panel.show{display:block}
-        @media print{body{background:#fff;color:#000}.header,.stats-row,.tabs,.fab,.btn,.search-bar,.modal-overlay,.toast,.settings-panel{display:none!important}.panel{display:none!important}#panel-report{display:block!important}.report-preview{background:#fff;border:none;color:#000;max-height:none;overflow:visible}}
-        @media(min-width:600px){.content{max-width:600px;margin:0 auto}.stats-row{max-width:600px;margin:0 auto}}
+        .report-section{margin-bottom:16px}
+        .report-section h3{font-size:.8rem;color:var(--accent);margin-bottom:8px;border-bottom:1px solid var(--border);padding-bottom:4px}
+        @media print{body{background:#fff;color:#000;font-size:10pt}.header,.stats-row,.tabs,.fab,.btn,.search-bar,.modal-overlay,.toast,.settings-panel{display:none!important}.panel{display:none!important}#panel-report{display:block!important}.report-preview{background:#fff;border:none;color:#000;max-height:none;overflow:visible;font-size:9pt}.report-photo-grid{grid-template-columns:repeat(2,1fr);page-break-inside:avoid}.report-photo{break-inside:avoid;border:1px solid #ccc}.report-photo img{max-height:200px;object-fit:contain}}
+        @media(min-width:600px){.content{max-width:650px;margin:0 auto}.stats-row{max-width:650px;margin:0 auto}}
     </style>
 </head>
 <body>
@@ -89,7 +96,6 @@
                 <span class="date" id="currentDate"></span>
             </div>
         </div>
-        <!-- Settings panel - hidden by default, shows current values -->
         <div class="settings-panel" id="settingsPanel">
             <div class="project-info">
                 <div><div class="label">Project Name *</div><input type="text" id="projectName" placeholder="e.g., Riverside Apartments"></div>
@@ -98,13 +104,9 @@
                 <div><div class="label">Default Location *</div><input type="text" id="defaultLocation" placeholder="e.g., Block A, Floor 3"></div>
                 <div><div class="label">Clerk of Works Name</div><input type="text" id="cowName" placeholder="Your name"></div>
                 <div><div class="label">Weather</div><select id="weatherSelect"><option>☀️ Sunny</option><option>⛅ Partly Cloudy</option><option>☁️ Overcast</option><option>🌧️ Rain</option><option>⛈️ Storm</option></select></div>
-                <div style="grid-column:1/-1;margin-top:4px;">
-                    <button class="btn btn-primary btn-small" onclick="saveProjectSettings()">💾 Save Settings</button>
-                    <span style="font-size:.6rem;color:var(--muted);margin-left:8px;">Auto-fills all forms</span>
-                </div>
+                <div style="grid-column:1/-1;margin-top:4px;"><button class="btn btn-primary btn-small" onclick="saveProjectSettings()">💾 Save Settings</button><span style="font-size:.6rem;color:var(--muted);margin-left:8px;">Auto-fills all forms</span></div>
             </div>
         </div>
-        <!-- Compact display when settings hidden -->
         <div id="compactInfo" style="font-size:.68rem;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap;">
             <span>🏗️ <strong id="displayProject">—</strong></span>
             <span>👷 <strong id="displayContractor">—</strong></span>
@@ -145,429 +147,238 @@
 
     <script>
     // ============================================
-    // PERSISTENT PROJECT SETTINGS
+    // DATA STORE
     // ============================================
-    const MK = 'cowlog_media_v3';
-    const AK = 'cowlog_app_v3';
-    const PK = 'cowlog_project'; // Single key for all project settings
+    const MK='cowlog_media_v4', AK='cowlog_app_v4', PK='cowlog_project_v2';
+    function loadProject(){try{const r=localStorage.getItem(PK);return r?JSON.parse(r):{projectName:'',contractNo:'',contractorName:'',defaultLocation:'',cowName:'Clerk of Works',weather:'☀️ Sunny',reportCounter:1};}catch(e){return{projectName:'',contractNo:'',contractorName:'',defaultLocation:'',cowName:'Clerk of Works',weather:'☀️ Sunny',reportCounter:1};}}
+    function saveProject(p){localStorage.setItem(PK,JSON.stringify(p));}
+    let project=loadProject();
+    function loadMedia(){try{const r=localStorage.getItem(MK);return r?JSON.parse(r):[];}catch(e){return[];}}
+    function saveMedia(arr){if(arr.length>50)arr=arr.slice(-35);try{localStorage.setItem(MK,JSON.stringify(arr));}catch(e){}}
+    function loadApp(){try{const r=localStorage.getItem(AK);return r?JSON.parse(r):{diary:[],inspections:[],ncrs:[],instructions:[],dailyReports:[]};}catch(e){return{diary:[],inspections:[],ncrs:[],instructions:[],dailyReports:[]};}}
+    function saveApp(d){localStorage.setItem(AK,JSON.stringify(d));}
+    let media=loadMedia(), app=loadApp(), pendingMedia=[];
+    window._report='';
+    function genId(p){return p+'-'+Date.now()+'-'+Math.random().toString(36).substr(2,5);}
+    function fmt(ts){return new Date(ts).toLocaleString('en-KE',{weekday:'short',year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}
+    function today(){return new Date().toISOString().split('T')[0];}
+    function toast(msg){const c=document.getElementById('toastContainer');c.innerHTML='<div class="toast">'+msg+'</div>';setTimeout(()=>c.innerHTML='',2000);}
+    function loc(){return project.defaultLocation||'Site';}
+    function contractor(){return project.contractorName||'Contractor';}
 
-    function loadProject() {
-        try {
-            const r = localStorage.getItem(PK);
-            if (r) return JSON.parse(r);
-        } catch(e) {}
-        // Defaults
-        return {
-            projectName: '',
-            contractNo: '',
-            contractorName: '',
-            defaultLocation: '',
-            cowName: 'Clerk of Works',
-            weather: '☀️ Sunny',
-            reportCounter: 1
-        };
-    }
-
-    function saveProject(p) {
-        localStorage.setItem(PK, JSON.stringify(p));
-    }
-
-    let project = loadProject();
-
-    function loadMedia() {
-        try { const r = localStorage.getItem(MK); return r ? JSON.parse(r) : []; }
-        catch(e) { return []; }
-    }
-    function saveMedia(arr) {
-        if (arr.length > 50) arr = arr.slice(-35);
-        try { localStorage.setItem(MK, JSON.stringify(arr)); } catch(e) {}
-    }
-    function loadApp() {
-        try { const r = localStorage.getItem(AK); return r ? JSON.parse(r) : { diary:[], inspections:[], ncrs:[], instructions:[], dailyReports:[] }; }
-        catch(e) { return { diary:[], inspections:[], ncrs:[], instructions:[], dailyReports:[] }; }
-    }
-    function saveApp(d) { localStorage.setItem(AK, JSON.stringify(d)); }
-
-    let media = loadMedia();
-    let app = loadApp();
-    let pendingMedia = [];
-    window._report = '';
-
-    function genId(p) { return p+'-'+Date.now()+'-'+Math.random().toString(36).substr(2,5); }
-    function fmt(ts) { return new Date(ts).toLocaleString('en-KE',{weekday:'short',year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}); }
-    function today() { return new Date().toISOString().split('T')[0]; }
-    function toast(msg) { const c=document.getElementById('toastContainer'); c.innerHTML='<div class="toast">'+msg+'</div>'; setTimeout(()=>c.innerHTML='',2000); }
-
-    // Get current location from project settings
-    function loc() { return project.defaultLocation || 'Site'; }
-    function contractor() { return project.contractorName || 'Contractor'; }
-    function projectName() { return project.projectName || 'Project'; }
-
-    function updateStats() {
-        document.getElementById('diaryCount').textContent = app.diary.length;
-        document.getElementById('inspectionCount').textContent = app.inspections.length;
-        document.getElementById('ncrCount').textContent = app.ncrs.filter(n=>n.status==='open').length;
-        document.getElementById('instructionCount').textContent = app.instructions.length;
-        document.getElementById('photoCount').textContent = media.length;
+    function updateStats(){
+        document.getElementById('diaryCount').textContent=app.diary.length;
+        document.getElementById('inspectionCount').textContent=app.inspections.length;
+        document.getElementById('ncrCount').textContent=app.ncrs.filter(n=>n.status==='open').length;
+        document.getElementById('instructionCount').textContent=app.instructions.length;
+        document.getElementById('photoCount').textContent=media.length;
     }
 
     // ============================================
-    // PROJECT SETTINGS UI
+    // SETTINGS UI
     // ============================================
-    function populateProjectFields() {
-        document.getElementById('projectName').value = project.projectName || '';
-        document.getElementById('contractNo').value = project.contractNo || '';
-        document.getElementById('contractorName').value = project.contractorName || '';
-        document.getElementById('defaultLocation').value = project.defaultLocation || '';
-        document.getElementById('cowName').value = project.cowName || '';
-        document.getElementById('weatherSelect').value = project.weather || '☀️ Sunny';
+    function populateProjectFields(){
+        document.getElementById('projectName').value=project.projectName||'';
+        document.getElementById('contractNo').value=project.contractNo||'';
+        document.getElementById('contractorName').value=project.contractorName||'';
+        document.getElementById('defaultLocation').value=project.defaultLocation||'';
+        document.getElementById('cowName').value=project.cowName||'';
+        document.getElementById('weatherSelect').value=project.weather||'☀️ Sunny';
         updateCompactDisplay();
     }
-
-    function updateCompactDisplay() {
-        document.getElementById('displayProject').textContent = project.projectName || '—';
-        document.getElementById('displayContractor').textContent = project.contractorName || '—';
-        document.getElementById('displayLocation').textContent = project.defaultLocation || '—';
+    function updateCompactDisplay(){
+        document.getElementById('displayProject').textContent=project.projectName||'—';
+        document.getElementById('displayContractor').textContent=project.contractorName||'—';
+        document.getElementById('displayLocation').textContent=project.defaultLocation||'—';
     }
-
-    function saveProjectSettings() {
-        project.projectName = document.getElementById('projectName').value.trim();
-        project.contractNo = document.getElementById('contractNo').value.trim();
-        project.contractorName = document.getElementById('contractorName').value.trim();
-        project.defaultLocation = document.getElementById('defaultLocation').value.trim();
-        project.cowName = document.getElementById('cowName').value.trim() || 'Clerk of Works';
-        project.weather = document.getElementById('weatherSelect').value;
+    function saveProjectSettings(){
+        project.projectName=document.getElementById('projectName').value.trim();
+        project.contractNo=document.getElementById('contractNo').value.trim();
+        project.contractorName=document.getElementById('contractorName').value.trim();
+        project.defaultLocation=document.getElementById('defaultLocation').value.trim();
+        project.cowName=document.getElementById('cowName').value.trim()||'Clerk of Works';
+        project.weather=document.getElementById('weatherSelect').value;
         saveProject(project);
         updateCompactDisplay();
         document.getElementById('settingsPanel').classList.remove('show');
-        toast('✅ Settings saved! Auto-fills all forms now');
+        toast('✅ Settings saved!');
     }
-
-    // Settings toggle
-    document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('settingsToggle').addEventListener('click', () => {
-            const panel = document.getElementById('settingsPanel');
-            panel.classList.toggle('show');
-            if (panel.classList.contains('show')) populateProjectFields();
-        });
-    });
+    document.addEventListener('DOMContentLoaded',()=>{document.getElementById('settingsToggle').addEventListener('click',()=>{const p=document.getElementById('settingsPanel');p.classList.toggle('show');if(p.classList.contains('show'))populateProjectFields();});});
 
     // ============================================
-    // MEDIA
+    // MEDIA HANDLING
     // ============================================
-    function openCamera() {
-        const inp = document.createElement('input');
-        inp.type = 'file'; inp.accept = 'image/*,video/*'; inp.capture = 'environment'; inp.style.display = 'none';
+    function openCamera(){
+        const inp=document.createElement('input');inp.type='file';inp.accept='image/*,video/*';inp.capture='environment';inp.style.display='none';
         document.body.appendChild(inp);
-        inp.addEventListener('change', async function() {
-            for (let f of inp.files) await processFile(f);
-            refreshMediaPreview();
-            toast('📸 ' + inp.files.length + ' captured');
-            document.body.removeChild(inp);
-        });
+        inp.addEventListener('change',async function(){for(let f of inp.files)await processFile(f);refreshMediaPreview();toast('📸 '+inp.files.length+' captured');document.body.removeChild(inp);});
         inp.click();
     }
-
-    function openGallery() {
-        const inp = document.createElement('input');
-        inp.type = 'file'; inp.accept = 'image/*,video/*'; inp.multiple = true; inp.style.display = 'none';
+    function openGallery(){
+        const inp=document.createElement('input');inp.type='file';inp.accept='image/*,video/*';inp.multiple=true;inp.style.display='none';
         document.body.appendChild(inp);
-        inp.addEventListener('change', async function() {
-            for (let f of inp.files) await processFile(f);
-            refreshMediaPreview();
-            toast('🖼️ ' + inp.files.length + ' added');
-            document.body.removeChild(inp);
-        });
+        inp.addEventListener('change',async function(){for(let f of inp.files)await processFile(f);refreshMediaPreview();toast('🖼️ '+inp.files.length+' added');document.body.removeChild(inp);});
         inp.click();
     }
-
-    function processFile(file) {
-        return new Promise(resolve => {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                let dataUrl = e.target.result;
-                const type = file.type.startsWith('video/') ? 'video' : 'image';
-                if (type === 'image' && dataUrl.length > 200000) {
-                    const img = new Image();
-                    img.onload = function() {
-                        const c = document.createElement('canvas');
-                        let w=img.width, h=img.height;
-                        if(w>800){h=Math.round(h*(800/w));w=800;}
-                        c.width=w; c.height=h;
-                        c.getContext('2d').drawImage(img,0,0,w,h);
-                        dataUrl = c.toDataURL('image/jpeg',0.5);
-                        addPending(dataUrl, type, file.name);
-                        resolve();
-                    };
-                    img.src = dataUrl;
-                } else {
-                    addPending(dataUrl, type, file.name);
-                    resolve();
-                }
-            };
-            reader.readAsDataURL(file);
-        });
-    }
-
-    function addPending(dataUrl, type, name) {
-        pendingMedia.push({ id: genId('med'), type, dataUrl, fileName: name||'photo.jpg', timestamp: new Date().toISOString(), label:'', entryId:null });
-    }
-
-    function refreshMediaPreview() {
-        const c = document.getElementById('mediaPreviewContainer');
-        if (!c) { setTimeout(refreshMediaPreview,100); return; }
-        if (!pendingMedia.length) { c.innerHTML = '<p style="font-size:.7rem;color:var(--muted);text-align:center;padding:10px;">Tap 📷 or 🖼️ above</p>'; return; }
-        c.innerHTML = '<div class="media-preview">' + pendingMedia.map((m,i) =>
-            '<div class="media-preview-item">'+(m.type==='video'?'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;">🎬</div>':'<img src="'+m.dataUrl+'" style="width:100%;height:100%;object-fit:cover;">')+'<button class="remove-media" onclick="removePending('+i+')">✕</button></div>'
-        ).join('') + '</div>';
-    }
-
-    function removePending(i) { pendingMedia.splice(i,1); refreshMediaPreview(); }
-
-    function commitMedia(entryId) {
-        if (!pendingMedia.length) return;
-        pendingMedia.forEach(m => { m.entryId = entryId; media.push({...m}); });
-        saveMedia(media);
-        pendingMedia = [];
-        updateStats();
-    }
-
-    function viewMedia(mediaId) {
-        const item = media.find(m => m.id === mediaId);
-        if (!item) return;
-        const v = document.getElementById('mediaViewer');
-        let content = item.type==='video'?'<video src="'+item.dataUrl+'" controls style="max-width:95%;max-height:65vh;border-radius:8px;"></video>':'<img src="'+item.dataUrl+'" style="max-width:95%;max-height:65vh;border-radius:8px;">';
-        v.innerHTML = '<div class="media-viewer" onclick="closeViewer()"><button class="close-btn">✕</button>'+content+'<div style="color:var(--text);font-size:.75rem;margin-top:12px;text-align:center;"><p>'+(item.label||'Photo')+'</p><p style="font-size:.65rem;color:#888;">'+fmt(item.timestamp)+'</p><div style="margin-top:8px;display:flex;gap:6px;justify-content:center;"><button class="btn btn-small btn-primary" onclick="event.stopPropagation();shareMedia(\''+mediaId+'\')">📤 Share</button><button class="btn btn-small btn-danger" onclick="event.stopPropagation();deleteMediaItem(\''+mediaId+'\')">🗑️</button></div></div></div>';
-    }
-    function closeViewer() { document.getElementById('mediaViewer').innerHTML = ''; }
-    function deleteMediaItem(id) { if(!confirm('Delete?'))return; media=media.filter(m=>m.id!==id); saveMedia(media); closeViewer(); refreshAll(); toast('🗑️ Deleted'); }
-    async function shareMedia(id) {
-        const item = media.find(m=>m.id===id);
-        if(!item)return;
-        if(navigator.share){try{const r=await fetch(item.dataUrl);const b=await r.blob();await navigator.share({title:'Site Photo',files:[new File([b],item.fileName,{type:b.type})]});toast('📤 Shared!');}catch(e){shareWA('📸 Photo — '+fmt(item.timestamp));}}
-        else{shareWA('📸 Photo — '+fmt(item.timestamp));}
-    }
-    function shareWA(text) { window.open('https://wa.me/?text='+encodeURIComponent(text.substring(0,1000)),'_blank'); }
+    function processFile(file){return new Promise(resolve=>{const reader=new FileReader();reader.onload=function(e){let dataUrl=e.target.result;const type=file.type.startsWith('video/')?'video':'image';if(type==='image'&&dataUrl.length>200000){const img=new Image();img.onload=function(){const c=document.createElement('canvas');let w=img.width,h=img.height;if(w>800){h=Math.round(h*(800/w));w=800;}c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);dataUrl=c.toDataURL('image/jpeg',0.5);addPending(dataUrl,type,file.name);resolve();};img.src=dataUrl;}else{addPending(dataUrl,type,file.name);resolve();}};reader.readAsDataURL(file);});}
+    function addPending(dataUrl,type,name){pendingMedia.push({id:genId('med'),type,dataUrl,fileName:name||'photo.jpg',timestamp:new Date().toISOString(),label:'',entryId:null});}
+    function refreshMediaPreview(){const c=document.getElementById('mediaPreviewContainer');if(!c){setTimeout(refreshMediaPreview,100);return;}if(!pendingMedia.length){c.innerHTML='<p style="font-size:.7rem;color:var(--muted);text-align:center;padding:10px;">Tap 📷 or 🖼️ above</p>';return;}c.innerHTML='<div class="media-preview">'+pendingMedia.map((m,i)=>'<div class="media-preview-item">'+(m.type==='video'?'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;">🎬</div>':'<img src="'+m.dataUrl+'" style="width:100%;height:100%;object-fit:cover;">')+'<button class="remove-media" onclick="removePending('+i+')">✕</button></div>').join('')+'</div>';}
+    function removePending(i){pendingMedia.splice(i,1);refreshMediaPreview();}
+    function commitMedia(entryId){if(!pendingMedia.length)return;pendingMedia.forEach(m=>{m.entryId=entryId;media.push({...m});});saveMedia(media);pendingMedia=[];updateStats();}
+    function viewMedia(mediaId){const item=media.find(m=>m.id===mediaId);if(!item)return;const v=document.getElementById('mediaViewer');let content=item.type==='video'?'<video src="'+item.dataUrl+'" controls style="max-width:95%;max-height:65vh;border-radius:8px;"></video>':'<img src="'+item.dataUrl+'" style="max-width:95%;max-height:65vh;border-radius:8px;">';v.innerHTML='<div class="media-viewer" onclick="closeViewer()"><button class="close-btn">✕</button>'+content+'<div style="color:var(--text);font-size:.75rem;margin-top:12px;text-align:center;"><p>'+(item.label||'Photo')+'</p><p style="font-size:.65rem;color:#888;">'+fmt(item.timestamp)+'</p><div style="margin-top:8px;display:flex;gap:6px;justify-content:center;"><button class="btn btn-small btn-primary" onclick="event.stopPropagation();shareMedia(\''+mediaId+'\')">📤 Share</button><button class="btn btn-small btn-danger" onclick="event.stopPropagation();deleteMediaItem(\''+mediaId+'\')">🗑️</button></div></div></div>';}
+    function closeViewer(){document.getElementById('mediaViewer').innerHTML='';}
+    function deleteMediaItem(id){if(!confirm('Delete?'))return;media=media.filter(m=>m.id!==id);saveMedia(media);closeViewer();refreshAll();toast('🗑️ Deleted');}
+    async function shareMedia(id){const item=media.find(m=>m.id===id);if(!item)return;if(navigator.share){try{const r=await fetch(item.dataUrl);const b=await r.blob();await navigator.share({title:'Site Photo',files:[new File([b],item.fileName,{type:b.type})]});toast('📤 Shared!');}catch(e){shareWA('📸 Photo — '+fmt(item.timestamp));}}else{shareWA('📸 Photo — '+fmt(item.timestamp));}}
+    function shareWA(text){window.open('https://wa.me/?text='+encodeURIComponent(text.substring(0,1500)),'_blank');}
 
     // ============================================
     // RENDERERS
     // ============================================
-    function renderDiary(filter='') {
-        const c = document.getElementById('diaryEntries');
-        let entries = app.diary;
+    function renderDiary(filter=''){
+        const c=document.getElementById('diaryEntries');let entries=app.diary;
         if(filter){const q=filter.toLowerCase();entries=entries.filter(e=>e.title.toLowerCase().includes(q)||e.description.toLowerCase().includes(q));}
         entries.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
         if(!entries.length){c.innerHTML='<div class="empty-state"><div class="icon">📔</div><p>No diary entries yet</p></div>';return;}
-        c.innerHTML = entries.map(e=>{
-            const em=media.filter(m=>m.entryId===e.id);
-            const colors={'Work in Progress':'badge-info','Material Delivery':'badge-pending','Inspection':'badge-pass','Meeting':'badge-pending','Delay/Issue':'badge-fail','General':'badge-closed'};
-            const ab=e.activityType?'<span class="badge '+(colors[e.activityType]||'badge-info')+'">'+e.activityType+'</span>':'';
-            return '<div class="entry-card diary-card"><div class="entry-header"><span class="entry-title">📔 '+e.title+'</span>'+ab+'</div><div class="entry-meta"><span>🕐 '+fmt(e.timestamp)+'</span><span>📍 '+e.location+'</span></div><div class="entry-desc">'+e.description.replace(/\n/g,'<br>')+'</div>'+
-                (em.length?'<div class="entry-section"><div class="section-label">📸 '+em.length+' Photo(s)</div><div class="media-grid">'+em.map(m=>'<div class="media-thumb" onclick="viewMedia(\''+m.id+'\')">'+(m.type==='video'?'<div class="placeholder">🎬</div>':'<img src="'+m.dataUrl+'" alt="photo">')+'</div>').join('')+'</div></div>':'')+
-                (e.labourCount||e.equipmentUsed?'<div class="entry-section"><div class="section-label">Resources</div>'+(e.labourCount?'👷 '+e.labourCount+'<br>':'')+(e.equipmentUsed?'🚜 '+e.equipmentUsed:'')+'</div>':'')+
-                (e.materialsDelivered?'<div class="entry-section"><div class="section-label">Materials</div>'+e.materialsDelivered.replace(/\n/g,'<br>')+'</div>':'')+
-                (e.issuesIdentified?'<div class="entry-section" style="border-left:3px solid var(--red);"><div class="section-label">⚠️ Issues</div>'+e.issuesIdentified.replace(/\n/g,'<br>')+'</div>':'')+
-                '<div style="margin-top:6px;display:flex;gap:5px;flex-wrap:wrap;"><button class="btn btn-small btn-secondary" onclick="addMediaToEntry(\''+e.id+'\')">📸</button><button class="btn btn-small btn-primary" onclick="editDiary(\''+e.id+'\')">✏️</button><button class="btn btn-small btn-secondary" onclick="deleteEntry(\'diary\',\''+e.id+'\')">🗑️</button></div></div>';
-        }).join('');
+        c.innerHTML=entries.map(e=>{const em=media.filter(m=>m.entryId===e.id);const colors={'Work in Progress':'badge-info','Material Delivery':'badge-pending','Inspection':'badge-pass','Meeting':'badge-pending','Delay/Issue':'badge-fail','General':'badge-closed'};const ab=e.activityType?'<span class="badge '+(colors[e.activityType]||'badge-info')+'">'+e.activityType+'</span>':'';return '<div class="entry-card diary-card"><div class="entry-header"><span class="entry-title">📔 '+e.title+'</span>'+ab+'</div><div class="entry-meta"><span>🕐 '+fmt(e.timestamp)+'</span><span>📍 '+e.location+'</span></div><div class="entry-desc">'+e.description.replace(/\n/g,'<br>')+'</div>'+(em.length?'<div class="entry-section"><div class="section-label">📸 '+em.length+' Photo(s)</div><div class="media-grid">'+em.map(m=>'<div class="media-thumb" onclick="viewMedia(\''+m.id+'\')">'+(m.type==='video'?'<div class="placeholder">🎬</div>':'<img src="'+m.dataUrl+'" alt="photo">')+'</div>').join('')+'</div></div>':'')+(e.labourCount||e.equipmentUsed?'<div class="entry-section"><div class="section-label">Resources</div>'+(e.labourCount?'👷 '+e.labourCount+'<br>':'')+(e.equipmentUsed?'🚜 '+e.equipmentUsed:'')+'</div>':'')+(e.materialsDelivered?'<div class="entry-section"><div class="section-label">Materials</div>'+e.materialsDelivered.replace(/\n/g,'<br>')+'</div>':'')+(e.issuesIdentified?'<div class="entry-section" style="border-left:3px solid var(--red);"><div class="section-label">⚠️ Issues</div>'+e.issuesIdentified.replace(/\n/g,'<br>')+'</div>':'')+'<div style="margin-top:6px;display:flex;gap:5px;flex-wrap:wrap;"><button class="btn btn-small btn-secondary" onclick="addMediaToEntry(\''+e.id+'\')">📸</button><button class="btn btn-small btn-primary" onclick="editDiary(\''+e.id+'\')">✏️</button><button class="btn btn-small btn-secondary" onclick="deleteEntry(\'diary\',\''+e.id+'\')">🗑️</button></div></div>';}).join('');
     }
 
-    function renderInspections() {
-        const c=document.getElementById('inspectionEntries');
-        const entries=[...app.inspections].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
+    function renderInspections(){
+        const c=document.getElementById('inspectionEntries');const entries=[...app.inspections].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
         if(!entries.length){c.innerHTML='<div class="empty-state"><div class="icon">✅</div><p>No inspections</p></div>';return;}
-        c.innerHTML=entries.map(e=>{
-            const em=media.filter(m=>m.entryId===e.id);
-            return '<div class="entry-card inspection-card"><div class="entry-header"><span class="entry-title">✅ '+e.checklistType+'</span><span class="badge '+(e.result==='pass'?'badge-pass':'badge-fail')+'">'+e.result.toUpperCase()+'</span></div><div class="entry-meta"><span>🕐 '+fmt(e.timestamp)+'</span><span>📍 '+e.location+'</span><span>'+e.items.filter(i=>i.passed).length+'/'+e.items.length+' OK</span></div><div class="entry-section"><div class="section-label">Items</div>'+e.items.map(i=>'<div style="padding:1px 0;font-size:.7rem;">'+(i.passed?'✅':'❌')+' '+i.label+(i.comment?' <span style="color:var(--muted);">— '+i.comment+'</span>':'')+'</div>').join('')+'</div>'+
-                (em.length?'<div class="entry-section"><div class="section-label">📸 '+em.length+' Photo(s)</div><div class="media-grid">'+em.map(m=>'<div class="media-thumb" onclick="viewMedia(\''+m.id+'\')">'+(m.type==='video'?'<div class="placeholder">🎬</div>':'<img src="'+m.dataUrl+'" alt="photo">')+'</div>').join('')+'</div></div>':'')+
-                (e.notes?'<div class="entry-section"><div class="section-label">Notes</div>'+e.notes+'</div>':'')+
-                '<div style="margin-top:6px;"><button class="btn btn-small btn-secondary" onclick="deleteEntry(\'inspections\',\''+e.id+'\')">🗑️</button></div></div>';
-        }).join('');
+        c.innerHTML=entries.map(e=>{const em=media.filter(m=>m.entryId===e.id);return '<div class="entry-card inspection-card"><div class="entry-header"><span class="entry-title">✅ '+e.checklistType+'</span><span class="badge '+(e.result==='pass'?'badge-pass':'badge-fail')+'">'+e.result.toUpperCase()+'</span></div><div class="entry-meta"><span>🕐 '+fmt(e.timestamp)+'</span><span>📍 '+e.location+'</span><span>'+e.items.filter(i=>i.passed).length+'/'+e.items.length+' OK</span></div><div class="entry-section"><div class="section-label">Items</div>'+e.items.map(i=>'<div style="padding:1px 0;font-size:.7rem;">'+(i.passed?'✅':'❌')+' '+i.label+(i.comment?' <span style="color:var(--muted);">— '+i.comment+'</span>':'')+'</div>').join('')+'</div>'+(em.length?'<div class="entry-section"><div class="section-label">📸 '+em.length+' Photo(s)</div><div class="media-grid">'+em.map(m=>'<div class="media-thumb" onclick="viewMedia(\''+m.id+'\')">'+(m.type==='video'?'<div class="placeholder">🎬</div>':'<img src="'+m.dataUrl+'" alt="photo">')+'</div>').join('')+'</div></div>':'')+(e.notes?'<div class="entry-section"><div class="section-label">Notes</div>'+e.notes+'</div>':'')+'<div style="margin-top:6px;"><button class="btn btn-small btn-secondary" onclick="deleteEntry(\'inspections\',\''+e.id+'\')">🗑️</button></div></div>';}).join('');
     }
 
-    function renderNCRs() {
-        const c=document.getElementById('ncrEntries');
-        const entries=[...app.ncrs].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
+    function renderNCRs(){
+        const c=document.getElementById('ncrEntries');const entries=[...app.ncrs].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
         if(!entries.length){c.innerHTML='<div class="empty-state"><div class="icon">🚨</div><p>No NCRs</p></div>';return;}
         c.innerHTML=entries.map(e=>'<div class="entry-card ncr-card"><div class="entry-header"><span class="entry-title">🚨 NCR-'+e.id.split('-')[1]+': '+e.title+'</span><span class="badge '+(e.status==='open'?'badge-open':'badge-closed')+'">'+e.status.toUpperCase()+'</span></div><div class="entry-meta"><span>🕐 '+fmt(e.timestamp)+'</span><span>📍 '+e.location+'</span><span>⚠️ '+e.severity+'</span></div><div class="entry-section"><div class="section-label">Description</div>'+e.description+'</div><div class="entry-section" style="border-left:3px solid var(--yellow);"><div class="section-label">Action Required</div>'+e.actionRequired+'</div>'+(e.closeoutComment?'<div class="entry-section" style="border-left:3px solid var(--green);"><div class="section-label">Closeout</div>'+e.closeoutComment+'</div>':'')+'<div style="margin-top:6px;display:flex;gap:5px;">'+(e.status!=='closed'?'<button class="btn btn-small btn-primary" onclick="closeNCR(\''+e.id+'\')">✅ Close</button>':'')+'<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'ncrs\',\''+e.id+'\')">🗑️</button></div></div>').join('');
     }
 
-    function renderInstructions() {
-        const c=document.getElementById('instructionEntries');
-        const entries=[...app.instructions].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
+    function renderInstructions(){
+        const c=document.getElementById('instructionEntries');const entries=[...app.instructions].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
         if(!entries.length){c.innerHTML='<div class="empty-state"><div class="icon">📋</div><p>No site instructions</p></div>';return;}
         c.innerHTML=entries.map(e=>'<div class="entry-card instruction-card"><div class="entry-header"><span class="entry-title">📋 SI-'+e.id.split('-')[1]+'</span><span class="badge '+(e.status==='acknowledged'?'badge-closed':'badge-open')+'">'+e.status.toUpperCase()+'</span></div><div class="entry-meta"><span>🕐 '+fmt(e.timestamp)+'</span><span>👷 '+e.issuedTo+'</span><span>📍 '+e.location+'</span></div><div class="entry-desc">'+e.description.replace(/\n/g,'<br>')+'</div>'+(e.deadline?'<div class="entry-section"><div class="section-label">Deadline</div>⏰ '+e.deadline+'</div>':'')+'<div style="margin-top:6px;display:flex;gap:5px;">'+(e.status!=='acknowledged'?'<button class="btn btn-small btn-primary" onclick="ackSI(\''+e.id+'\')">✍️ Ack</button>':'')+'<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'instructions\',\''+e.id+'\')">🗑️</button></div></div>').join('');
     }
 
-    function renderPhotos() {
+    function renderPhotos(){
         const c=document.getElementById('photoGallery');
         if(!media.length){c.innerHTML='<div class="empty-state"><div class="icon">📸</div><p>No media yet</p></div>';return;}
         c.innerHTML='<div style="display:flex;gap:6px;margin-bottom:10px;"><button class="btn btn-small btn-primary" onclick="openCamera()">📷 Camera</button><button class="btn btn-small btn-secondary" onclick="openGallery()">🖼️ Gallery</button></div><div class="media-grid">'+[...media].reverse().map(m=>'<div class="media-thumb" onclick="viewMedia(\''+m.id+'\')">'+(m.type==='video'?'<div class="placeholder">🎬</div>':'<img src="'+m.dataUrl+'" alt="photo" loading="lazy">')+'</div>').join('')+'</div>';
     }
 
-    function renderReport() {
+    // ============================================
+    // REPORT — WITH ACTUAL PHOTOS EMBEDDED
+    // ============================================
+    function renderReport(){
         const td=today();
-        const dt=app.diary.filter(e=>e.timestamp.startsWith(td));
-        const it=app.inspections.filter(e=>e.timestamp.startsWith(td));
-        const no=app.ncrs.filter(e=>e.status==='open');
+        const diaryToday=app.diary.filter(e=>e.timestamp.startsWith(td));
+        const inspToday=app.inspections.filter(e=>e.timestamp.startsWith(td));
+        const ncrsOpen=app.ncrs.filter(e=>e.status==='open');
+        const siToday=app.instructions.filter(e=>e.timestamp.startsWith(td));
         const rdate=new Date().toLocaleDateString('en-KE',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
         const pn=project.projectName||'Project';
         const cn=project.contractNo||'N/A';
         const con=project.contractorName||'N/A';
         const rn='COW-'+String(project.reportCounter||1).padStart(3,'0');
 
-        let r='═══════════════════════════════════════════════\n';
-        r+='  CLERK OF WORKS — DAILY SITE REPORT\n';
-        r+='═══════════════════════════════════════════════\n\n';
-        r+='REPORT NO:     '+rn+'\nDATE:          '+rdate+'\nPROJECT:       '+pn+'\nCONTRACT NO:   '+cn+'\nCONTRACTOR:    '+con+'\nREPORTED BY:   '+(project.cowName||'Clerk of Works')+'\n';
-        r+='───────────────────────────────────────────────\n\n';
-        r+='1. WORK PROGRESS\n───────────────────────────────────────────────\n';
-        if(dt.length){dt.forEach((e,i)=>{r+='\n'+(i+1)+'. '+e.title+'\n   Location: '+e.location+'\n   '+e.description.replace(/\n/g,'\n   ')+'\n';if(e.labourCount)r+='   Labour: '+e.labourCount+'\n';if(e.issuesIdentified)r+='   ⚠️ '+e.issuesIdentified+'\n';const em=media.filter(m=>m.entryId===e.id);if(em.length)r+='   📸 '+em.length+' photo(s)\n';});}else{r+='\n   No diary entries today.\n';}
-        r+='\n2. INSPECTIONS\n───────────────────────────────────────────────\n';
-        if(it.length){it.forEach(e=>{r+='\n   '+e.checklistType+' — '+e.result.toUpperCase()+'\n   Location: '+e.location+'\n';e.items.forEach(i=>{r+='   '+(i.passed?'✅':'❌')+' '+i.label+'\n';});if(e.notes)r+='   Notes: '+e.notes+'\n';});}else{r+='\n   No inspections today.\n';}
-        r+='\n3. OUTSTANDING NCRs\n───────────────────────────────────────────────\n';
-        if(no.length){no.forEach(e=>{r+='   • NCR-'+e.id.split('-')[1]+': '+e.title+' ['+e.severity+'] — '+e.location+'\n';});}else{r+='\n   None.\n';}
-        r+='\n4. SITE INSTRUCTIONS\n───────────────────────────────────────────────\n';
-        const si=app.instructions.filter(e=>e.timestamp.startsWith(td));
-        if(si.length){si.forEach(e=>{r+='   • SI-'+e.id.split('-')[1]+': '+e.issuedTo+' — '+e.description.substring(0,80)+'\n';});}else{r+='\n   None issued today.\n';}
-        r+='\n═══════════════════════════════════════════════\n  REPORT END — '+rdate+'\n═══════════════════════════════════════════════\n';
-        r+='\n  SIGNED: ................    DATE: ................\n  '+(project.cowName||'Clerk of Works')+'\n';
+        // Collect all today's photos
+        const allPhotos=[];
+        diaryToday.forEach(e=>{media.filter(m=>m.entryId===e.id&&m.type==='image').forEach(m=>allPhotos.push({...m,source:e.title,sourceType:'Diary'}));});
+        inspToday.forEach(e=>{media.filter(m=>m.entryId===e.id&&m.type==='image').forEach(m=>allPhotos.push({...m,source:e.checklistType,sourceType:'Inspection'}));});
 
-        document.getElementById('reportContent').innerHTML='<div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;"><button class="btn btn-small btn-primary" onclick="copyReport()">📋 Copy</button><button class="btn btn-small btn-secondary" onclick="printReport()">🖨️ Print</button><button class="btn btn-small btn-whatsapp" onclick="shareWA(window._report)">📱 WhatsApp</button><button class="btn btn-small btn-secondary" onclick="saveReport()">💾 Save & Next</button></div><div class="report-preview" id="reportText">'+r+'</div>';
-        window._report = r;
+        // Build text report
+        let textReport='═══════════════════════════════════════════════\n';
+        textReport+='  CLERK OF WORKS — DAILY SITE REPORT\n';
+        textReport+='═══════════════════════════════════════════════\n\n';
+        textReport+='REPORT NO:     '+rn+'\nDATE:          '+rdate+'\nPROJECT:       '+pn+'\nCONTRACT NO:   '+cn+'\nCONTRACTOR:    '+con+'\nREPORTED BY:   '+(project.cowName||'Clerk of Works')+'\n';
+        textReport+='───────────────────────────────────────────────\n\n';
+        textReport+='1. WORK PROGRESS\n';
+        if(diaryToday.length){diaryToday.forEach((e,i)=>{textReport+='\n'+(i+1)+'. '+e.title+'\n   Location: '+e.location+'\n   '+e.description.replace(/\n/g,'\n   ')+'\n';if(e.labourCount)textReport+='   Labour: '+e.labourCount+'\n';if(e.issuesIdentified)textReport+='   ⚠️ '+e.issuesIdentified+'\n';});}else{textReport+='\n   No diary entries today.\n';}
+        textReport+='\n2. INSPECTIONS\n';
+        if(inspToday.length){inspToday.forEach(e=>{textReport+='\n   '+e.checklistType+' — '+e.result.toUpperCase()+'\n   Location: '+e.location+'\n';e.items.forEach(i=>{textReport+='   '+(i.passed?'✅':'❌')+' '+i.label+'\n';});if(e.notes)textReport+='   Notes: '+e.notes+'\n';});}else{textReport+='\n   No inspections today.\n';}
+        textReport+='\n3. OUTSTANDING NCRs\n';
+        if(ncrsOpen.length){ncrsOpen.forEach(e=>{textReport+='   • NCR-'+e.id.split('-')[1]+': '+e.title+' ['+e.severity+'] — '+e.location+'\n';});}else{textReport+='\n   None.\n';}
+        textReport+='\n4. SITE INSTRUCTIONS\n';
+        if(siToday.length){siToday.forEach(e=>{textReport+='   • SI-'+e.id.split('-')[1]+': '+e.issuedTo+' — '+e.description.substring(0,80)+'\n';});}else{textReport+='\n   None issued today.\n';}
+        if(allPhotos.length){textReport+='\n5. SITE PHOTOS ('+allPhotos.length+')\n';allPhotos.forEach((p,i)=>{textReport+='   Photo '+(i+1)+': '+p.source+' — '+fmt(p.timestamp)+'\n';});}
+        textReport+='\n═══════════════════════════════════════════════\n  REPORT END — '+rdate+'\n═══════════════════════════════════════════════\n';
+        textReport+='\n  SIGNED: ................    DATE: ................\n  '+(project.cowName||'Clerk of Works')+'\n';
+
+        window._report = textReport;
+
+        // Build HTML report with embedded photos
+        let html='<div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;">'+
+            '<button class="btn btn-small btn-primary" onclick="copyReport()">📋 Copy Text</button>'+
+            '<button class="btn btn-small btn-secondary" onclick="printReport()">🖨️ Print</button>'+
+            '<button class="btn btn-small btn-whatsapp" onclick="shareReportWhatsApp()">📱 WhatsApp</button>'+
+            '<button class="btn btn-small btn-secondary" onclick="saveReport()">💾 Save & Next</button>'+
+        '</div>';
+
+        // Summary badges
+        html+='<div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;">'+
+            '<span class="badge badge-info">📔 Diary: '+diaryToday.length+'</span>'+
+            '<span class="badge '+(inspToday.some(i=>i.result==='fail')?'badge-fail':'badge-pass')+'">✅ Insp: '+inspToday.length+'</span>'+
+            '<span class="badge badge-open">🚨 Open NCRs: '+ncrsOpen.length+'</span>'+
+            '<span class="badge badge-pending">📸 Photos: '+allPhotos.length+'</span>'+
+        '</div>';
+
+        // Report content with photos
+        html+='<div class="report-preview" id="reportText">'+textReport+'</div>';
+
+        // Photo gallery in report
+        if(allPhotos.length>0){
+            html+='<div class="report-section" style="margin-top:16px;">'+
+                '<h3>📸 SITE PHOTOS ('+allPhotos.length+')</h3>'+
+                '<div class="report-photo-grid">'+
+                    allPhotos.map((p,i)=>'<div class="report-photo" onclick="viewMedia(\''+p.id+'\')">'+
+                        '<img src="'+p.dataUrl+'" alt="Photo '+(i+1)+'" style="width:100%;">'+
+                        '<div class="caption">📷 '+(i+1)+'. '+p.source+'<br><small>'+fmt(p.timestamp)+'</small></div>'+
+                    '</div>').join('')+
+                '</div>'+
+            '</div>';
+        }
+
+        document.getElementById('reportContent').innerHTML=html;
     }
 
-    function refreshAll() { renderDiary(); renderInspections(); renderNCRs(); renderInstructions(); renderPhotos(); updateStats(); }
+    function refreshAll(){renderDiary();renderInspections();renderNCRs();renderInstructions();renderPhotos();updateStats();}
 
     // ============================================
-    // MODALS — AUTO-FILL FROM PROJECT SETTINGS
+    // MODALS
     // ============================================
-    function showModal(title, html, cb) {
-        const mc=document.getElementById('modalContainer');
-        mc.innerHTML='<div class="modal-overlay" id="mo"><div class="modal"><h2>'+title+'</h2><div id="mf">'+html+'</div><div class="btn-row"><button class="btn btn-secondary" onclick="closeModal()">Cancel</button><button class="btn btn-primary" id="ms">Save</button></div></div></div>';
-        document.getElementById('ms').addEventListener('click',()=>{const r=cb();if(r!==false){closeModal();refreshAll();toast('✅ Saved!');}});
-        document.getElementById('mo').addEventListener('click',e=>{if(e.target.id==='mo')closeModal();});
-    }
-    function closeModal() { document.getElementById('modalContainer').innerHTML=''; }
+    function showModal(title,html,cb){const mc=document.getElementById('modalContainer');mc.innerHTML='<div class="modal-overlay" id="mo"><div class="modal"><h2>'+title+'</h2><div id="mf">'+html+'</div><div class="btn-row"><button class="btn btn-secondary" onclick="closeModal()">Cancel</button><button class="btn btn-primary" id="ms">Save</button></div></div></div>';document.getElementById('ms').addEventListener('click',()=>{const r=cb();if(r!==false){closeModal();refreshAll();toast('✅ Saved!');}});document.getElementById('mo').addEventListener('click',e=>{if(e.target.id==='mo')closeModal();});}
+    function closeModal(){document.getElementById('modalContainer').innerHTML='';}
 
-    function showDiaryForm(editId) {
-        const ex=editId?app.diary.find(e=>e.id===editId):null;
-        pendingMedia=[];
-        // USE PROJECT DEFAULTS for location
-        const defLoc = ex ? ex.location : loc();
-        const h='<div class="form-group"><label>Title *</label><input type="text" id="dt" value="'+(ex?ex.title:'')+'" placeholder="e.g., Concreting — 3rd Floor Slab"></div>'+
-            '<div class="form-group"><label>Activity</label><select id="da"><option>Work in Progress</option><option>Material Delivery</option><option>Inspection</option><option>Meeting</option><option>Delay/Issue</option><option>General</option></select></div>'+
-            '<div class="form-group"><label>Location</label><input type="text" id="dl" value="'+defLoc+'"></div>'+
-            '<div class="form-group"><label>Description *</label><textarea id="dd" placeholder="Describe work observed, quality, progress...">'+(ex?ex.description:'')+'</textarea></div>'+
-            '<div class="form-group"><label>Labour on Site</label><input type="text" id="dlb" value="'+(ex?ex.labourCount||'':'')+'" placeholder="e.g., 15 skilled, 25 unskilled"></div>'+
-            '<div class="form-group"><label>Equipment</label><input type="text" id="deq" value="'+(ex?ex.equipmentUsed||'':'')+'" placeholder="e.g., Tower Crane, 2 Mixers"></div>'+
-            '<div class="form-group"><label>Materials Delivered</label><textarea id="dmt" style="min-height:45px;" placeholder="e.g., 200 bags cement\n5 tonnes Y12 steel">'+(ex?ex.materialsDelivered||'':'')+'</textarea></div>'+
-            '<div class="form-group"><label>Issues / Concerns</label><textarea id="dis" style="min-height:45px;" placeholder="Any problems, delays, or quality issues...">'+(ex?ex.issuesIdentified||'':'')+'</textarea></div>'+
-            '<div class="form-group"><label>📸 Photos</label><div class="media-actions"><button type="button" class="btn btn-primary" onclick="openCamera()">📷 Camera</button><button type="button" class="btn btn-secondary" onclick="openGallery()">🖼️ Gallery</button></div><div id="mediaPreviewContainer" style="margin-top:6px;"></div></div>';
-        showModal(ex?'✏️ Edit Diary':'📔 New Diary Entry',h,()=>{
-            const title=document.getElementById('dt').value.trim();
-            const desc=document.getElementById('dd').value.trim();
-            if(!title||!desc){alert('Title and description required');return false;}
-            const entry={id:ex?ex.id:genId('di'),title,activityType:document.getElementById('da').value,location:document.getElementById('dl').value,description:desc,labourCount:document.getElementById('dlb').value,equipmentUsed:document.getElementById('deq').value,materialsDelivered:document.getElementById('dmt').value,issuesIdentified:document.getElementById('dis').value,weather:project.weather,timestamp:ex?ex.timestamp:new Date().toISOString()};
-            if(ex){const i=app.diary.findIndex(e=>e.id===editId);if(i>-1)app.diary[i]=entry;}else{app.diary.push(entry);}
-            commitMedia(entry.id);
-            saveApp(app);
-        });
-        if(ex&&ex.activityType){setTimeout(()=>{const s=document.getElementById('da');if(s)s.value=ex.activityType;},100);}
-        setTimeout(refreshMediaPreview,200);
-    }
-    function editDiary(id) { showDiaryForm(id); }
+    function showDiaryForm(editId){const ex=editId?app.diary.find(e=>e.id===editId):null;pendingMedia=[];const defLoc=ex?ex.location:loc();const h='<div class="form-group"><label>Title *</label><input type="text" id="dt" value="'+(ex?ex.title:'')+'" placeholder="e.g., Concreting — 3rd Floor Slab"></div><div class="form-group"><label>Activity</label><select id="da"><option>Work in Progress</option><option>Material Delivery</option><option>Inspection</option><option>Meeting</option><option>Delay/Issue</option><option>General</option></select></div><div class="form-group"><label>Location</label><input type="text" id="dl" value="'+defLoc+'"></div><div class="form-group"><label>Description *</label><textarea id="dd" placeholder="Describe work observed...">'+(ex?ex.description:'')+'</textarea></div><div class="form-group"><label>Labour</label><input type="text" id="dlb" value="'+(ex?ex.labourCount||'':'')+'"></div><div class="form-group"><label>Equipment</label><input type="text" id="deq" value="'+(ex?ex.equipmentUsed||'':'')+'"></div><div class="form-group"><label>Materials</label><textarea id="dmt" style="min-height:45px;">'+(ex?ex.materialsDelivered||'':'')+'</textarea></div><div class="form-group"><label>Issues</label><textarea id="dis" style="min-height:45px;">'+(ex?ex.issuesIdentified||'':'')+'</textarea></div><div class="form-group"><label>📸 Photos</label><div class="media-actions"><button type="button" class="btn btn-primary" onclick="openCamera()">📷 Camera</button><button type="button" class="btn btn-secondary" onclick="openGallery()">🖼️ Gallery</button></div><div id="mediaPreviewContainer" style="margin-top:6px;"></div></div>';showModal(ex?'✏️ Edit Diary':'📔 New Diary Entry',h,()=>{const title=document.getElementById('dt').value.trim();const desc=document.getElementById('dd').value.trim();if(!title||!desc){alert('Title and description required');return false;}const entry={id:ex?ex.id:genId('di'),title,activityType:document.getElementById('da').value,location:document.getElementById('dl').value,description:desc,labourCount:document.getElementById('dlb').value,equipmentUsed:document.getElementById('deq').value,materialsDelivered:document.getElementById('dmt').value,issuesIdentified:document.getElementById('dis').value,weather:project.weather,timestamp:ex?ex.timestamp:new Date().toISOString()};if(ex){const i=app.diary.findIndex(e=>e.id===editId);if(i>-1)app.diary[i]=entry;}else{app.diary.push(entry);}commitMedia(entry.id);saveApp(app);});if(ex&&ex.activityType){setTimeout(()=>{const s=document.getElementById('da');if(s)s.value=ex.activityType;},100);}setTimeout(refreshMediaPreview,200);}
+    function editDiary(id){showDiaryForm(id);}
 
-    function showInspectionForm() {
-        const lists={'Concrete Pour':['Formwork checked','Reinforcement correct','Cover blocks placed','Grade confirmed','Slump test done','Vibrators ready','Curing plan ready'],'Steel Reinforcement':['Bar sizes correct','Spacing correct','Laps correct','Chairs placed','Clean & rust-free'],'Blockwork':['Block type correct','Mortar 1:4','Plumb & level','Wall ties','DPC in place','Openings correct'],'Excavation':['Setting out checked','Depth correct','Bottom firm','Safety batter','Dewatering'],'Waterproofing':['Surface prepared','Primer applied','Membrane lapped','Detailing correct','Protection board','Ponding test']};
-        window._lists=lists;
-        pendingMedia=[];
-        let h='<div class="form-group"><label>Type *</label><select id="ct" onchange="window._ul()"><option value="">— Select —</option>';
-        Object.keys(lists).forEach(k=>h+='<option value="'+k+'">'+k+'</option>');
-        h+='</select></div><div class="form-group"><label>Location</label><input type="text" id="il" value="'+loc()+'"></div><div class="form-group"><label>Items</label><div id="ci" style="background:var(--bg);border-radius:8px;padding:4px 10px;border:1px solid var(--border);"><p style="color:var(--muted);text-align:center;padding:14px;">Select checklist type</p></div></div><div class="form-group"><label>Notes</label><textarea id="in" placeholder="Overall assessment..."></textarea></div><div class="form-group"><label>📸 Photos</label><div class="media-actions"><button type="button" class="btn btn-primary" onclick="openCamera()">📷 Camera</button><button type="button" class="btn btn-secondary" onclick="openGallery()">🖼️ Gallery</button></div><div id="mediaPreviewContainer" style="margin-top:6px;"></div></div>';
-        showModal('✅ Inspection',h,()=>{
-            const type=document.getElementById('ct').value;
-            if(!type){alert('Select checklist type');return false;}
-            const cbs=document.querySelectorAll('#ci input[type=checkbox]');
-            const cmts=document.querySelectorAll('#ci .ic');
-            const items=Array.from(cbs).map((cb,i)=>({label:cb.nextElementSibling.textContent.replace(/\s*$/,''),passed:cb.checked,comment:cmts[i]?cmts[i].value:''}));
-            const entry={id:genId('ins'),checklistType:type,location:document.getElementById('il').value,items,result:items.every(i=>i.passed)?'pass':'fail',notes:document.getElementById('in').value,timestamp:new Date().toISOString()};
-            app.inspections.push(entry);
-            commitMedia(entry.id);
-            saveApp(app);
-        });
-        window._ul=function(){const type=document.getElementById('ct').value;const c=document.getElementById('ci');if(!type||!window._lists[type]){c.innerHTML='<p style="color:var(--muted);text-align:center;padding:14px;">Select checklist type</p>';return;}c.innerHTML=window._lists[type].map((item,i)=>'<div style="display:flex;align-items:center;gap:6px;padding:7px 0;border-bottom:1px solid var(--border);font-size:.75rem;"><input type="checkbox" id="it'+i+'" checked><label for="it'+i+'" style="flex:1;">'+item+'</label><input type="text" class="ic" placeholder="Comment" style="width:30%;padding:3px 6px;font-size:.65rem;background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--text);"></div>').join('');};
-        setTimeout(refreshMediaPreview,200);
-    }
+    function showInspectionForm(){const lists={'Concrete Pour':['Formwork checked','Reinforcement correct','Cover blocks placed','Grade confirmed','Slump test done','Vibrators ready','Curing plan ready'],'Steel Reinforcement':['Bar sizes correct','Spacing correct','Laps correct','Chairs placed','Clean & rust-free'],'Blockwork':['Block type correct','Mortar 1:4','Plumb & level','Wall ties','DPC in place','Openings correct'],'Excavation':['Setting out checked','Depth correct','Bottom firm','Safety batter','Dewatering'],'Waterproofing':['Surface prepared','Primer applied','Membrane lapped','Detailing correct','Protection board','Ponding test']};window._lists=lists;pendingMedia=[];let h='<div class="form-group"><label>Type *</label><select id="ct" onchange="window._ul()"><option value="">— Select —</option>';Object.keys(lists).forEach(k=>h+='<option value="'+k+'">'+k+'</option>');h+='</select></div><div class="form-group"><label>Location</label><input type="text" id="il" value="'+loc()+'"></div><div class="form-group"><label>Items</label><div id="ci" style="background:var(--bg);border-radius:8px;padding:4px 10px;border:1px solid var(--border);"><p style="color:var(--muted);text-align:center;padding:14px;">Select checklist type</p></div></div><div class="form-group"><label>Notes</label><textarea id="in"></textarea></div><div class="form-group"><label>📸 Photos</label><div class="media-actions"><button type="button" class="btn btn-primary" onclick="openCamera()">📷 Camera</button><button type="button" class="btn btn-secondary" onclick="openGallery()">🖼️ Gallery</button></div><div id="mediaPreviewContainer" style="margin-top:6px;"></div></div>';showModal('✅ Inspection',h,()=>{const type=document.getElementById('ct').value;if(!type){alert('Select checklist type');return false;}const cbs=document.querySelectorAll('#ci input[type=checkbox]');const cmts=document.querySelectorAll('#ci .ic');const items=Array.from(cbs).map((cb,i)=>({label:cb.nextElementSibling.textContent.replace(/\s*$/,''),passed:cb.checked,comment:cmts[i]?cmts[i].value:''}));const entry={id:genId('ins'),checklistType:type,location:document.getElementById('il').value,items,result:items.every(i=>i.passed)?'pass':'fail',notes:document.getElementById('in').value,timestamp:new Date().toISOString()};app.inspections.push(entry);commitMedia(entry.id);saveApp(app);});window._ul=function(){const type=document.getElementById('ct').value;const c=document.getElementById('ci');if(!type||!window._lists[type]){c.innerHTML='<p style="color:var(--muted);text-align:center;padding:14px;">Select checklist type</p>';return;}c.innerHTML=window._lists[type].map((item,i)=>'<div style="display:flex;align-items:center;gap:6px;padding:7px 0;border-bottom:1px solid var(--border);font-size:.75rem;"><input type="checkbox" id="it'+i+'" checked><label for="it'+i+'" style="flex:1;">'+item+'</label><input type="text" class="ic" placeholder="Comment" style="width:30%;padding:3px 6px;font-size:.65rem;background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--text);"></div>').join('');};setTimeout(refreshMediaPreview,200);}
 
-    function showNCRForm() {
-        pendingMedia=[];
-        const h='<div class="form-group"><label>Title *</label><input type="text" id="nt" placeholder="e.g., Honeycomb on Column C12"></div><div class="form-group"><label>Severity</label><select id="ns"><option>Minor</option><option selected>Major</option><option>Critical</option></select></div><div class="form-group"><label>Location</label><input type="text" id="nl" value="'+loc()+'"></div><div class="form-group"><label>Responsible Party</label><input type="text" id="nr" value="'+contractor()+'"></div><div class="form-group"><label>Description *</label><textarea id="nd" placeholder="Describe non-conformance in detail..."></textarea></div><div class="form-group"><label>Required Action *</label><textarea id="na" placeholder="What must be done, by whom, by when..."></textarea></div><div class="form-group"><label>📸 Evidence</label><div class="media-actions"><button type="button" class="btn btn-primary" onclick="openCamera()">📷 Camera</button><button type="button" class="btn btn-secondary" onclick="openGallery()">🖼️ Gallery</button></div><div id="mediaPreviewContainer" style="margin-top:6px;"></div></div>';
-        showModal('🚨 Raise NCR',h,()=>{
-            const t=document.getElementById('nt').value.trim(),d=document.getElementById('nd').value.trim(),a=document.getElementById('na').value.trim();
-            if(!t||!d||!a){alert('Title, description, and action required');return false;}
-            const entry={id:genId('ncr'),title:t,severity:document.getElementById('ns').value,location:document.getElementById('nl').value,responsibleParty:document.getElementById('nr').value,description:d,actionRequired:a,status:'open',timestamp:new Date().toISOString()};
-            app.ncrs.push(entry);
-            commitMedia(entry.id);
-            saveApp(app);
-        });
-        setTimeout(refreshMediaPreview,200);
-    }
+    function showNCRForm(){pendingMedia=[];const h='<div class="form-group"><label>Title *</label><input type="text" id="nt" placeholder="e.g., Honeycomb on Column C12"></div><div class="form-group"><label>Severity</label><select id="ns"><option>Minor</option><option selected>Major</option><option>Critical</option></select></div><div class="form-group"><label>Location</label><input type="text" id="nl" value="'+loc()+'"></div><div class="form-group"><label>Responsible</label><input type="text" id="nr" value="'+contractor()+'"></div><div class="form-group"><label>Description *</label><textarea id="nd"></textarea></div><div class="form-group"><label>Action Required *</label><textarea id="na"></textarea></div><div class="form-group"><label>📸 Evidence</label><div class="media-actions"><button type="button" class="btn btn-primary" onclick="openCamera()">📷 Camera</button><button type="button" class="btn btn-secondary" onclick="openGallery()">🖼️ Gallery</button></div><div id="mediaPreviewContainer" style="margin-top:6px;"></div></div>';showModal('🚨 Raise NCR',h,()=>{const t=document.getElementById('nt').value.trim(),d=document.getElementById('nd').value.trim(),a=document.getElementById('na').value.trim();if(!t||!d||!a){alert('All fields required');return false;}const entry={id:genId('ncr'),title:t,severity:document.getElementById('ns').value,location:document.getElementById('nl').value,responsibleParty:document.getElementById('nr').value,description:d,actionRequired:a,status:'open',timestamp:new Date().toISOString()};app.ncrs.push(entry);commitMedia(entry.id);saveApp(app);});setTimeout(refreshMediaPreview,200);}
 
-    function showInstructionForm() {
-        const h='<div class="form-group"><label>Issued To *</label><input type="text" id="st" value="'+contractor()+'" placeholder="Contractor name"></div><div class="form-group"><label>Location</label><input type="text" id="sl" value="'+loc()+'"></div><div class="form-group"><label>Instruction *</label><textarea id="sd" placeholder="Clear instruction with reason..."></textarea></div><div class="form-group"><label>Reference Drawing/Spec</label><input type="text" id="srf" placeholder="e.g., Dwg S-301 Rev B"></div><div class="form-group"><label>Deadline</label><input type="text" id="sdl" placeholder="e.g., 18 June 2026"></div>';
-        showModal('📋 Site Instruction',h,()=>{
-            const to=document.getElementById('st').value.trim(),desc=document.getElementById('sd').value.trim();
-            if(!to||!desc){alert('Issued to and instruction required');return false;}
-            app.instructions.push({id:genId('si'),issuedTo:to,location:document.getElementById('sl').value,description:desc,reference:document.getElementById('srf').value,deadline:document.getElementById('sdl').value,status:'issued',timestamp:new Date().toISOString()});
-            saveApp(app);
-        });
-    }
+    function showInstructionForm(){const h='<div class="form-group"><label>Issued To *</label><input type="text" id="st" value="'+contractor()+'"></div><div class="form-group"><label>Location</label><input type="text" id="sl" value="'+loc()+'"></div><div class="form-group"><label>Instruction *</label><textarea id="sd"></textarea></div><div class="form-group"><label>Reference</label><input type="text" id="srf"></div><div class="form-group"><label>Deadline</label><input type="text" id="sdl"></div>';showModal('📋 Site Instruction',h,()=>{const to=document.getElementById('st').value.trim(),desc=document.getElementById('sd').value.trim();if(!to||!desc){alert('All fields required');return false;}app.instructions.push({id:genId('si'),issuedTo:to,location:document.getElementById('sl').value,description:desc,reference:document.getElementById('srf').value,deadline:document.getElementById('sdl').value,status:'issued',timestamp:new Date().toISOString()});saveApp(app);});}
 
-    function addMediaToEntry(entryId) {
-        pendingMedia=[];
-        const mc=document.getElementById('modalContainer');
-        mc.innerHTML='<div class="modal-overlay" id="amo"><div class="modal"><h2>📸 Add Photos</h2><div class="media-actions"><button class="btn btn-primary" id="ac">📷 Camera</button><button class="btn btn-secondary" id="ag">🖼️ Gallery</button></div><div id="mediaPreviewContainer" style="margin-top:10px;"></div><div class="btn-row"><button class="btn btn-secondary" id="ax">Cancel</button><button class="btn btn-primary" id="as">💾 Save</button></div></div></div>';
-        setTimeout(()=>{
-            document.getElementById('ac').addEventListener('click',openCamera);
-            document.getElementById('ag').addEventListener('click',openGallery);
-            document.getElementById('ax').addEventListener('click',closeModal);
-            document.getElementById('as').addEventListener('click',()=>{commitMedia(entryId);closeModal();refreshAll();toast('📸 Photos added!');});
-            document.getElementById('amo').addEventListener('click',e=>{if(e.target.id==='amo')closeModal();});
-            refreshMediaPreview();
-        },100);
-    }
+    function addMediaToEntry(entryId){pendingMedia=[];const mc=document.getElementById('modalContainer');mc.innerHTML='<div class="modal-overlay" id="amo"><div class="modal"><h2>📸 Add Photos</h2><div class="media-actions"><button class="btn btn-primary" id="ac">📷 Camera</button><button class="btn btn-secondary" id="ag">🖼️ Gallery</button></div><div id="mediaPreviewContainer" style="margin-top:10px;"></div><div class="btn-row"><button class="btn btn-secondary" id="ax">Cancel</button><button class="btn btn-primary" id="as">💾 Save</button></div></div></div>';setTimeout(()=>{document.getElementById('ac').addEventListener('click',openCamera);document.getElementById('ag').addEventListener('click',openGallery);document.getElementById('ax').addEventListener('click',closeModal);document.getElementById('as').addEventListener('click',()=>{commitMedia(entryId);closeModal();refreshAll();toast('📸 Photos added!');});document.getElementById('amo').addEventListener('click',e=>{if(e.target.id==='amo')closeModal();});refreshMediaPreview();},100);}
 
-    function showFABMenu() {
-        const mc=document.getElementById('modalContainer');
-        mc.innerHTML='<div class="modal-overlay" id="fo" style="align-items:flex-end;justify-content:center;"><div class="modal" style="text-align:center;max-width:380px;"><h2>➕ Add New</h2><button class="btn btn-primary" style="margin-bottom:6px;width:100%;" onclick="closeModal();showDiaryForm();">📔 Diary Entry</button><button class="btn btn-primary" style="margin-bottom:6px;width:100%;background:var(--green);" onclick="closeModal();showInspectionForm();">✅ Inspection</button><button class="btn btn-primary" style="margin-bottom:6px;width:100%;background:var(--red);" onclick="closeModal();showNCRForm();">🚨 NCR</button><button class="btn btn-primary" style="margin-bottom:6px;width:100%;background:var(--yellow);color:#0d1117;" onclick="closeModal();showInstructionForm();">📋 Site Instruction</button><button class="btn btn-primary" style="margin-bottom:6px;width:100%;background:var(--purple);" onclick="closeModal();openCamera();">📷 Quick Photo</button><button class="btn btn-secondary" style="width:100%;" onclick="closeModal();">Cancel</button></div></div>';
-        document.getElementById('fo').addEventListener('click',e=>{if(e.target.id==='fo')closeModal();});
-    }
+    function showFABMenu(){const mc=document.getElementById('modalContainer');mc.innerHTML='<div class="modal-overlay" id="fo" style="align-items:flex-end;justify-content:center;"><div class="modal" style="text-align:center;max-width:380px;"><h2>➕ Add New</h2><button class="btn btn-primary" style="margin-bottom:6px;width:100%;" onclick="closeModal();showDiaryForm();">📔 Diary Entry</button><button class="btn btn-primary" style="margin-bottom:6px;width:100%;background:var(--green);" onclick="closeModal();showInspectionForm();">✅ Inspection</button><button class="btn btn-primary" style="margin-bottom:6px;width:100%;background:var(--red);" onclick="closeModal();showNCRForm();">🚨 NCR</button><button class="btn btn-primary" style="margin-bottom:6px;width:100%;background:var(--yellow);color:#0d1117;" onclick="closeModal();showInstructionForm();">📋 SI</button><button class="btn btn-primary" style="margin-bottom:6px;width:100%;background:var(--purple);" onclick="closeModal();openCamera();">📷 Quick Photo</button><button class="btn btn-secondary" style="width:100%;" onclick="closeModal();">Cancel</button></div></div>';document.getElementById('fo').addEventListener('click',e=>{if(e.target.id==='fo')closeModal();});}
 
     // ============================================
     // ACTIONS
     // ============================================
     function deleteEntry(type,id){if(!confirm('Delete?'))return;app[type]=app[type].filter(e=>e.id!==id);media=media.filter(m=>m.entryId!==id);saveApp(app);saveMedia(media);refreshAll();toast('🗑️ Deleted');}
-    function closeNCR(id){const n=app.ncrs.find(n=>n.id===id);if(!n)return;const c=prompt('Closeout verification comment:');if(c===null)return;n.status='closed';n.closeoutComment=c;n.closedDate=new Date().toISOString();saveApp(app);refreshAll();toast('✅ Closed');}
+    function closeNCR(id){const n=app.ncrs.find(n=>n.id===id);if(!n)return;const c=prompt('Closeout comment:');if(c===null)return;n.status='closed';n.closeoutComment=c;n.closedDate=new Date().toISOString();saveApp(app);refreshAll();toast('✅ Closed');}
     function ackSI(id){const s=app.instructions.find(s=>s.id===id);if(!s)return;s.status='acknowledged';s.acknowledgedDate=new Date().toISOString();saveApp(app);refreshAll();toast('✍️ Acknowledged');}
-    function copyReport(){navigator.clipboard.writeText(window._report||'').then(()=>toast('📋 Copied!'));}
+    function copyReport(){navigator.clipboard.writeText(window._report||'').then(()=>toast('📋 Text copied!'));}
     function printReport(){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));const rt=document.querySelector('[data-tab="report"]');if(rt)rt.classList.add('active');document.getElementById('panel-report').classList.add('active');renderReport();setTimeout(()=>window.print(),400);}
-    function saveReport(){
-        project.reportCounter = (project.reportCounter||1) + 1;
-        saveProject(project);
-        app.dailyReports.push({id:genId('rpt'),content:window._report||'',date:today(),timestamp:new Date().toISOString(),reportNo:'COW-'+String(project.reportCounter-1).padStart(3,'0')});
-        saveApp(app);
-        toast('💾 Report saved! Next: COW-'+String(project.reportCounter).padStart(3,'0'));
-        renderReport();
-    }
+    function shareReportWhatsApp(){shareWA(window._report||'No report generated.');}
+    function saveReport(){project.reportCounter=(project.reportCounter||1)+1;saveProject(project);app.dailyReports.push({id:genId('rpt'),content:window._report||'',date:today(),timestamp:new Date().toISOString(),reportNo:'COW-'+String(project.reportCounter-1).padStart(3,'0')});saveApp(app);toast('💾 Saved! Next: COW-'+String(project.reportCounter).padStart(3,'0'));renderReport();}
 
     // ============================================
     // INIT
     // ============================================
-    function init() {
+    function init(){
         document.getElementById('currentDate').textContent=new Date().toLocaleDateString('en-KE',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-        populateProjectFields();
-        updateCompactDisplay();
-
+        populateProjectFields();updateCompactDisplay();
         document.querySelectorAll('.tab').forEach(tab=>{tab.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));tab.classList.add('active');const panel=document.getElementById('panel-'+tab.dataset.tab);if(panel)panel.classList.add('active');if(tab.dataset.tab==='report')renderReport();if(tab.dataset.tab==='photos')renderPhotos();});});
         document.getElementById('fabBtn').addEventListener('click',showFABMenu);
         document.getElementById('diarySearch').addEventListener('input',e=>renderDiary(e.target.value));
