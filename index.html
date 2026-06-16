@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>CoW Log</title>
+    <meta name="theme-color" content="#1a1a2e">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --accent: #e94560;
+            --card: #16213e;
+            --text: #eee;
+            --muted: #0f3460;
+            --green: #00b894;
+            --orange: #fdcb6e;
+            --red: #d63031;
+            --border: #2d3436;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--primary);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+        .header {
+            background: var(--card);
+            padding: 14px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            font-size: 1.1rem;
+            color: var(--accent);
+        }
+        .header .date {
+            font-size: 0.75rem;
+            color: #888;
+        }
+        .project-bar {
+            display: flex;
+            gap: 10px;
+            margin-top: 6px;
+            font-size: 0.7rem;
+            color: #888;
+            flex-wrap: wrap;
+        }
+        .weather-select {
+            background: var(--muted);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+        }
+        .stats-row {
+            display: flex;
+            gap: 6px;
+            padding: 10px 14px;
+            overflow-x: auto;
+        }
+        .stat-card {
+            background: var(--card);
+            padding: 10px;
+            border-radius: 10px;
+            min-width: 65px;
+            text-align: center;
+            flex: 1;
+        }
+        .stat-card .count {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+        .stat-card .label {
+            font-size: 0.6rem;
+            color: #888;
+            margin-top: 2px;
+        }
+        .stat-card.ncr .count { color: var(--red); }
+        .stat-card.inspections .count { color: var(--green); }
+        .tabs {
+            display: flex;
+            gap: 4px;
+            padding: 0 14px;
+            margin-bottom: 10px;
+            overflow-x: auto;
+        }
+        .tab {
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: #888;
+            cursor: pointer;
+        }
+        .tab.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+        .content { padding: 0 14px; }
+        .panel { display: none; }
+        .panel.active { display: block; }
+        .entry-card {
+            background: var(--card);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-left: 3px solid transparent;
+        }
+        .entry-card.ncr-card { border-left-color: var(--red); }
+        .entry-card.inspection-card { border-left-color: var(--green); }
+        .entry-card.diary-card { border-left-color: var(--accent); }
+        .entry-card.instruction-card { border-left-color: var(--orange); }
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 6px;
+        }
+        .entry-title { font-weight: 600; font-size: 0.85rem; }
+        .entry-badge {
+            font-size: 0.6rem;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        .badge-open { background: rgba(214,48,49,0.2); color: var(--red); }
+        .badge-closed { background: rgba(0,184,148,0.2); color: var(--green); }
+        .entry-meta { font-size: 0.65rem; color: #888; margin-bottom: 4px; }
+        .entry-desc { font-size: 0.75rem; line-height: 1.4; color: #ccc; }
+        .fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(233,68,96,0.4);
+            z-index: 200;
+        }
+        .fab:active { transform: scale(0.9); }
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 300;
+            display: flex;
+            align-items: flex-end;
+        }
+        .modal {
+            background: var(--card);
+            width: 100%;
+            border-radius: 18px 18px 0 0;
+            padding: 18px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .modal h2 {
+            font-size: 0.95rem;
+            margin-bottom: 14px;
+            color: var(--accent);
+        }
+        .modal input, .modal textarea, .modal select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--primary);
+            color: var(--text);
+            font-size: 0.8rem;
+            font-family: inherit;
+        }
+        .modal textarea { min-height: 80px; resize: vertical; }
+        .modal .btn-row { display: flex; gap: 8px; }
+        .btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            flex: 1;
+        }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-secondary { background: var(--muted); color: var(--text); }
+        .btn-small { padding: 5px 10px; font-size: 0.65rem; border-radius: 6px; }
+        .empty-state {
+            text-align: center;
+            padding: 35px 16px;
+            color: #555;
+        }
+        .empty-state .icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .search-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .search-bar input {
+            flex: 1;
+            padding: 9px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-top">
+            <h1>CoW Log</h1>
+            <span class="date" id="currentDate"></span>
+        </div>
+        <div class="project-bar">
+            <span id="projectName">Riverside Apartments</span>
+            <select class="weather-select" id="weatherSelect">
+                <option>Sunny</option>
+                <option>Partly Cloudy</option>
+                <option>Overcast</option>
+                <option>Rainy</option>
+                <option>Storm</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="stats-row">
+        <div class="stat-card diary"><div class="count" id="diaryCount">0</div><div class="label">Diary</div></div>
+        <div class="stat-card inspections"><div class="count" id="inspectionCount">0</div><div class="label">Inspections</div></div>
+        <div class="stat-card ncr"><div class="count" id="ncrCount">0</div><div class="label">NCRs</div></div>
+        <div class="stat-card"><div class="count" id="photoCount">0</div><div class="label">Photos</div></div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" data-tab="diary">Diary</button>
+        <button class="tab" data-tab="inspections">Inspect</button>
+        <button class="tab" data-tab="ncr">NCR</button>
+        <button class="tab" data-tab="instructions">SI</button>
+    </div>
+
+    <div class="content">
+        <div class="panel active" id="panel-diary">
+            <div class="search-bar"><input type="text" placeholder="Search diary..." id="diarySearch"></div>
+            <div id="diaryEntries"></div>
+        </div>
+        <div class="panel" id="panel-inspections"><div id="inspectionEntries"></div></div>
+        <div class="panel" id="panel-ncr"><div id="ncrEntries"></div></div>
+        <div class="panel" id="panel-instructions"><div id="instructionEntries"></div></div>
+    </div>
+
+    <button class="fab" id="fabBtn">+</button>
+    <div id="modalContainer"></div>
+
+    <script>
+        const STORAGE_KEY = 'cowlog_v1';
+        function loadData() {
+            try { const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : { diary: [], inspections: [], ncrs: [], instructions: [] }; }
+            catch(e) { return { diary: [], inspections: [], ncrs: [], instructions: [] }; }
+        }
+        function saveData(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+        let appData = loadData();
+        function genId(p) { return p + '-' + Date.now() + '-' + Math.random().toString(36).substr(2,5); }
+
+        function updateStats() {
+            document.getElementById('diaryCount').textContent = appData.diary.length;
+            document.getElementById('inspectionCount').textContent = appData.inspections.length;
+            document.getElementById('ncrCount').textContent = appData.ncrs.filter(n => n.status === 'open').length;
+            document.getElementById('photoCount').textContent = appData.diary.reduce((c, e) => c + (e.photos ? e.photos.length : 0), 0);
+        }
+
+        function timeFormat(ts) { return new Date(ts).toLocaleString('en-KE', { dateStyle: 'medium', timeStyle: 'short' }); }
+
+        function renderDiary(filter = '') {
+            const container = document.getElementById('diaryEntries');
+            let entries = appData.diary;
+            if (filter) {
+                const q = filter.toLowerCase();
+                entries = entries.filter(e => e.title.toLowerCase().includes(q) || e.description.toLowerCase().includes(q));
+            }
+            entries.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+            if (!entries.length) {
+                container.innerHTML = '<div class="empty-state"><div class="icon">+</div><p>No diary entries yet</p><p style="font-size:0.65rem;color:#666;">Tap + to start</p></div>';
+                return;
+            }
+            container.innerHTML = entries.map(e => '<div class="entry-card diary-card"><div class="entry-header"><span class="entry-title">' + e.title + '</span><span style="font-size:0.6rem;color:#888;">' + (e.weather||'') + '</span></div><div class="entry-meta">' + timeFormat(e.timestamp) + ' | ' + e.location + '</div><div class="entry-desc">' + e.description + '</div><div style="margin-top:6px;"><button class="btn btn-small btn-secondary" onclick="deleteEntry(\'diary\',\'' + e.id + '\')">Delete</button></div></div>').join('');
+        }
+
+        function renderInspections() {
+            const container = document.getElementById('inspectionEntries');
+            const entries = [...appData.inspections].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+            if (!entries.length) { container.innerHTML = '<div class="empty-state"><div class="icon">OK</div><p>No inspections yet</p></div>'; return; }
+            container.innerHTML = entries.map(e => '<div class="entry-card inspection-card"><div class="entry-header"><span class="entry-title">' + e.checklistType + '</span><span class="entry-badge ' + (e.result==='pass'?'badge-closed':'badge-open') + '">' + e.result.toUpperCase() + '</span></div><div class="entry-meta">' + timeFormat(e.timestamp) + ' | ' + e.location + '</div><div class="entry-desc">' + e.items.map(i => (i.passed ? 'OK' : 'X') + ' ' + i.label).join('<br>') + '</div>' + (e.notes ? '<div class="entry-desc" style="margin-top:4px;color:#888;">Note: ' + e.notes + '</div>' : '') + '<div style="margin-top:6px;"><button class="btn btn-small btn-secondary" onclick="deleteEntry(\'inspections\',\'' + e.id + '\')">Delete</button></div></div>').join('');
+        }
+
+        function renderNCRs() {
+            const container = document.getElementById('ncrEntries');
+            const entries = [...appData.ncrs].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+            if (!entries.length) { container.innerHTML = '<div class="empty-state"><div class="icon">!</div><p>No NCRs raised</p></div>'; return; }
+            container.innerHTML = entries.map(e => '<div class="entry-card ncr-card"><div class="entry-header"><span class="entry-title">' + e.title + '</span><span class="entry-badge ' + (e.status==='open'?'badge-open':'badge-closed') + '">' + e.status.toUpperCase() + '</span></div><div class="entry-meta">' + timeFormat(e.timestamp) + ' | ' + e.location + ' | ' + e.severity + '</div><div class="entry-desc">' + e.description + '</div><div class="entry-desc" style="margin-top:4px;color:var(--orange);">Action: ' + e.actionRequired + '</div><div style="margin-top:6px;display:flex;gap:6px;">' + (e.status!=='closed' ? '<button class="btn btn-small btn-primary" onclick="closeNCR(\'' + e.id + '\')">Close</button>' : '') + '<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'ncrs\',\'' + e.id + '\')">Delete</button></div></div>').join('');
+        }
+
+        function renderInstructions() {
+            const container = document.getElementById('instructionEntries');
+            const entries = [...appData.instructions].sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp));
+            if (!entries.length) { container.innerHTML = '<div class="empty-state"><div class="icon">i</div><p>No site instructions</p></div>'; return; }
+            container.innerHTML = entries.map(e => '<div class="entry-card instruction-card"><div class="entry-header"><span class="entry-title">SI-' + e.id.split('-')[1] + '</span><span class="entry-badge ' + (e.status==='acknowledged'?'badge-closed':'badge-open') + '">' + e.status + '</span></div><div class="entry-meta">' + timeFormat(e.timestamp) + ' | To: ' + e.issuedTo + '</div><div class="entry-desc">' + e.description + '</div><div style="margin-top:6px;display:flex;gap:6px;">' + (e.status!=='acknowledged' ? '<button class="btn btn-small btn-primary" onclick="ackSI(\'' + e.id + '\')">Ack</button>' : '') + '<button class="btn btn-small btn-secondary" onclick="deleteEntry(\'instructions\',\'' + e.id + '\')">Delete</button></div></div>').join('');
+        }
+
+        function renderAll() { renderDiary(); renderInspections(); renderNCRs(); renderInstructions(); updateStats(); }
+
+        function showModal(title, formHTML, onSubmit) {
+            const container = document.getElementById('modalContainer');
+            container.innerHTML = '<div class="modal-overlay" id="modalOverlay"><div class="modal"><h2>' + title + '</h2><div id="modalForm">' + formHTML + '</div><div class="btn-row" style="margin-top:10px;"><button class="btn btn-secondary" onclick="closeModal()">Cancel</button><button class="btn btn-primary" id="modalSubmit">Save</button></div></div></div>';
+            document.getElementById('modalSubmit').addEventListener('click', () => { const r = onSubmit(); if (r !== false) { closeModal(); renderAll(); } });
+            document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target.id==='modalOverlay') closeModal(); });
+        }
+        function closeModal() { document.getElementById('modalContainer').innerHTML = ''; }
+
+        function showDiaryForm() {
+            showModal('New Diary Entry', '<input type="text" id="diaryTitle" placeholder="Entry title"><select id="diaryLocation"><option>Floor 3 - East Wing</option><option>Floor 2 - East Wing</option><option>Ground Floor</option><option>External Works</option><option>Site General</option></select><textarea id="diaryDesc" placeholder="Describe work, labour, materials, issues..."></textarea>', () => {
+                const title = document.getElementById('diaryTitle').value.trim();
+                if (!title) { alert('Title required'); return false; }
+                appData.diary.push({ id: genId('diary'), title, location: document.getElementById('diaryLocation').value, description: document.getElementById('diaryDesc').value.trim(), weather: document.getElementById('weatherSelect').value, photos: [], timestamp: new Date().toISOString() });
+                saveData(appData);
+            });
+        }
+
+        function showInspectionForm() {
+            const lists = {
+                'Concrete Pour': ['Formwork checked','Reinforcement as drawing','Cover blocks placed','Grade confirmed','Slump test done','Vibrator ready','Curing plan ready'],
+                'Steel Fixing': ['Bar sizes correct','Spacing correct','Laps correct','Chairs placed','Clean & rust-free','Drawings on site'],
+                'Blockwork': ['Block type correct','Mortar 1:4','Plumb & level','Wall ties','DPC in place','Openings correct'],
+                'Excavation': ['Setting out checked','Depth correct','Bottom firm','Safety batter','Dewatering','Blinding approval'],
+            };
+            window._lists = lists;
+            let h = '<select id="checklistType" onchange="window.updateList()"><option value="">Select checklist...</option>';
+            Object.keys(lists).forEach(k => { h += '<option value="' + k + '">' + k + '</option>'; });
+            h += '</select><div id="checklistItems" style="margin-top:8px;"></div><textarea id="inspectionNotes" placeholder="Notes..." style="margin-top:8px;"></textarea><input type="text" id="inspectionLocation" placeholder="Location" value="Floor 3 - East Wing">';
+            showModal('Inspection Checklist', h, () => {
+                const type = document.getElementById('checklistType').value;
+                if (!type) { alert('Select type'); return false; }
+                const cbs = document.querySelectorAll('#checklistItems input[type=checkbox]');
+                const items = Array.from(cbs).map(cb => ({ label: cb.nextElementSibling.textContent, passed: cb.checked }));
+                appData.inspections.push({ id: genId('insp'), checklistType: type, location: document.getElementById('inspectionLocation').value, items: items, result: items.every(i => i.passed) ? 'pass' : 'fail', notes: document.getElementById('inspectionNotes').value, timestamp: new Date().toISOString() });
+                saveData(appData);
+            });
+            window.updateList = function() {
+                const type = document.getElementById('checklistType').value;
+                const c = document.getElementById('checklistItems');
+                if (!type || !window._lists[type]) { c.innerHTML = ''; return; }
+                c.innerHTML = window._lists[type].map((item,i) => '<label style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:0.75rem;"><input type="checkbox" id="item' + i + '" checked> ' + item + '</label>').join('');
+            };
+        }
+
+        function showNCRForm() {
+            showModal('Raise NCR', '<input type="text" id="ncrTitle" placeholder="NCR Title"><select id="ncrSeverity"><option value="Minor">Minor</option><option value="Major" selected>Major</option><option value="Critical">Critical</option></select><input type="text" id="ncrLocation" placeholder="Location" value="Floor 3 - East Wing"><textarea id="ncrDesc" placeholder="Describe non-conformance..."></textarea><textarea id="ncrAction" placeholder="Required corrective action..."></textarea>', () => {
+                const title = document.getElementById('ncrTitle').value.trim();
+                const desc = document.getElementById('ncrDesc').value.trim();
+                if (!title || !desc) { alert('Title and description required'); return false; }
+                appData.ncrs.push({ id: genId('ncr'), title: title, severity: document.getElementById('ncrSeverity').value, location: document.getElementById('ncrLocation').value, description: desc, actionRequired: document.getElementById('ncrAction').value.trim(), status: 'open', timestamp: new Date().toISOString() });
+                saveData(appData);
+            });
+        }
+
+        function showInstructionForm() {
+            showModal('Site Instruction', '<input type="text" id="siTo" placeholder="Issued to (Contractor)"><input type="text" id="siLoc" placeholder="Location" value="Floor 3 - East Wing"><textarea id="siDesc" placeholder="Describe instruction..."></textarea>', () => {
+                const to = document.getElementById('siTo').value.trim();
+                const desc = document.getElementById('siDesc').value.trim();
+                if (!to || !desc) { alert('All fields required'); return false; }
+                appData.instructions.push({ id: genId('si'), issuedTo: to, location: document.getElementById('siLoc').value, description: desc, status: 'issued', timestamp: new Date().toISOString() });
+                saveData(appData);
+            });
+        }
+
+        function showFABMenu() {
+            const c = document.getElementById('modalContainer');
+            c.innerHTML = '<div class="modal-overlay" id="fo" style="align-items:flex-end;justify-content:center;"><div class="modal" style="text-align:center;"><h2 style="margin-bottom:14px;">Add New</h2><button class="btn btn-primary" style="margin-bottom:6px;width:100%;" onclick="closeModal();showDiaryForm();">Diary Entry</button><button class="btn btn-primary" style="margin-bottom:6px;width:100%;background:var(--green);" onclick="closeModal();showInspectionForm();">Inspection</button><button class="btn btn-primary" style="margin-bottom:6px;width:100%;background:var(--red);" onclick="closeModal();showNCRForm();">Raise NCR</button><button class="btn btn-primary" style="margin-bottom:6px;width:100%;background:var(--orange);" onclick="closeModal();showInstructionForm();">Site Instruction</button><button class="btn btn-secondary" style="width:100%;" onclick="closeModal();">Cancel</button></div></div>';
+            document.getElementById('fo').addEventListener('click', e => { if (e.target.id==='fo') closeModal(); });
+        }
+
+        function deleteEntry(type, id) { if (!confirm('Delete?')) return; appData[type] = appData[type].filter(e => e.id !== id); saveData(appData); renderAll(); }
+        function closeNCR(id) { const ncr = appData.ncrs.find(n => n.id === id); if (ncr) { ncr.status = 'closed'; ncr.closedDate = new Date().toISOString(); saveData(appData); renderAll(); } }
+        function ackSI(id) { const si = appData.instructions.find(s => s.id === id); if (si) { si.status = 'acknowledged'; si.acknowledgedDate = new Date().toISOString(); saveData(appData); renderAll(); } }
+
+        function exportReport() {
+            const today = new Date().toISOString().split('T')[0];
+            let r = 'COW DAILY REPORT - ' + new Date().toLocaleDateString('en-KE',{dateStyle:'full'}) + '\n';
+            r += 'Project: ' + document.getElementById('projectName').textContent + '\n';
+            r += 'Weather: ' + document.getElementById('weatherSelect').value + '\n';
+            r += '='.repeat(40) + '\n\n';
+            r += 'DIARY:\n'; appData.diary.filter(e => e.timestamp.startsWith(today)).forEach(e => { r += '- ' + e.title + ': ' + e.description + '\n'; });
+            r += '\nINSPECTIONS:\n'; appData.inspections.filter(e => e.timestamp.startsWith(today)).forEach(e => { r += '- ' + e.checklistType + ': ' + e.result + '\n'; });
+            r += '\nNCRs:\n'; appData.ncrs.filter(e => e.timestamp.startsWith(today)).forEach(e => { r += '- [' + e.severity + '] ' + e.title + '\n'; });
+            navigator.clipboard.writeText(r).then(() => alert('Report copied!'));
+        }
+
+        function init() {
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-KE', { weekday:'short', year:'numeric', month:'short', day:'numeric' });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+                });
+            });
+            document.getElementById('fabBtn').addEventListener('click', showFABMenu);
+            document.getElementById('diarySearch').addEventListener('input', e => renderDiary(e.target.value));
+            const eb = document.createElement('button');
+            eb.textContent = 'Report';
+            eb.style.cssText = 'background:var(--muted);color:var(--text);border:1px solid var(--border);padding:3px 8px;border-radius:5px;font-size:0.65rem;cursor:pointer;';
+            eb.addEventListener('click', exportReport);
+            document.querySelector('.header-top').appendChild(eb);
+            renderAll();
+        }
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
