@@ -161,7 +161,7 @@
 
         let h='<div style="display:flex;gap:6px;margin-bottom:12px;">';
         h+='<button class="btn btn-primary btn-sm" onclick="copyReport()">📋 Copy</button>';
-        h+='<button class="btn btn-secondary btn-sm" onclick="printReport()">🖨️ Print</button>';h+='<button class="btn btn-primary btn-sm" onclick="downloadPDF()">📄 Save HTML</button>';
+        h+='<button class="btn btn-secondary btn-sm" onclick="printReport()">🖨️ Print</button>';h+='<button class="btn btn-primary btn-sm" onclick="downloadPDF()">📄 Save PDF</button>';
         h+='<button class="btn btn-secondary btn-sm" onclick="shareWA(window._report)">📱 Share</button>';
         h+='<button class="btn btn-secondary btn-sm" onclick="emailReport()">📧 Email</button>';
         h+='<button class="btn btn-secondary btn-sm" onclick="saveReport()">💾 Save</button>';h+='<button class="btn btn-secondary btn-sm" onclick="renderReport()">🔄 Refresh</button>';
@@ -315,36 +315,6 @@
     function copyReport(){navigator.clipboard.writeText(window._report||'').then(()=>toast('📋 Copied'));}
     function printReport(){switchTab('report');setTimeout(()=>window.print(),400);}
     function downloadPDF(){
-        switchTab('report');
-        setTimeout(()=>{
-            const reportEl=document.querySelector('.ke-report');
-            if(!reportEl){toast('No report found');return;}
-            
-            // Build complete HTML document
-            const styles=document.querySelector('style').textContent;
-            let html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>CoW Daily Report</title>';
-            html+='<style>'+styles+' body{background:#fff!important;color:#000!important;padding:0;margin:0}';
-            html+='.ke-report{box-shadow:none!important;border:2px solid #000!important;max-width:100%!important}';
-            html+='.navbar,.project-strip,.quick-actions,.stats-strip,.fab,.bottom-nav,.toast,.modal-overlay,.btn{display:none!important}';
-            html+='@page{size:A4;margin:10mm}</style></head><body style="display:flex;justify-content:center;">';
-            html+=reportEl.outerHTML;
-            html+='</body></html>';
-            
-            // Create blob and download
-            const blob=new Blob([html],{type:'text/html'});
-            const url=URL.createObjectURL(blob);
-            const a=document.createElement('a');
-            const rn='COW-'+(project.reportCounter||1)+'-'+today();
-            a.href=url;
-            a.download=rn+'.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            toast('📄 Saved! Open the file and Print → Save as PDF from your browser');
-        },300);
-    }
         switchTab('report');
         setTimeout(()=>{
             // Create a new window with just the report for printing/PDF
