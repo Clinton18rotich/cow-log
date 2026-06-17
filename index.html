@@ -78,98 +78,8 @@
         .ke-signatures{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:20px 16px;border-top:2px solid #1a1a1a;margin-top:12px}
         .ke-sig{text-align:center}.ke-sig-line{border-bottom:1px solid #1a1a1a;margin:30px 0 4px}.ke-sig-name{font-size:.7rem;font-weight:700}.ke-sig-title{font-size:.6rem}
         .ke-footer{text-align:center;padding:8px;font-size:.5rem;color:#888;border-top:1px solid #ccc}
-        .navbar,.project-strip,.quick-actions,.stats-strip,.fab,.bottom-nav,.toast,.modal-overlay{display:none!important}.content{padding:0;max-width:100%}.panel{display:none!important}#panel-report{display:block!important}.ke-report{box-shadow:none;border:none;margin:0}}
+        @media print{body{background:#fff}.navbar,.project-strip,.quick-actions,.stats-strip,.fab,.bottom-nav,.toast,.modal-overlay{display:none!important}.content{padding:0;max-width:100%}.panel{display:none!important}#panel-report{display:block!important}.ke-report{box-shadow:none;border:none;margin:0}}
         @media(min-width:430px){.content{max-width:430px;margin:0 auto}}
-    
-        /* A4 PRINT FORMATTING */
-        @page {
-            size: A4;
-            margin: 15mm 12mm 15mm 12mm;
-        }
-        @media print {
-            body {
-                background: #fff;
-                font-size: 10pt;
-                width: 210mm;
-                min-height: 297mm;
-            }
-            .navbar, .project-strip, .quick-actions, .stats-strip, .fab, .bottom-nav, .toast, .modal-overlay {
-                display: none !important;
-            }
-            .content {
-                padding: 0;
-                max-width: 100%;
-                width: 100%;
-            }
-            .panel {
-                display: none !important;
-            }
-            #panel-report {
-                display: block !important;
-            }
-            .ke-report {
-                box-shadow: none;
-                border: 1px solid #000;
-                margin: 0;
-                width: 100%;
-                font-size: 9pt;
-            }
-            .ke-report * {
-                font-family: 'Times New Roman', serif !important;
-                color: #000 !important;
-            }
-            .ke-header {
-                border-bottom: 3px double #000;
-            }
-            .ke-section-title {
-                background: #e0e0e0 !important;
-                border-top: 2px solid #000;
-                border-bottom: 1px solid #000;
-                font-size: 8pt;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-            .ke-table {
-                font-size: 7pt;
-                page-break-inside: avoid;
-            }
-            .ke-table th {
-                background: #e8e8e8 !important;
-                border: 1px solid #000;
-                font-size: 6pt;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-            .ke-table td {
-                border: 1px solid #000;
-            }
-            .ke-input {
-                border: none !important;
-                background: transparent !important;
-            }
-            .ke-meta {
-                background: #f8f8f8 !important;
-                border-bottom: 1px solid #000;
-                font-size: 7pt;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
-            .ke-signatures {
-                border-top: 2px solid #000;
-                page-break-inside: avoid;
-            }
-            .ke-footer {
-                border-top: 1px solid #000;
-                font-size: 6pt;
-            }
-            .ke-check-group {
-                font-size: 7pt;
-            }
-            .btn {
-                display: none !important;
-            }
-        }
-
     </style>
 </head>
 <body>
@@ -212,7 +122,7 @@
     function loadProject(){try{return JSON.parse(localStorage.getItem(PK))||{projectName:'',contractNo:'',contractorName:'',defaultLocation:'',cowName:'CoW',geminiKey:'',reportCounter:1};}catch(e){return{projectName:'',contractNo:'',contractorName:'',defaultLocation:'',cowName:'CoW',geminiKey:'',reportCounter:1};}}
     function saveProject(p){localStorage.setItem(PK,JSON.stringify(p));}
     let project=loadProject();
-    function loadApp(){try{return JSON.parse(localStorage.getItem(AK))||{diary:[],inspections:[],ncrs:[],instructions:[],rfis:[],drawings:[],materials:[],materialLog:[],concrete:[],delays:[],attendance:[],dailyReports:[],reportOverrides:{}};}catch(e){return{diary:[],inspections:[],ncrs:[],instructions:[],rfis:[],drawings:[],materials:[],materialLog:[],concrete:[],delays:[],attendance:[],dailyReports:[],reportOverrides:{}};}}
+    function loadApp(){try{return JSON.parse(localStorage.getItem(AK))||{diary:[],inspections:[],ncrs:[],instructions:[],rfis:[],drawings:[],materials:[],materialLog:[],concrete:[],delays:[],attendance:[],dailyReports:[]};}catch(e){return{diary:[],inspections:[],ncrs:[],instructions:[],rfis:[],drawings:[],materials:[],materialLog:[],concrete:[],delays:[],attendance:[],dailyReports:[]};}}
     function saveApp(d){localStorage.setItem(AK,JSON.stringify(d));}
     let app=loadApp();
     function genId(p){return p+'-'+Date.now()+'-'+Math.random().toString(36).substr(2,5);}
@@ -254,36 +164,32 @@
         h+='<button class="btn btn-secondary btn-sm" onclick="printReport()">🖨️ Print</button>';
         h+='<button class="btn btn-secondary btn-sm" onclick="shareWA(window._report)">📱 Share</button>';
         h+='<button class="btn btn-secondary btn-sm" onclick="emailReport()">📧 Email</button>';
-        h+='<button class="btn btn-secondary btn-sm" onclick="saveReport()">💾 Save</button>';h+='<button class="btn btn-secondary btn-sm" onclick="clearManualEdit()">🔄 Reset</button>';h+='<button class="btn btn-secondary btn-sm" onclick="refreshReportData()">🔄 Refresh Data</button>';
+        h+='<button class="btn btn-secondary btn-sm" onclick="saveReport()">💾 Save</button>';
         h+='</div>';
 
         // KENYAN REPORT
         h+='<div class="ke-report">';
 
         // HEADER
-        h+='<div class="ke-header"><h3 contenteditable="true" onclick="event.stopPropagation()">Clerk of Works — Daily Site Report</h3><div class="ke-sub">'+pn+'</div><div class="ke-gok">Republic of Kenya — Ministry of Public Works Format</div></div>';
+        h+='<div class="ke-header"><h3>Clerk of Works — Daily Site Report</h3><div class="ke-sub">'+pn+'</div><div class="ke-gok">Republic of Kenya — Ministry of Public Works Format</div></div>';
 
         // META
-        h+='<div style="padding:4px 16px;background:#e8f5e9;font-size:.55rem;color:#2e7d32;display:flex;gap:8px;">';
-        h+='<span>✅ Auto-filled from Settings: Project, Contractor, Contract No, CoW Name</span>';
-        h+='<span style="margin-left:auto;">📊 Data from: Diary('+dt.length+'), Insp('+it.length+'), NCRs('+no.length+'), Attend('+at.length+')</span>';
-        h+='</div>';
         h+='<div class="ke-meta">';
-        h+='<div><span class="klabel">CONTRACT NO:</span><span class="kval" contenteditable="true" onclick="event.stopPropagation()">'+cn+'</span></div>';
-        h+='<div><span class="klabel">PROJECT:</span><span class="kval" contenteditable="true" onclick="event.stopPropagation()">'+pn+'</span></div>';
-        h+='<div><span class="klabel">CONTRACTOR:</span><span class="kval" contenteditable="true" onclick="event.stopPropagation()">'+con+'</span></div>';
-        h+='<div><span class="klabel">DATE:</span><span class="kval" contenteditable="true" onclick="event.stopPropagation()">'+rdate+'</span></div>';
-        h+='<div><span class="klabel">DAY NO:</span><span class="kval" contenteditable="true" onclick="event.stopPropagation()">'+dayNum+' &nbsp;&nbsp; WEEK NO: '+weekNum+'</span></div>';
-        h+='<div><span class="klabel">REPORT NO:</span><span class="kval" contenteditable="true" onclick="event.stopPropagation()">'+rn+'</span></div>';
-        h+='<div><span class="klabel">WEATHER:</span><span class="kval" contenteditable="true" onclick="event.stopPropagation()">☐ Sunny ☐ Cloudy ☐ Rainy ☐ Stormy</span></div>';
-        h+='<div><span class="klabel">TEMP:</span><span class="kval" contenteditable="true" onclick="event.stopPropagation()">Min: ___°C &nbsp; Max: ___°C</span></div>';
+        h+='<div><span class="klabel">CONTRACT NO:</span><span class="kval">'+cn+'</span></div>';
+        h+='<div><span class="klabel">PROJECT:</span><span class="kval">'+pn+'</span></div>';
+        h+='<div><span class="klabel">CONTRACTOR:</span><span class="kval">'+con+'</span></div>';
+        h+='<div><span class="klabel">DATE:</span><span class="kval">'+rdate+'</span></div>';
+        h+='<div><span class="klabel">DAY NO:</span><span class="kval">'+dayNum+' &nbsp;&nbsp; WEEK NO: '+weekNum+'</span></div>';
+        h+='<div><span class="klabel">REPORT NO:</span><span class="kval">'+rn+'</span></div>';
+        h+='<div><span class="klabel">WEATHER:</span><span class="kval">☐ Sunny ☐ Cloudy ☐ Rainy ☐ Stormy</span></div>';
+        h+='<div><span class="klabel">TEMP:</span><span class="kval">Min: ___°C &nbsp; Max: ___°C</span></div>';
         h+='</div>';
 
         // 1. WORK IN PROGRESS
         h+='<div class="ke-section"><div class="ke-section-title">1.0 WORK IN PROGRESS</div>';
         h+='<table class="ke-table"><tr><th>Item</th><th>Description of Work</th><th>Location</th><th>% Complete</th><th>Remarks</th></tr>';
-        if(dt.length){dt.forEach((e,i)=>{h+='<tr><td>1.'+(i+1)+'</td><td>'+e.title+'<br><small>'+e.description.substring(0,100)+'</small></td><td>'+e.location+'</td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()">'+(e.issuesIdentified||'')+'</div></td></tr>';});}
-        else{for(let i=1;i<=5;i++){h+='<tr><td>1.'+i+'</td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td></tr>';}}
+        if(dt.length){dt.forEach((e,i)=>{h+='<tr><td>1.'+(i+1)+'</td><td>'+e.title+'<br><small>'+e.description.substring(0,100)+'</small></td><td>'+e.location+'</td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable>'+(e.issuesIdentified||'')+'</div></td></tr>';});}
+        else{for(let i=1;i<=5;i++){h+='<tr><td>1.'+i+'</td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td></tr>';}}
         h+='</table></div>';
 
         // 2. LABOUR
@@ -292,44 +198,44 @@
         const cats=['Skilled','Semi-Skilled','Unskilled'];
         const catCounts={};if(at.length){at.forEach(e=>{const c=e.category||'Unskilled';catCounts[c]=(catCounts[c]||0)+parseInt(e.count||0);});}
         const total=at.reduce((s,e)=>s+(parseInt(e.count)||0),0);
-        cats.forEach(c=>{h+='<tr><td>'+c+'</td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()">'+(catCounts[c]||'')+'</div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td></tr>';});
+        cats.forEach(c=>{h+='<tr><td>'+c+'</td><td><div class="ke-input" contenteditable>'+(catCounts[c]||'')+'</div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td></tr>';});
         h+='<tr style="font-weight:700;"><td>TOTAL</td><td></td><td></td><td>'+total+'</td></tr></table></div>';
 
         // 3. PLANT & EQUIPMENT
         h+='<div class="ke-section"><div class="ke-section-title">3.0 PLANT & EQUIPMENT ON SITE</div>';
         h+='<table class="ke-table"><tr><th>Item</th><th>Qty</th><th>Working</th><th>Idle</th><th>Remarks</th></tr>';
         const eq=dt.filter(e=>e.equipmentUsed).map(e=>e.equipmentUsed).join(', ').split(',').slice(0,10);
-        if(eq.length&&eq[0]){eq.forEach(e=>{h+='<tr><td>'+e.trim()+'</td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td></tr>';});}
-        else{for(let i=1;i<=4;i++){h+='<tr><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td></tr>';}}
+        if(eq.length&&eq[0]){eq.forEach(e=>{h+='<tr><td>'+e.trim()+'</td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td></tr>';});}
+        else{for(let i=1;i<=4;i++){h+='<tr><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td></tr>';}}
         h+='</table></div>';
 
         // 4. MATERIALS
         h+='<div class="ke-section"><div class="ke-section-title">4.0 MATERIALS DELIVERED</div>';
         h+='<table class="ke-table"><tr><th>Material</th><th>Quantity</th><th>Supplier</th><th>Delivery Note No.</th><th>Remarks</th></tr>';
         const matDel=dt.filter(e=>e.materialsDelivered);
-        if(matDel.length){matDel.forEach(e=>{const lines=e.materialsDelivered.split('\n');lines.forEach(l=>{const parts=l.split(' ');h+='<tr><td>'+parts.slice(1).join(' ')+'</td><td>'+parts[0]+'</td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td></tr>';});});}
-        else{for(let i=1;i<=3;i++){h+='<tr><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td></tr>';}}
+        if(matDel.length){matDel.forEach(e=>{const lines=e.materialsDelivered.split('\n');lines.forEach(l=>{const parts=l.split(' ');h+='<tr><td>'+parts.slice(1).join(' ')+'</td><td>'+parts[0]+'</td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td></tr>';});});}
+        else{for(let i=1;i<=3;i++){h+='<tr><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td></tr>';}}
         h+='</table></div>';
 
         // 5. INSPECTIONS & TESTS
         h+='<div class="ke-section"><div class="ke-section-title">5.0 INSPECTIONS & TESTS</div>';
         h+='<table class="ke-table"><tr><th>Time</th><th>Test/Inspection</th><th>Location</th><th>Result</th><th>Remarks</th></tr>';
-        if(it.length){it.forEach(e=>{h+='<tr><td>'+fmt(e.timestamp).split(',')[1]||''+'</td><td>'+e.checklistType+'</td><td>'+e.location+'</td><td>'+(e.result==='pass'?'✅ PASS':'❌ FAIL')+'</td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()">'+(e.notes||'')+'</div></td></tr>';});}
-        else{for(let i=1;i<=3;i++){h+='<tr><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td></tr>';}}
+        if(it.length){it.forEach(e=>{h+='<tr><td>'+fmt(e.timestamp).split(',')[1]||''+'</td><td>'+e.checklistType+'</td><td>'+e.location+'</td><td>'+(e.result==='pass'?'✅ PASS':'❌ FAIL')+'</td><td><div class="ke-input" contenteditable>'+(e.notes||'')+'</div></td></tr>';});}
+        else{for(let i=1;i<=3;i++){h+='<tr><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td></tr>';}}
         h+='</table></div>';
 
         // 6. NCRs
         h+='<div class="ke-section"><div class="ke-section-title">6.0 NON-CONFORMANCE REPORTS (NCRs)</div>';
         h+='<table class="ke-table"><tr><th>NCR No.</th><th>Description</th><th>Date Raised</th><th>Status</th><th>Action Taken</th></tr>';
-        if(no.length){no.forEach(e=>{h+='<tr><td>NCR-'+e.id.split('-')[1]+'</td><td>'+e.title+'</td><td>'+fmtDate(e.timestamp)+'</td><td>'+e.status.toUpperCase()+'</td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()">'+e.actionRequired+'</div></td></tr>';});}
-        else{for(let i=1;i<=2;i++){h+='<tr><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td></tr>';}}
+        if(no.length){no.forEach(e=>{h+='<tr><td>NCR-'+e.id.split('-')[1]+'</td><td>'+e.title+'</td><td>'+fmtDate(e.timestamp)+'</td><td>'+e.status.toUpperCase()+'</td><td><div class="ke-input" contenteditable>'+e.actionRequired+'</div></td></tr>';});}
+        else{for(let i=1;i<=2;i++){h+='<tr><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td></tr>';}}
         h+='</table></div>';
 
         // 7. SITE INSTRUCTIONS
         h+='<div class="ke-section"><div class="ke-section-title">7.0 SITE INSTRUCTIONS ISSUED</div>';
         h+='<table class="ke-table"><tr><th>SI No.</th><th>Description</th><th>Issued To</th><th>Date</th><th>Status</th></tr>';
         if(si.length){si.forEach(e=>{h+='<tr><td>SI-'+e.id.split('-')[1]+'</td><td>'+e.description+'</td><td>'+e.issuedTo+'</td><td>'+fmtDate(e.timestamp)+'</td><td>'+e.status.toUpperCase()+'</td></tr>';});}
-        else{for(let i=1;i<=2;i++){h+='<tr><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td></tr>';}}
+        else{for(let i=1;i<=2;i++){h+='<tr><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td></tr>';}}
         h+='</table></div>';
 
         // 8. DELAYS
@@ -337,7 +243,7 @@
         h+='<table class="ke-table"><tr><th>Cause</th><th>Duration</th><th>Impact</th><th>Responsible Party</th><th>Remarks</th></tr>';
         const delays=app.delays.filter(e=>e.date===td);
         if(delays.length){delays.forEach(e=>{h+='<tr><td>'+e.cause+'</td><td>'+e.duration+' days</td><td>'+e.impact+'</td><td></td><td></td></tr>';});}
-        else{for(let i=1;i<=2;i++){h+='<tr><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td><td><div class="ke-input" contenteditable="true" onclick="event.stopPropagation()"></div></td></tr>';}}
+        else{for(let i=1;i<=2;i++){h+='<tr><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td><td><div class="ke-input" contenteditable></div></td></tr>';}}
         h+='</table></div>';
 
         // 9. HEALTH & SAFETY
@@ -347,24 +253,11 @@
         h+='</div><div style="padding:8px 16px;font-size:.6rem;">Incidents (if any): <div class="ke-input" contenteditable style="display:inline-block;min-width:200px;"></div><br>Actions Taken: <div class="ke-input" contenteditable style="display:inline-block;min-width:200px;"></div></div></div>';
 
         // 10. GENERAL REMARKS
-        h+='<div class="ke-section"><div class="ke-section-title">10.0 GENERAL REMARKS</div><div style="padding:8px 16px;" contenteditable="true" onclick="event.stopPropagation()">';
+        h+='<div class="ke-section"><div class="ke-section-title">10.0 GENERAL REMARKS</div>';
         h+='<div style="padding:8px 16px;"><div class="ke-input" contenteditable style="min-height:40px;border:1px solid #ccc;padding:4px;">Work is progressing in accordance with the approved programme and specifications unless otherwise noted. Contractor is reminded to maintain quality standards and adhere to all safety requirements.</div></div></div>';
 
         // SIGNATURES
-        h+='<div class="ke-signatures">';
-        h+='<div class="ke-sig" contenteditable="true" onclick="event.stopPropagation()">';
-        h+='<div class="ke-sig-line"></div>';
-        h+='<div class="ke-sig-name" contenteditable="true" onclick="event.stopPropagation()" onblur="saveManualEdit('cowName',this.innerText)" title="Click to edit. Auto-filled from Settings.">'+getReportValue('cowName',cowName)+'</div>';
-        h+='<div class="ke-sig-title">Clerk of Works</div>';
-        h+='<div style="font-size:.55rem;">Date: ................</div>';
-        h+='</div>';
-        h+='<div class="ke-sig" contenteditable="true" onclick="event.stopPropagation()">';
-        h+='<div class="ke-sig-line"></div>';
-        h+='<div class="ke-sig-name">.....................</div>';
-        h+='<div class="ke-sig-title">Resident Engineer</div>';
-        h+='<div style="font-size:.55rem;">Date: ................</div>';
-        h+='</div>';
-        h+='</div>';
+        h+='<div class="ke-signatures"><div class="ke-sig"><div class="ke-sig-line"></div><div class="ke-sig-name">'+cowName+'</div><div class="ke-sig-title">Clerk of Works</div><div style="font-size:.55rem;">Date: ................</div></div><div class="ke-sig"><div class="ke-sig-line"></div><div class="ke-sig-name">.....................</div><div class="ke-sig-title">Resident Engineer</div><div style="font-size:.55rem;">Date: ................</div></div></div>';
 
         // FOOTER
         h+='<div class="ke-footer">Generated by CoW Log Pro | '+rn+' | '+rdate+' | Republic of Kenya</div>';
@@ -373,43 +266,6 @@
         document.getElementById('reportContent').innerHTML=h;
     }
 
-    function saveManualEdit(field, value){
-        if(!app.reportOverrides)app.reportOverrides={};
-        app.reportOverrides[field]=value;
-        saveApp(app);
-    }
-    function getReportValue(field, autoValue){
-        // Return manual override if exists, otherwise auto value
-        if(app.reportOverrides&&app.reportOverrides[field]!==undefined){
-            return app.reportOverrides[field];
-        }
-        return autoValue;
-    }
-    function clearManualEdit(field){
-        if(field){
-            // Clear specific field
-            if(app.reportOverrides){delete app.reportOverrides[field];saveApp(app);}
-        }else{
-            // Clear ALL manual edits
-            if(confirm('Reset all manual edits? Report will use auto-filled values from Settings and data.')){
-                app.reportOverrides={};saveApp(app);
-            }
-        }
-        renderReport();
-        toast('🔄 Reset to auto-fill values');
-    }
-        if(app.reportOverrides){
-            delete app.reportOverrides[field];
-            saveApp(app);
-            renderReport();
-            toast('🔄 Reset to auto-fill');
-        }
-    }
-    function refreshReportData(){
-        app=loadApp();project=loadProject();
-        renderReport();
-        toast('🔄 Report refreshed with latest data');
-    }
     function emailReport(){window.open('mailto:?subject='+encodeURIComponent('CoW Daily Report — '+today())+'&body='+encodeURIComponent(window._report||''),'_blank');toast('📧 Opening email...');}
     function refreshAll(){renderDiary();renderInspections();renderNCRs();renderInstructions();renderRFIs();renderDrawings();renderMaterials();renderConcrete();updateStats();}
 
