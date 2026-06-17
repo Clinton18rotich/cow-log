@@ -143,110 +143,7 @@
     function renderDiary(filter=''){const c=document.getElementById('diaryEntries');let entries=app.diary;if(filter){const q=filter.toLowerCase();entries=entries.filter(e=>e.title.toLowerCase().includes(q)||e.description.toLowerCase().includes(q));}entries.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty"><div class="empty-icon">📔</div><h3>No diary entries</h3></div>';return;}c.innerHTML=entries.map(e=>'<div class="list-cell"><div class="list-icon blue">📔</div><div class="list-content"><div class="list-title">'+e.title+'</div><div class="list-sub">'+fmt(e.timestamp)+' · '+e.location+'</div></div><div class="list-right"><button class="btn btn-xs btn-secondary" onclick="deleteEntry(\'diary\',\''+e.id+'\')">🗑️</button></div></div>').join('');}
     function renderInspections(){const c=document.getElementById('inspectionEntries');const entries=[...app.inspections].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty"><div class="empty-icon">✅</div><h3>No inspections</h3><button class="btn btn-primary btn-sm" onclick="showInspectionMenu()">Start Inspection</button></div>';return;}c.innerHTML=entries.map(e=>'<div class="list-cell"><div class="list-icon green">✅</div><div class="list-content"><div class="list-title">'+e.checklistType+'</div><div class="list-sub">'+fmt(e.timestamp)+' · '+e.location+' · '+e.items.filter(i=>i.passed).length+'/'+e.items.length+' OK</div></div><div class="list-right"><span class="badge '+(e.result==='pass'?'badge-success':'badge-danger')+'">'+e.result.toUpperCase()+'</span></div></div>').join('');}
     function renderNCRs(){const c=document.getElementById('ncrEntries');const entries=[...app.ncrs].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty"><div class="empty-icon">🚨</div><h3>No NCRs</h3></div>';return;}c.innerHTML=entries.map(e=>'<div class="list-cell"><div class="list-icon red">🚨</div><div class="list-content"><div class="list-title">'+e.title+'</div><div class="list-sub">'+fmt(e.timestamp)+' · '+e.location+' · '+e.severity+'</div></div><div class="list-right"><span class="badge '+(e.status==='open'?'badge-danger':'badge-success')+'">'+e.status+'</span></div></div>').join('');}
-    function showSIDocument(id){
-        const si=app.instructions.find(e=>e.id===id);
-        if(!si){toast('SI not found');return;}
-        const pn=project.projectName||'___________';
-        const con=project.contractorName||'___________';
-        const cn=project.contractNo||'___________';
-        const cowName=project.cowName||'___________';
-        const siNo='SI/'+si.id.split('-')[1]+'/'+new Date().getFullYear();
-        const siDate=new Date(si.timestamp).toLocaleDateString('en-KE',{day:'numeric',month:'long',year:'numeric'});
-        
-        let html='';
-        html+='<div style="display:flex;gap:6px;margin-bottom:12px;">';
-        html+='<button class="btn btn-primary btn-sm" onclick="printSIDoc()">🖨️ Print SI</button>';
-        html+='<button class="btn btn-secondary btn-sm" onclick="closeModal()">Close</button>';
-        html+='</div>';
-        html+='<div id="siDocument" style="background:#fff;color:#000;font-family:Times New Roman,serif;padding:20px;border:2px solid #000;max-width:210mm;margin:0 auto;font-size:11pt;">';
-        
-        // Header
-        html+='<div style="text-align:center;border-bottom:3px double #000;padding-bottom:12px;margin-bottom:16px;">';
-        html+='<h3 style="margin:0;font-size:14pt;text-transform:uppercase;">Site Instruction</h3>';
-        html+='<div style="font-size:9pt;color:#333;">'+pn+'</div>';
-        html+='</div>';
-        
-        // Meta
-        html+='<table style="width:100%;border-collapse:collapse;font-size:10pt;margin-bottom:16px;">';
-        html+='<tr><td style="padding:3px 8px;font-weight:700;width:120px;">SI NO:</td><td style="padding:3px 8px;border-bottom:1px dotted #999;">'+siNo+'</td></tr>';
-        html+='<tr><td style="padding:3px 8px;font-weight:700;">DATE:</td><td style="padding:3px 8px;border-bottom:1px dotted #999;">'+siDate+'</td></tr>';
-        html+='<tr><td style="padding:3px 8px;font-weight:700;">PROJECT:</td><td style="padding:3px 8px;border-bottom:1px dotted #999;">'+pn+'</td></tr>';
-        html+='<tr><td style="padding:3px 8px;font-weight:700;">CONTRACT NO:</td><td style="padding:3px 8px;border-bottom:1px dotted #999;">'+cn+'</td></tr>';
-        html+='<tr><td style="padding:3px 8px;font-weight:700;">CONTRACTOR:</td><td style="padding:3px 8px;border-bottom:1px dotted #999;">'+con+'</td></tr>';
-        html+='<tr><td style="padding:3px 8px;font-weight:700;">LOCATION:</td><td style="padding:3px 8px;border-bottom:1px dotted #999;">'+si.location+'</td></tr>';
-        html+='</table>';
-        
-        // Instruction type checkboxes
-        html+='<div style="border:1px solid #000;padding:12px;margin-bottom:16px;">';
-        html+='<div style="font-weight:700;margin-bottom:8px;">You are hereby instructed to:</div>';
-        ['Stop Work Immediately','Rectify Defective Work','Comply with Specification','Accelerate Progress','Other'].forEach(t=>{
-            html+='<div style="margin:4px 0;"><input type="checkbox" style="margin-right:8px;"> '+t+'</div>';
-        });
-        html+='</div>';
-        
-        // Details
-        html+='<div style="margin-bottom:16px;">';
-        html+='<div style="font-weight:700;border-bottom:1px solid #000;padding-bottom:4px;margin-bottom:8px;">DETAILS OF INSTRUCTION:</div>';
-        html+='<div style="min-height:60px;padding:8px;border:1px solid #ccc;">'+si.description+'</div>';
-        html+='</div>';
-        
-        // Reason
-        html+='<div style="margin-bottom:16px;">';
-        html+='<div style="font-weight:700;border-bottom:1px solid #000;padding-bottom:4px;margin-bottom:8px;">REASON FOR INSTRUCTION:</div>';
-        html+='<div contenteditable="true" style="min-height:40px;padding:8px;border:1px solid #ccc;">........................................................</div>';
-        html+='</div>';
-        
-        // Reference
-        html+='<div style="margin-bottom:16px;">';
-        html+='<div style="font-weight:700;border-bottom:1px solid #000;padding-bottom:4px;margin-bottom:8px;">REFERENCE (Drawing/Spec/Contract Clause):</div>';
-        html+='<div contenteditable="true" style="min-height:30px;padding:8px;border:1px solid #ccc;">'+(si.reference||'........................................................')+'</div>';
-        html+='</div>';
-        
-        // Deadline
-        html+='<div style="margin-bottom:16px;">';
-        html+='<div style="font-weight:700;border-bottom:1px solid #000;padding-bottom:4px;margin-bottom:8px;">COMPLIANCE REQUIRED BY:</div>';
-        html+='<div contenteditable="true" style="min-height:30px;padding:8px;border:1px solid #ccc;">'+(si.deadline||'........................................................')+'</div>';
-        html+='</div>';
-        
-        // Signatures
-        html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:30px;margin:20px 0;padding-top:16px;border-top:2px solid #000;">';
-        html+='<div style="text-align:center;"><div style="border-bottom:1px solid #000;margin:30px 0 4px;"></div><div style="font-weight:700;">'+cowName+'</div><div>Clerk of Works</div><div style="font-size:9pt;">Date: ................</div></div>';
-        html+='<div style="text-align:center;"><div style="border-bottom:1px solid #000;margin:30px 0 4px;"></div><div style="font-weight:700;">.....................</div><div>Contractor's Representative</div><div style="font-size:9pt;">Date: ................</div></div>';
-        html+='</div>';
-        
-        // Acknowledgment
-        html+='<div style="border:2px solid #000;padding:16px;margin:16px 0;">';
-        html+='<div style="font-weight:700;text-align:center;margin-bottom:12px;">ACKNOWLEDGMENT</div>';
-        html+='<p style="font-size:10pt;">I acknowledge receipt of this Site Instruction and understand that failure to comply may result in contractual action.</p>';
-        html+='<div style="text-align:center;margin-top:20px;"><div style="border-bottom:1px solid #000;width:200px;margin:0 auto 4px;"></div><div style="font-weight:700;">Contractor's Representative</div><div style="font-size:9pt;">Date: ................</div></div>';
-        html+='</div>';
-        
-        // Completion
-        html+='<div style="border:1px solid #000;padding:12px;margin:16px 0;">';
-        html+='<div style="font-weight:700;text-align:center;margin-bottom:8px;">COMPLETION</div>';
-        html+='<div style="font-size:10pt;">Work completed on: ......................................</div>';
-        html+='<div style="font-size:10pt;">Verified by CoW: ........................................</div>';
-        html+='<div style="font-size:10pt;">Date: ...................................................</div>';
-        html+='<div style="margin-top:8px;">Status: ☐ Complied &nbsp; ☐ Partially Complied &nbsp; ☐ Not Complied</div>';
-        html+='</div>';
-        
-        html+='</div>';
-        
-        document.getElementById('modalContainer').innerHTML='<div class="modal-overlay" onclick="if(event.target===this)closeModal()"><div class="modal" style="max-width:600px;">'+html+'</div></div>';
-    }
-    
-    function printSIDoc(){
-        const doc=document.getElementById('siDocument');
-        if(!doc)return;
-        const w=window.open('','_blank');
-        w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Site Instruction</title>');
-        w.document.write('<style>@page{size:A4;margin:15mm}body{font-family:Times New Roman,serif;display:flex;justify-content:center;padding:20px}</style>');
-        w.document.write('</head><body>'+doc.outerHTML+'</body></html>');
-        w.document.close();
-        setTimeout(()=>w.print(),500);
-    }
-    
-    function renderInstructions(){const c=document.getElementById('instructionEntries');const entries=[...app.instructions].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty"><div class="empty-icon">📋</div><h3>No instructions</h3></div>';return;}c.innerHTML=entries.map(e=>'<div class="list-cell" onclick="showSIDocument(\''+e.id+'\')"><div class="list-icon orange">📋</div><div class="list-content"><div class="list-title">SI-'+e.id.split('-')[1]+'</div><div class="list-sub">'+fmt(e.timestamp)+' · '+e.issuedTo+'</div></div><div class="list-right"><span class="badge '+(e.status==='acknowledged'?'badge-success':'badge-warning')+'">'+e.status+'</span></div></div>').join('');}
+    function renderInstructions(){const c=document.getElementById('instructionEntries');const entries=[...app.instructions].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty"><div class="empty-icon">📋</div><h3>No instructions</h3></div>';return;}c.innerHTML=entries.map(e=>'<div class="list-cell"><div class="list-icon orange">📋</div><div class="list-content"><div class="list-title">SI-'+e.id.split('-')[1]+'</div><div class="list-sub">'+fmt(e.timestamp)+' · '+e.issuedTo+'</div></div></div>').join('');}
     function renderRFIs(){const c=document.getElementById('rfiEntries');if(!app.rfis.length){c.innerHTML='<div class="empty"><div class="empty-icon">📤</div><h3>No RFIs</h3></div>';return;}c.innerHTML=app.rfis.map(e=>'<div class="list-cell"><div class="list-icon purple">📤</div><div class="list-content"><div class="list-title">'+e.subject+'</div><div class="list-sub">'+fmt(e.timestamp)+' · '+e.sentTo+'</div></div></div>').join('');}
     function renderDrawings(){const c=document.getElementById('drawingEntries');let h='<button class="btn btn-primary btn-sm" style="width:100%;margin-bottom:8px;" onclick="showDrawingForm()">+ Add Drawing</button>';if(!app.drawings.length){h+='<div class="empty"><div class="empty-icon">📐</div><h3>No drawings</h3></div>';}else{app.drawings.forEach(e=>{h+='<div class="card"><div class="card-title">📐 '+e.number+' Rev '+e.revision+'</div></div>';});}c.innerHTML=h;}
     function renderMaterials(){const c=document.getElementById('materialEntries');if(!app.materials.length){c.innerHTML='<div class="empty"><div class="empty-icon">🧱</div><h3>No materials</h3><button class="btn btn-primary btn-sm" onclick="showMaterialForm()">Add Material</button></div>';return;}let h='<button class="btn btn-primary btn-sm" style="width:100%;margin-bottom:8px;" onclick="showMaterialForm()">+ Add Material</button>';app.materials.forEach(m=>{const s=parseFloat(m.currentStock||0);h+='<div class="list-cell"><div class="list-icon orange">🧱</div><div class="list-content"><div class="list-title">'+m.name+'</div></div><div class="list-right" style="font-weight:700;color:'+(s<=0?'var(--red)':'var(--green)')+';">'+s+'</div></div>';});c.innerHTML=h;}
@@ -264,7 +161,7 @@
 
         let h='<div style="display:flex;gap:6px;margin-bottom:12px;">';
         h+='<button class="btn btn-primary btn-sm" onclick="copyReport()">📋 Copy</button>';
-        h+='<button class="btn btn-secondary btn-sm" onclick="printReport()">🖨️ Print</button>';h+='<button class="btn btn-primary btn-sm" onclick="downloadPDF()">📄 Save PDF</button>';
+        h+='<button class="btn btn-secondary btn-sm" onclick="printReport()">🖨️ Print</button>';
         h+='<button class="btn btn-secondary btn-sm" onclick="shareWA(window._report)">📱 Share</button>';
         h+='<button class="btn btn-secondary btn-sm" onclick="emailReport()">📧 Email</button>';
         h+='<button class="btn btn-secondary btn-sm" onclick="saveReport()">💾 Save</button>';h+='<button class="btn btn-secondary btn-sm" onclick="renderReport()">🔄 Refresh</button>';
@@ -417,39 +314,6 @@
     function deleteEntry(type,id){app[type]=app[type].filter(e=>e.id!==id);saveApp(app);refreshAll();}
     function copyReport(){navigator.clipboard.writeText(window._report||'').then(()=>toast('📋 Copied'));}
     function printReport(){switchTab('report');setTimeout(()=>window.print(),400);}
-    function downloadPDF(){
-        switchTab('report');
-        setTimeout(()=>{
-            // Create a new window with just the report for printing/PDF
-            const reportEl=document.querySelector('.ke-report');
-            if(!reportEl){toast('No report found');return;}
-            const reportHTML=reportEl.outerHTML;
-            const printWindow=window.open('','_blank','width=800,height=600');
-            printWindow.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>CoW Daily Report</title>');
-            printWindow.document.write('<style>');
-            printWindow.document.write('@page{size:A4;margin:15mm 12mm}');
-            printWindow.document.write('body{font-family:Times New Roman,serif;background:#fff;color:#000;margin:0;padding:0}');
-            printWindow.document.write('.ke-report{width:100%;max-width:210mm;margin:0 auto;border:1px solid #000}');
-            printWindow.document.write('.ke-header{text-align:center;padding:15px;border-bottom:3px double #000}');
-            printWindow.document.write('.ke-header h3{font-size:14pt;margin:0}');
-            printWindow.document.write('.ke-meta{padding:8px 12px;border-bottom:1px solid #000;font-size:9pt;display:grid;grid-template-columns:1fr 1fr;gap:2px 8px;background:#f8f8f8}');
-            printWindow.document.write('.ke-section-title{background:#e0e0e0;padding:6px 12px;font-size:9pt;font-weight:700;border-top:2px solid #000;border-bottom:1px solid #000}');
-            printWindow.document.write('.ke-table{width:100%;border-collapse:collapse;font-size:8pt}');
-            printWindow.document.write('.ke-table th{background:#e8e8e8;padding:4px;border:1px solid #000;font-size:7pt}');
-            printWindow.document.write('.ke-table td{padding:4px;border:1px solid #000}');
-            printWindow.document.write('.ke-signatures{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:20px 12px;border-top:2px solid #000}');
-            printWindow.document.write('.ke-sig{text-align:center}.ke-sig-line{border-bottom:1px solid #000;margin:25px 0 4px}');
-            printWindow.document.write('.ke-footer{text-align:center;padding:6px;font-size:7pt;border-top:1px solid #000}');
-            printWindow.document.write('</style></head><body>');
-            printWindow.document.write(reportHTML);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            setTimeout(()=>{
-                printWindow.print();
-                toast('📄 Print dialog opened — select "Save as PDF"');
-            },500);
-        },300);
-    }
     function shareWA(text){
         // Generate a clean formatted version for WhatsApp
         const td=today();
