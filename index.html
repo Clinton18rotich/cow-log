@@ -254,7 +254,7 @@
         h+='<button class="btn btn-secondary btn-sm" onclick="printReport()">🖨️ Print</button>';
         h+='<button class="btn btn-secondary btn-sm" onclick="shareWA(window._report)">📱 Share</button>';
         h+='<button class="btn btn-secondary btn-sm" onclick="emailReport()">📧 Email</button>';
-        h+='<button class="btn btn-secondary btn-sm" onclick="saveReport()">💾 Save</button>';
+        h+='<button class="btn btn-secondary btn-sm" onclick="saveReport()">💾 Save</button>';h+='<button class="btn btn-secondary btn-sm" onclick="refreshReportData()">🔄 Refresh Data</button>';
         h+='</div>';
 
         // KENYAN REPORT
@@ -264,6 +264,10 @@
         h+='<div class="ke-header"><h3 contenteditable="true" onclick="event.stopPropagation()">Clerk of Works — Daily Site Report</h3><div class="ke-sub">'+pn+'</div><div class="ke-gok">Republic of Kenya — Ministry of Public Works Format</div></div>';
 
         // META
+        h+='<div style="padding:4px 16px;background:#e8f5e9;font-size:.55rem;color:#2e7d32;display:flex;gap:8px;">';
+        h+='<span>✅ Auto-filled from Settings: Project, Contractor, Contract No, CoW Name</span>';
+        h+='<span style="margin-left:auto;">📊 Data from: Diary('+dt.length+'), Insp('+it.length+'), NCRs('+no.length+'), Attend('+at.length+')</span>';
+        h+='</div>';
         h+='<div class="ke-meta">';
         h+='<div><span class="klabel">CONTRACT NO:</span><span class="kval" contenteditable="true" onclick="event.stopPropagation()">'+cn+'</span></div>';
         h+='<div><span class="klabel">PROJECT:</span><span class="kval" contenteditable="true" onclick="event.stopPropagation()">'+pn+'</span></div>';
@@ -369,6 +373,11 @@
         document.getElementById('reportContent').innerHTML=h;
     }
 
+    function refreshReportData(){
+        app=loadApp();project=loadProject();
+        renderReport();
+        toast('🔄 Report refreshed with latest data');
+    }
     function emailReport(){window.open('mailto:?subject='+encodeURIComponent('CoW Daily Report — '+today())+'&body='+encodeURIComponent(window._report||''),'_blank');toast('📧 Opening email...');}
     function refreshAll(){renderDiary();renderInspections();renderNCRs();renderInstructions();renderRFIs();renderDrawings();renderMaterials();renderConcrete();updateStats();}
 
