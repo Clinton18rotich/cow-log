@@ -171,18 +171,18 @@
         h+='<div class="ke-report">';
 
         // HEADER
-        h+='<div class="ke-header"><h3>Clerk of Works — Daily Site Report</h3><div class="ke-sub">'+pn+'</div><div class="ke-gok">Republic of Kenya — Ministry of Public Works Format</div></div>';
+        h+='<div class="ke-header"><h3 contenteditable="true" onclick="event.stopPropagation()">Clerk of Works — Daily Site Report</h3><div class="ke-sub">'+pn+'</div><div class="ke-gok">Republic of Kenya — Ministry of Public Works Format</div></div>';
 
         // META
         h+='<div class="ke-meta">';
-        h+='<div><span class="klabel">CONTRACT NO:</span><span class="kval">'+cn+'</span></div>';
-        h+='<div><span class="klabel">PROJECT:</span><span class="kval">'+pn+'</span></div>';
-        h+='<div><span class="klabel">CONTRACTOR:</span><span class="kval">'+con+'</span></div>';
-        h+='<div><span class="klabel">DATE:</span><span class="kval">'+rdate+'</span></div>';
-        h+='<div><span class="klabel">DAY NO:</span><span class="kval">'+dayNum+' &nbsp;&nbsp; WEEK NO: '+weekNum+'</span></div>';
-        h+='<div><span class="klabel">REPORT NO:</span><span class="kval">'+rn+'</span></div>';
-        h+='<div><span class="klabel">WEATHER:</span><span class="kval">☐ Sunny ☐ Cloudy ☐ Rainy ☐ Stormy</span></div>';
-        h+='<div><span class="klabel">TEMP:</span><span class="kval">Min: ___°C &nbsp; Max: ___°C</span></div>';
+        h+='<div><span class="klabel">CONTRACT NO:</span><span class="kval" contenteditable="true" onclick="event.stopPropagation()">'+cn+'</span></div>';
+        h+='<div><span class="klabel">PROJECT:</span><span class="kval" contenteditable="true" onclick="event.stopPropagation()">'+pn+'</span></div>';
+        h+='<div><span class="klabel">CONTRACTOR:</span><span class="kval" contenteditable="true" onclick="event.stopPropagation()">'+con+'</span></div>';
+        h+='<div><span class="klabel">DATE:</span><span class="kval" contenteditable="true" onclick="event.stopPropagation()">'+rdate+'</span></div>';
+        h+='<div><span class="klabel">DAY NO:</span><span class="kval" contenteditable="true" onclick="event.stopPropagation()">'+dayNum+' &nbsp;&nbsp; WEEK NO: '+weekNum+'</span></div>';
+        h+='<div><span class="klabel">REPORT NO:</span><span class="kval" contenteditable="true" onclick="event.stopPropagation()">'+rn+'</span></div>';
+        h+='<div><span class="klabel">WEATHER:</span><span class="kval" contenteditable="true" onclick="event.stopPropagation()">☐ Sunny ☐ Cloudy ☐ Rainy ☐ Stormy</span></div>';
+        h+='<div><span class="klabel">TEMP:</span><span class="kval" contenteditable="true" onclick="event.stopPropagation()">Min: ___°C &nbsp; Max: ___°C</span></div>';
         h+='</div>';
 
         // 1. WORK IN PROGRESS
@@ -250,14 +250,14 @@
         h+='<div class="ke-section"><div class="ke-section-title">9.0 HEALTH & SAFETY OBSERVATIONS</div>';
         h+='<div class="ke-check-group">';
         ['All workers wearing PPE (helmets, boots, vests)','Site access controlled & safe','Scaffolding & ladders in good condition','First aid kit available & stocked','Fire extinguishers in place','No incidents / accidents reported'].forEach((item,i)=>{h+='<label><input type="checkbox" '+(i<5?'checked':'')+'> '+item+'</label>';});
-        h+='</div><div style="padding:8px 16px;font-size:.6rem;">Incidents (if any): <div class="ke-input" contenteditable style="display:inline-block;min-width:200px;"></div><br>Actions Taken: <div class="ke-input" contenteditable style="display:inline-block;min-width:200px;"></div></div></div>';
+        h+='</div><div style="padding:8px 16px;font-size:.6rem;">Incidents (if any): <span contenteditable="true" onclick="event.stopPropagation()" style="display:inline-block;min-width:150px;border-bottom:1px dotted #999;"></span> <div class="ke-input" contenteditable style="display:inline-block;min-width:200px;"></div><br>Actions Taken: <span contenteditable="true" onclick="event.stopPropagation()" style="display:inline-block;min-width:150px;border-bottom:1px dotted #999;"></span> <div class="ke-input" contenteditable style="display:inline-block;min-width:200px;"></div></div></div>';
 
         // 10. GENERAL REMARKS
-        h+='<div class="ke-section"><div class="ke-section-title">10.0 GENERAL REMARKS</div>';
+        h+='<div class="ke-section"><div class="ke-section-title">10.0 GENERAL REMARKS</div><div style="padding:8px 16px;" contenteditable="true" onclick="event.stopPropagation()">';
         h+='<div style="padding:8px 16px;"><div class="ke-input" contenteditable style="min-height:40px;border:1px solid #ccc;padding:4px;">Work is progressing in accordance with the approved programme and specifications unless otherwise noted. Contractor is reminded to maintain quality standards and adhere to all safety requirements.</div></div></div>';
 
         // SIGNATURES
-        h+='<div class="ke-signatures"><div class="ke-sig"><div class="ke-sig-line"></div><div class="ke-sig-name" contenteditable="true" onclick="event.stopPropagation()">'+cowName+'</div><div class="ke-sig-title">Clerk of Works</div><div style="font-size:.55rem;">Date: ................</div></div><div class="ke-sig"><div class="ke-sig-line"></div><div class="ke-sig-name" contenteditable="true" onclick="event.stopPropagation()">.....................</div><div class="ke-sig-title">Resident Engineer</div><div style="font-size:.55rem;">Date: ................</div></div></div>';
+        h+='<div class="ke-signatures"><div class="ke-sig"><div class="ke-sig-line"></div><div class="ke-sig-name" contenteditable="true" onclick="event.stopPropagation()">'+cowName+'</div><div class="ke-sig-title" contenteditable="true" onclick="event.stopPropagation()">Clerk of Works</div><div style="font-size:.55rem;">Date: <span contenteditable="true" onclick="event.stopPropagation()">................</span></div></div><div class="ke-sig"><div class="ke-sig-line"></div><div class="ke-sig-name" contenteditable="true" onclick="event.stopPropagation()">.....................</div><div class="ke-sig-title" contenteditable="true" onclick="event.stopPropagation()">Resident Engineer</div><div style="font-size:.55rem;">Date: <span contenteditable="true" onclick="event.stopPropagation()">................</span></div></div></div>';
 
         // FOOTER
         h+='<div class="ke-footer">Generated by CoW Log Pro | '+rn+' | '+rdate+' | Republic of Kenya</div>';
