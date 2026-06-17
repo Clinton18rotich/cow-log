@@ -106,7 +106,7 @@
         <div class="panel" id="panel-materials"><div id="materialEntries"></div></div>
         <div class="panel" id="panel-concrete"><div id="concreteEntries"></div></div>
         <div class="panel" id="panel-report"><div id="reportContent"></div></div>
-        <div class="panel" id="panel-ncrdoc"><div id="ncrDocContent"></div></div>
+    <div class="panel" id="panel-sidoc"><div id="siDocContent"></div></div>
     </div>
     <button class="fab" id="fabBtn">+</button>
     <div class="bottom-nav">
@@ -138,13 +138,13 @@
     function updateCompactDisplay(){document.getElementById('displayProject').textContent=project.projectName||'Project';document.getElementById('displayContractor').textContent=project.contractorName||'Contractor';document.getElementById('displayLocation').textContent=project.defaultLocation||'Site';document.getElementById('aiStatus').innerHTML=hasAI()?'<div class="chip chip-ai">🤖 AI Ready</div>':'';}
     function saveProjectSettings(){['projectName','contractNo','contractorName','defaultLocation','cowName','geminiKey'].forEach(id=>{const el=document.getElementById(id);if(el)project[id]=el.value.trim();});saveProject(project);updateCompactDisplay();document.getElementById('settingsPanel').style.display='none';toast('✅ Saved');}
     function toggleSettings(){const p=document.getElementById('settingsPanel');p.style.display=p.style.display==='none'?'block':'none';if(p.style.display==='block')populateProjectFields();}
-    function switchTab(tab){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.bn-item').forEach(b=>b.classList.remove('active'));const panel=document.getElementById('panel-'+tab);if(panel)panel.classList.add('active');const bn=document.querySelector('.bn-item[data-tab="'+tab+'"]');if(bn)bn.classList.add('active');if(tab==='report')renderReport();}
+    function switchTab(tab){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.bn-item').forEach(b=>b.classList.remove('active'));var panel=document.getElementById('panel-'+tab);if(panel)panel.classList.add('active');var bn=document.querySelector('.bn-item[data-tab="'+tab+'"]');if(bn)bn.classList.add('active');if(tab==='report')renderReport();}
     function quickAction(type){switchTab(type==='inspect'?'inspections':type==='si'?'instructions':type==='material'?'materials':type);if(type==='diary')showDiaryForm();if(type==='inspect')showInspectionMenu();if(type==='ncr')showNCRForm();if(type==='si')showInstructionForm();if(type==='rfi')showRFIForm();if(type==='material')showMaterialForm();}
 
     function renderDiary(filter=''){const c=document.getElementById('diaryEntries');let entries=app.diary;if(filter){const q=filter.toLowerCase();entries=entries.filter(e=>e.title.toLowerCase().includes(q)||e.description.toLowerCase().includes(q));}entries.sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty"><div class="empty-icon">📔</div><h3>No diary entries</h3></div>';return;}c.innerHTML=entries.map(e=>'<div class="list-cell"><div class="list-icon blue">📔</div><div class="list-content"><div class="list-title">'+e.title+'</div><div class="list-sub">'+fmt(e.timestamp)+' · '+e.location+'</div></div><div class="list-right"><button class="btn btn-xs btn-secondary" onclick="deleteEntry(\'diary\',\''+e.id+'\')">🗑️</button></div></div>').join('');}
     function renderInspections(){const c=document.getElementById('inspectionEntries');const entries=[...app.inspections].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty"><div class="empty-icon">✅</div><h3>No inspections</h3><button class="btn btn-primary btn-sm" onclick="showInspectionMenu()">Start Inspection</button></div>';return;}c.innerHTML=entries.map(e=>'<div class="list-cell"><div class="list-icon green">✅</div><div class="list-content"><div class="list-title">'+e.checklistType+'</div><div class="list-sub">'+fmt(e.timestamp)+' · '+e.location+' · '+e.items.filter(i=>i.passed).length+'/'+e.items.length+' OK</div></div><div class="list-right"><span class="badge '+(e.result==='pass'?'badge-success':'badge-danger')+'">'+e.result.toUpperCase()+'</span></div></div>').join('');}
-    function renderNCRs(){const c=document.getElementById('ncrEntries');const entries=[...app.ncrs].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty"><div class="empty-icon">🚨</div><h3>No NCRs</h3></div>';return;}c.innerHTML=entries.map(e=>'<div class="list-cell" style="cursor:pointer;" onclick="viewNCRDoc(\''+e.id+'\')"><div class="list-icon red">🚨</div><div class="list-content"><div class="list-title">'+e.title+'</div><div class="list-sub">'+fmt(e.timestamp)+' · '+e.location+' · '+e.severity+'</div></div><div class="list-right"><span class="badge '+(e.status==='open'?'badge-danger':'badge-success')+'">'+e.status+'</span></div></div>').join('');}
-    function renderInstructions(){const c=document.getElementById('instructionEntries');const entries=[...app.instructions].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty"><div class="empty-icon">📋</div><h3>No instructions</h3></div>';return;}c.innerHTML=entries.map(e=>'<div class="list-cell"><div class="list-icon orange">📋</div><div class="list-content"><div class="list-title">SI-'+e.id.split('-')[1]+'</div><div class="list-sub">'+fmt(e.timestamp)+' · '+e.issuedTo+'</div></div></div>').join('');}
+    function renderNCRs(){const c=document.getElementById('ncrEntries');const entries=[...app.ncrs].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty"><div class="empty-icon">🚨</div><h3>No NCRs</h3></div>';return;}c.innerHTML=entries.map(e=>'<div class="list-cell"><div class="list-icon red">🚨</div><div class="list-content"><div class="list-title">'+e.title+'</div><div class="list-sub">'+fmt(e.timestamp)+' · '+e.location+' · '+e.severity+'</div></div><div class="list-right"><span class="badge '+(e.status==='open'?'badge-danger':'badge-success')+'">'+e.status+'</span></div></div>').join('');}
+    function renderInstructions(){const c=document.getElementById('instructionEntries');const entries=[...app.instructions].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));if(!entries.length){c.innerHTML='<div class="empty"><div class="empty-icon">📋</div><h3>No instructions</h3></div>';return;}c.innerHTML=entries.map(e=>'<div class="list-cell" onclick="viewSI(\''+e.id+'\')"><div class="list-icon orange">📋</div><div class="list-content"><div class="list-title">SI-'+e.id.split('-')[1]+'</div><div class="list-sub">'+fmt(e.timestamp)+' · '+e.issuedTo+'</div></div><div class="list-right"><span class="badge '+(e.status==='acknowledged'?'badge-success':'badge-warning')+'">'+e.status+'</span></div></div>').join('');}
     function renderRFIs(){const c=document.getElementById('rfiEntries');if(!app.rfis.length){c.innerHTML='<div class="empty"><div class="empty-icon">📤</div><h3>No RFIs</h3></div>';return;}c.innerHTML=app.rfis.map(e=>'<div class="list-cell"><div class="list-icon purple">📤</div><div class="list-content"><div class="list-title">'+e.subject+'</div><div class="list-sub">'+fmt(e.timestamp)+' · '+e.sentTo+'</div></div></div>').join('');}
     function renderDrawings(){const c=document.getElementById('drawingEntries');let h='<button class="btn btn-primary btn-sm" style="width:100%;margin-bottom:8px;" onclick="showDrawingForm()">+ Add Drawing</button>';if(!app.drawings.length){h+='<div class="empty"><div class="empty-icon">📐</div><h3>No drawings</h3></div>';}else{app.drawings.forEach(e=>{h+='<div class="card"><div class="card-title">📐 '+e.number+' Rev '+e.revision+'</div></div>';});}c.innerHTML=h;}
     function renderMaterials(){const c=document.getElementById('materialEntries');if(!app.materials.length){c.innerHTML='<div class="empty"><div class="empty-icon">🧱</div><h3>No materials</h3><button class="btn btn-primary btn-sm" onclick="showMaterialForm()">Add Material</button></div>';return;}let h='<button class="btn btn-primary btn-sm" style="width:100%;margin-bottom:8px;" onclick="showMaterialForm()">+ Add Material</button>';app.materials.forEach(m=>{const s=parseFloat(m.currentStock||0);h+='<div class="list-cell"><div class="list-icon orange">🧱</div><div class="list-content"><div class="list-title">'+m.name+'</div></div><div class="list-right" style="font-weight:700;color:'+(s<=0?'var(--red)':'var(--green)')+';">'+s+'</div></div>';});c.innerHTML=h;}
@@ -303,6 +303,103 @@
     function showDiaryForm(){const h='<div class="form-group"><label class="form-label">Title *</label><input class="input" type="text" id="dt"></div><div class="form-group"><label class="form-label">Activity</label><select class="select" id="da"><option>Work in Progress</option><option>Material Delivery</option><option>Inspection</option><option>Meeting</option><option>Delay/Issue</option></select></div><div class="form-group"><label class="form-label">Location *</label><input class="input" type="text" id="dl" value="'+loc()+'"></div><div class="form-group"><label class="form-label">Description *</label><textarea class="textarea" id="dd"></textarea></div><div class="form-group"><label class="form-label">Labour</label><input class="input" type="text" id="dlb"></div><div class="form-group"><label class="form-label">Equipment</label><input class="input" type="text" id="deq"></div><div class="form-group"><label class="form-label">Materials</label><textarea class="textarea" id="dmt" style="min-height:40px;"></textarea></div><div class="form-group"><label class="form-label">Issues</label><textarea class="textarea" id="dis" style="min-height:40px;"></textarea></div>';showModal('📔 Diary Entry',h,()=>{const t=document.getElementById('dt').value.trim(),d=document.getElementById('dd').value.trim();if(!t||!d)return false;app.diary.push({id:genId('di'),title:t,activityType:document.getElementById('da').value,location:document.getElementById('dl').value,description:d,labourCount:document.getElementById('dlb').value,equipmentUsed:document.getElementById('deq').value,materialsDelivered:document.getElementById('dmt').value,issuesIdentified:document.getElementById('dis').value,timestamp:new Date().toISOString()});saveApp(app);});}
     function showNCRForm(){const h='<div class="form-group"><label class="form-label">Title *</label><input class="input" type="text" id="nt"></div><div class="form-group"><label class="form-label">Severity</label><select class="select" id="ns"><option>Minor</option><option selected>Major</option><option>Critical</option></select></div><div class="form-group"><label class="form-label">Location</label><input class="input" type="text" id="nl" value="'+loc()+'"></div><div class="form-group"><label class="form-label">Description *</label><textarea class="textarea" id="nd"></textarea></div><div class="form-group"><label class="form-label">Action *</label><textarea class="textarea" id="na"></textarea></div>';showModal('🚨 NCR',h,()=>{const t=document.getElementById('nt').value.trim(),d=document.getElementById('nd').value.trim(),a=document.getElementById('na').value.trim();if(!t||!d||!a)return false;app.ncrs.push({id:genId('ncr'),title:t,severity:document.getElementById('ns').value,location:document.getElementById('nl').value,description:d,actionRequired:a,status:'open',timestamp:new Date().toISOString()});saveApp(app);});}
     function showRFIForm(){const h='<div class="form-group"><label class="form-label">Subject *</label><input class="input" type="text" id="rs"></div><div class="form-group"><label class="form-label">Question *</label><textarea class="textarea" id="rq"></textarea></div>';showModal('📤 RFI',h,()=>{const s=document.getElementById('rs').value.trim(),q=document.getElementById('rq').value.trim();if(!s||!q)return false;app.rfis.push({id:genId('rfi'),subject:s,question:q,sentTo:'Engineer',status:'open',timestamp:new Date().toISOString()});saveApp(app);});}
+    function viewSI(id){
+        const si=app.instructions.find(e=>e.id===id);
+        if(!si)return;
+        const pn=project.projectName||'___________';
+        const con=project.contractorName||'___________';
+        const cn=project.contractNo||'___________';
+        const cowName=project.cowName||'___________';
+        const siNo='SI/'+si.id.split('-')[1]+'/'+new Date().getFullYear();
+        const siDate=new Date(si.timestamp).toLocaleDateString('en-KE',{day:'numeric',month:'long',year:'numeric'});
+        
+        let h='<div style="display:flex;gap:6px;margin-bottom:8px;">';
+        h+='<button class="btn btn-sm btn-primary" onclick="printSIDoc()">🖨️ Print SI</button>';
+        h+='<button class="btn btn-sm btn-secondary" onclick="switchTab('instructions')">← Back</button>';
+        h+='</div>';
+        h+='<div id="siPrintable" style="background:#fff;color:#000;font-family:Times New Roman,serif;padding:16px;border:2px solid #000;font-size:10pt;line-height:1.4;">';
+        
+        // Header
+        h+='<div style="text-align:center;border-bottom:3px double #000;padding-bottom:10px;margin-bottom:14px;">';
+        h+='<h3 style="margin:0;font-size:13pt;text-transform:uppercase;letter-spacing:1px;">Site Instruction</h3>';
+        h+='<div style="font-size:8pt;margin-top:2px;">'+pn+'</div></div>';
+        
+        // Meta table
+        h+='<table style="width:100%;border-collapse:collapse;font-size:9pt;margin-bottom:12px;">';
+        [['SI NO:',siNo],['DATE:',siDate],['PROJECT:',pn],['CONTRACT NO:',cn],['CONTRACTOR:',con],['LOCATION:',si.location||'___________']].forEach(r=>{
+            h+='<tr><td style="padding:2px 6px;font-weight:700;width:100px;">'+r[0]+'</td><td style="padding:2px 6px;border-bottom:1px dotted #999;">'+r[1]+'</td></tr>';
+        });
+        h+='</table>';
+        
+        // Checkboxes
+        h+='<div style="border:1px solid #000;padding:10px;margin-bottom:12px;">';
+        h+='<div style="font-weight:700;margin-bottom:6px;font-size:9pt;">You are hereby instructed to:</div>';
+        ['Stop Work Immediately','Rectify Defective Work','Comply with Specification','Accelerate Progress','Other'].forEach(t=>{
+            h+='<div style="margin:3px 0;font-size:9pt;">☐ '+t+'</div>';
+        });
+        h+='</div>';
+        
+        // Details
+        h+='<div style="margin-bottom:12px;"><div style="font-weight:700;border-bottom:1px solid #000;padding-bottom:3px;margin-bottom:6px;">DETAILS OF INSTRUCTION:</div>';
+        h+='<div style="min-height:50px;padding:6px;border:1px solid #ccc;font-size:9pt;">'+(si.description||'')+'</div></div>';
+        
+        // Reason
+        h+='<div style="margin-bottom:12px;"><div style="font-weight:700;border-bottom:1px solid #000;padding-bottom:3px;margin-bottom:6px;">REASON:</div>';
+        h+='<div contenteditable="true" style="min-height:30px;padding:6px;border:1px solid #ccc;font-size:9pt;">........................................................</div></div>';
+        
+        // Reference
+        h+='<div style="margin-bottom:12px;"><div style="font-weight:700;border-bottom:1px solid #000;padding-bottom:3px;margin-bottom:6px;">REFERENCE:</div>';
+        h+='<div contenteditable="true" style="min-height:25px;padding:6px;border:1px solid #ccc;font-size:9pt;">'+(si.reference||'........................................................')+'</div></div>';
+        
+        // Deadline
+        h+='<div style="margin-bottom:12px;"><div style="font-weight:700;border-bottom:1px solid #000;padding-bottom:3px;margin-bottom:6px;">COMPLIANCE REQUIRED BY:</div>';
+        h+='<div contenteditable="true" style="min-height:25px;padding:6px;border:1px solid #ccc;font-size:9pt;">'+(si.deadline||'........................................................')+'</div></div>';
+        
+        // Signatures
+        h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:16px 0;padding-top:12px;border-top:2px solid #000;">';
+        h+='<div style="text-align:center;"><div style="border-bottom:1px solid #000;margin:28px 0 4px;"></div><div style="font-weight:700;font-size:9pt;">'+cowName+'</div><div style="font-size:8pt;">Clerk of Works</div><div style="font-size:8pt;">Date: ................</div></div>';
+        h+='<div style="text-align:center;"><div style="border-bottom:1px solid #000;margin:28px 0 4px;"></div><div style="font-weight:700;font-size:9pt;">.....................</div><div style="font-size:8pt;">Contractor's Rep</div><div style="font-size:8pt;">Date: ................</div></div>';
+        h+='</div>';
+        
+        // Acknowledgment
+        h+='<div style="border:2px solid #000;padding:12px;margin:12px 0;font-size:9pt;">';
+        h+='<div style="font-weight:700;text-align:center;margin-bottom:8px;">ACKNOWLEDGMENT</div>';
+        h+='<p>I acknowledge receipt of this Site Instruction.</p>';
+        h+='<div style="text-align:center;margin-top:16px;"><div style="border-bottom:1px solid #000;width:180px;margin:0 auto 4px;"></div><div style="font-weight:700;">Contractor's Rep</div><div>Date: ................</div></div></div>';
+        
+        h+='</div>';
+        
+        document.getElementById('siDocContent').innerHTML=h;
+        switchTab('sidoc');
+        
+        // Store for printing
+        window._siDocHTML=h;
+    }
+    
+    function printSIDoc(){
+        const doc=document.getElementById('siPrintable');
+        if(!doc)return;
+        const w=window.open('','_blank','width=800,height=600');
+        w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Site Instruction</title>');
+        w.document.write('<style>@page{size:A4;margin:12mm}body{font-family:Times New Roman,serif;display:flex;justify-content:center;padding:10px;background:#fff}</style>');
+        w.document.write('</head><body>'+doc.outerHTML+'</body></html>');
+        w.document.close();
+        setTimeout(()=>w.print(),400);
+    }
+    
+    function viewSI_old(id){
+        const si=app.instructions.find(e=>e.id===id);
+        if(!si)return;
+        const h='<div class="form-group"><label class="form-label">SI Number</label><input class="input" value="SI-'+si.id.split('-')[1]+'" disabled></div>'+
+        '<div class="form-group"><label class="form-label">Issued To</label><input class="input" value="'+si.issuedTo+'" disabled></div>'+
+        '<div class="form-group"><label class="form-label">Location</label><input class="input" value="'+si.location+'" disabled></div>'+
+        '<div class="form-group"><label class="form-label">Instruction</label><textarea class="textarea" disabled>'+si.description+'</textarea></div>'+
+        '<div class="form-group"><label class="form-label">Status</label><input class="input" value="'+si.status.toUpperCase()+'" disabled></div>'+
+        (si.deadline?'<div class="form-group"><label class="form-label">Deadline</label><input class="input" value="'+si.deadline+'" disabled></div>':'')+
+        '<p style="font-size:.6rem;color:var(--text3);text-align:center;margin-top:8px;">📄 Go to Report tab → Print to save as PDF document</p>';
+        document.getElementById('modalContainer').innerHTML='<div class="modal-overlay" id="mo"><div class="modal"><div class="modal-handle"></div><h2>📋 Site Instruction</h2>'+h+'<button class="btn btn-secondary" style="width:100%;margin-top:8px;" onclick="closeModal()">Close</button></div></div>';
+        document.getElementById('mo').addEventListener('click',e=>{if(e.target.id==='mo')closeModal();});
+    }
     function showInstructionForm(){const h='<div class="form-group"><label class="form-label">Issued To *</label><input class="input" type="text" id="st" value="'+(project.contractorName||'Contractor')+'"></div><div class="form-group"><label class="form-label">Instruction *</label><textarea class="textarea" id="sd"></textarea></div>';showModal('📋 SI',h,()=>{const t=document.getElementById('st').value.trim(),d=document.getElementById('sd').value.trim();if(!t||!d)return false;app.instructions.push({id:genId('si'),issuedTo:t,description:d,location:loc(),status:'issued',timestamp:new Date().toISOString()});saveApp(app);});}
     function showMaterialForm(){const h='<div class="form-group"><label class="form-label">Name *</label><input class="input" type="text" id="mn"></div><div class="form-group"><label class="form-label">Unit</label><select class="select" id="mu"><option>Bags</option><option>Tonnes</option><option>m³</option><option>Pieces</option></select></div><div class="form-group"><label class="form-label">Stock</label><input class="input" type="number" id="ms" value="0"></div>';showModal('🧱 Material',h,()=>{const n=document.getElementById('mn').value.trim();if(!n)return false;app.materials.push({id:genId('mat'),name:n,unit:document.getElementById('mu').value,currentStock:parseFloat(document.getElementById('ms').value)||0,minStock:0});saveApp(app);});}
     function showDrawingForm(){const h='<div class="form-group"><label class="form-label">Number *</label><input class="input" type="text" id="dwNo"></div><div class="form-group"><label class="form-label">Title *</label><input class="input" type="text" id="dwTitle"></div><div class="form-group"><label class="form-label">Revision</label><input class="input" type="text" id="dwRev" value="A"></div>';showModal('📐 Drawing',h,()=>{const n=document.getElementById('dwNo').value.trim(),t=document.getElementById('dwTitle').value.trim();if(!n||!t)return false;app.drawings.push({id:genId('dw'),number:n,title:t,revision:document.getElementById('dwRev').value,dateReceived:today()});saveApp(app);});}
@@ -312,56 +409,6 @@
     function startInsp(name,group){const items=ALL_CHECKLISTS[group][name];let h='<div class="form-group"><label class="form-label">Location</label><input class="input" type="text" id="il" value="'+loc()+'"></div>';items.forEach((item,i)=>{h+='<div class="checkbox-row"><input type="checkbox" id="it'+i+'" checked><label for="it'+i+'">'+item+'</label></div>';});showModal('✅ '+name,h,()=>{const checked=items.map((item,i)=>({label:item,passed:document.getElementById('it'+i).checked}));app.inspections.push({id:genId('ins'),checklistType:name,location:document.getElementById('il').value,items:checked,result:checked.every(i=>i.passed)?'pass':'fail',timestamp:new Date().toISOString()});saveApp(app);});}
     function showFABMenu(){document.getElementById('modalContainer').innerHTML='<div class="modal-overlay" id="fo" style="align-items:flex-end;justify-content:center;"><div class="modal" style="max-width:340px;text-align:center;"><div class="modal-handle"></div><h2>New Entry</h2><button class="btn btn-primary" style="margin:3px 0;" onclick="closeModal();showDiaryForm();">📔 Diary</button><button class="btn btn-primary" style="margin:3px 0;background:var(--green);" onclick="closeModal();showInspectionMenu();">✅ Inspection</button><button class="btn btn-primary" style="margin:3px 0;background:var(--red);" onclick="closeModal();showNCRForm();">🚨 NCR</button><button class="btn btn-secondary" style="margin-top:6px;" onclick="closeModal();">Cancel</button></div></div>';document.getElementById('fo').addEventListener('click',e=>{if(e.target.id==='fo')closeModal();});}
 
-
-    function viewNCRDoc(id){
-        var ncr=app.ncrs.find(function(e){return e.id===id;});
-        if(!ncr)return;
-        var pn=project.projectName||'___________';
-        var con=project.contractorName||'___________';
-        var cowName=project.cowName||'___________';
-        var ncrNo='NCR/'+ncr.id.split('-')[1]+'/'+new Date().getFullYear();
-        var ncrDate=new Date(ncr.timestamp).toLocaleDateString('en-KE',{day:'numeric',month:'long',year:'numeric'});
-        
-        var h='';
-        h+='<div style="display:flex;gap:6px;margin-bottom:10px;">';
-        h+='<button class="btn btn-sm btn-primary" onclick="printNCRDoc()">Print NCR</button>';
-        h+='<button class="btn btn-sm btn-secondary" onclick="switchTab(\'ncr\')">Back</button>';
-        h+='</div>';
-        h+='<div id="ncrPrintArea" style="background:#fff;color:#000;font-family:Times New Roman,serif;padding:20px;border:2px solid #000;font-size:10pt;">';
-        h+='<div style="text-align:center;border-bottom:3px double #000;padding-bottom:12px;margin-bottom:16px;">';
-        h+='<h3 style="margin:0;font-size:14pt;">NON-CONFORMANCE REPORT</h3>';
-        h+='<div style="font-size:9pt;">'+pn+'</div></div>';
-        h+='<table style="width:100%;border-collapse:collapse;font-size:9pt;margin-bottom:14px;">';
-        h+='<tr><td style="padding:3px;font-weight:700;width:100px;">NCR NO:</td><td style="padding:3px;border-bottom:1px dotted #999;">'+ncrNo+'</td></tr>';
-        h+='<tr><td style="padding:3px;font-weight:700;">DATE:</td><td style="padding:3px;border-bottom:1px dotted #999;">'+ncrDate+'</td></tr>';
-        h+='<tr><td style="padding:3px;font-weight:700;">PROJECT:</td><td style="padding:3px;border-bottom:1px dotted #999;">'+pn+'</td></tr>';
-        h+='<tr><td style="padding:3px;font-weight:700;">CONTRACTOR:</td><td style="padding:3px;border-bottom:1px dotted #999;">'+con+'</td></tr>';
-        h+='<tr><td style="padding:3px;font-weight:700;">LOCATION:</td><td style="padding:3px;border-bottom:1px dotted #999;">'+(ncr.location||'')+'</td></tr>';
-        h+='<tr><td style="padding:3px;font-weight:700;">SEVERITY:</td><td style="padding:3px;border-bottom:1px dotted #999;font-weight:700;color:#cc0000;">'+ncr.severity.toUpperCase()+'</td></tr>';
-        h+='</table>';
-        h+='<div style="margin-bottom:14px;"><div style="font-weight:700;border-bottom:1px solid #000;padding-bottom:4px;">DESCRIPTION:</div><div style="min-height:60px;padding:8px;border:1px solid #ccc;">'+(ncr.description||'')+'</div></div>';
-        h+='<div style="margin-bottom:14px;"><div style="font-weight:700;border-bottom:1px solid #000;padding-bottom:4px;">CORRECTIVE ACTION:</div><div style="min-height:50px;padding:8px;border:1px solid #ccc;">'+(ncr.actionRequired||'')+'</div></div>';
-        h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:30px;margin:20px 0;padding-top:16px;border-top:2px solid #000;">';
-        h+='<div style="text-align:center;"><div style="border-bottom:1px solid #000;margin:30px 0 4px;"></div><div style="font-weight:700;">'+cowName+'</div><div style="font-size:9pt;">Clerk of Works</div></div>';
-        h+='<div style="text-align:center;"><div style="border-bottom:1px solid #000;margin:30px 0 4px;"></div><div style="font-weight:700;">................</div><div style="font-size:9pt;">Contractor Rep</div></div></div>';
-        h+='</div>';
-        
-        document.getElementById('ncrDocContent').innerHTML=h;
-        document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
-        document.getElementById('panel-ncrdoc').classList.add('active');
-        document.querySelectorAll('.bn-item').forEach(function(b){b.classList.remove('active');});
-    }
-    
-    function printNCRDoc(){
-        var doc=document.getElementById('ncrPrintArea');
-        if(!doc)return;
-        var w=window.open('','_blank');
-        w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>NCR</title>');
-        w.document.write('<style>@page{size:A4;margin:15mm}body{font-family:Times New Roman,serif;padding:10px;background:#fff}</style>');
-        w.document.write('</head><body>'+doc.outerHTML+'</body></html>');
-        w.document.close();
-        setTimeout(function(){w.print();},500);
-    }
     function deleteEntry(type,id){app[type]=app[type].filter(e=>e.id!==id);saveApp(app);refreshAll();}
     function copyReport(){navigator.clipboard.writeText(window._report||'').then(()=>toast('📋 Copied'));}
     function printReport(){switchTab('report');setTimeout(()=>window.print(),400);}
