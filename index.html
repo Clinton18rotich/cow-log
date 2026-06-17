@@ -106,6 +106,7 @@
         <div class="panel" id="panel-materials"><div id="materialEntries"></div></div>
         <div class="panel" id="panel-concrete"><div id="concreteEntries"></div></div>
         <div class="panel" id="panel-report"><div id="reportContent"></div></div>
+        <div class="panel" id="panel-ncrdoc"><div id="ncrDocContent"></div></div>
     <div class="panel" id="panel-sidoc"><div id="siDocContent"></div></div>
     </div>
     <button class="fab" id="fabBtn">+</button>
@@ -472,6 +473,83 @@
     }
     document.addEventListener('DOMContentLoaded',init);
     if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}
-    </script>
+
+    // ============================================
+    // DOCUMENT GENERATORS — Added safely at end
+    // ============================================
+    
+    // Make NCR items clickable after page loads
+    var _ncrClickSetup = setInterval(function(){
+        var ncrs = document.querySelectorAll('#ncrEntries .list-cell');
+        if(ncrs.length > 0){
+            clearInterval(_ncrClickSetup);
+            ncrs.forEach(function(cell, i){
+                cell.style.cursor = 'pointer';
+                cell.addEventListener('click', function(){
+                    var entries = app.ncrs.sort(function(a,b){return new Date(b.timestamp)-new Date(a.timestamp);});
+                    if(entries[i]) viewNCRDoc(entries[i].id);
+                });
+            });
+        }
+    }, 500);
+    
+    function viewNCRDoc(id){
+        var ncr = app.ncrs.find(function(e){return e.id===id;});
+        if(!ncr) return;
+        var pn = project.projectName || '___________';
+        var con = project.contractorName || '___________';
+        var cowName = project.cowName || '___________';
+        var ncrNo = 'NCR/' + ncr.id.split('-')[1] + '/' + new Date().getFullYear();
+        var ncrDate = new Date(ncr.timestamp).toLocaleDateString('en-KE',{day:'numeric',month:'long',year:'numeric'});
+        
+        var h = '';
+        h += '<div style="display:flex;gap:6px;margin-bottom:10px;">';
+        h += '<button class="btn btn-sm btn-primary" onclick="printNCRDoc()">Print NCR</button>';
+        h += '<button class="btn btn-sm btn-secondary" onclick="closeNCRDoc()">Back</button>';
+        h += '</div>';
+        h += '<div id="ncrPrintArea" style="background:#fff;color:#000;font-family:Times New Roman,serif;padding:16px;border:2px solid #000;font-size:9pt;">';
+        h += '<div style="text-align:center;border-bottom:3px double #000;padding-bottom:10px;margin-bottom:14px;">';
+        h += '<h3 style="margin:0;font-size:13pt;">NON-CONFORMANCE REPORT</h3>';
+        h += '<div style="font-size:8pt;">' + pn + '</div></div>';
+        h += '<table style="width:100%;border-collapse:collapse;font-size:8pt;margin-bottom:12px;">';
+        h += '<tr><td style="font-weight:700;width:90px;">NCR NO:</td><td style="border-bottom:1px dotted #999;">' + ncrNo + '</td></tr>';
+        h += '<tr><td style="font-weight:700;">DATE:</td><td style="border-bottom:1px dotted #999;">' + ncrDate + '</td></tr>';
+        h += '<tr><td style="font-weight:700;">PROJECT:</td><td style="border-bottom:1px dotted #999;">' + pn + '</td></tr>';
+        h += '<tr><td style="font-weight:700;">CONTRACTOR:</td><td style="border-bottom:1px dotted #999;">' + con + '</td></tr>';
+        h += '<tr><td style="font-weight:700;">LOCATION:</td><td style="border-bottom:1px dotted #999;">' + (ncr.location||'') + '</td></tr>';
+        h += '<tr><td style="font-weight:700;">SEVERITY:</td><td style="border-bottom:1px dotted #999;font-weight:700;color:#cc0000;">' + ncr.severity.toUpperCase() + '</td></tr>';
+        h += '</table>';
+        h += '<div style="margin-bottom:12px;"><b>DESCRIPTION:</b><div style="padding:6px;border:1px solid #ccc;min-height:50px;">' + (ncr.description||'') + '</div></div>';
+        h += '<div style="margin-bottom:12px;"><b>CORRECTIVE ACTION:</b><div style="padding:6px;border:1px solid #ccc;min-height:40px;">' + (ncr.actionRequired||'') + '</div></div>';
+        h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:20px;padding-top:12px;border-top:2px solid #000;">';
+        h += '<div style="text-align:center;"><div style="border-bottom:1px solid #000;margin:28px 0 4px;"></div><b>' + cowName + '</b><br><small>Clerk of Works</small></div>';
+        h += '<div style="text-align:center;"><div style="border-bottom:1px solid #000;margin:28px 0 4px;"></div><b>................</b><br><small>Contractor Rep</small></div>';
+        h += '</div></div>';
+        
+        document.getElementById('ncrDocContent').innerHTML = h;
+        document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+        document.getElementById('panel-ncrdoc').classList.add('active');
+        document.querySelectorAll('.bn-item').forEach(function(b){b.classList.remove('active');});
+    }
+    
+    function closeNCRDoc(){
+        document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+        document.getElementById('panel-ncr').classList.add('active');
+        document.querySelectorAll('.bn-item').forEach(function(b){b.classList.remove('active');});
+        var bn = document.querySelector('.bn-item[data-tab="ncr"]');
+        if(bn) bn.classList.add('active');
+    }
+    
+    function printNCRDoc(){
+        var doc = document.getElementById('ncrPrintArea');
+        if(!doc) return;
+        var w = window.open('','_blank');
+        w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>NCR</title>');
+        w.document.write('<style>@page{size:A4;margin:15mm}body{font-family:Times New Roman,serif;padding:10px;background:#fff}</style>');
+        w.document.write('</head><body>' + doc.outerHTML + '</body></html>');
+        w.document.close();
+        setTimeout(function(){w.print();},500);
+    }
+</script>
 </body>
 </html>
