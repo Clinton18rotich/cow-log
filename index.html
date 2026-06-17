@@ -192,108 +192,26 @@
         const td=today();const dt=app.diary.filter(e=>e.timestamp.startsWith(td));const it=app.inspections.filter(e=>e.timestamp.startsWith(td));const no=app.ncrs.filter(e=>e.status==='open');const si=app.instructions.filter(e=>e.timestamp.startsWith(td));const at=app.attendance.filter(e=>e.date===td);const lowMat=app.materials.filter(m=>parseFloat(m.currentStock||0)<=parseFloat(m.minStock||0));
         const rdate=new Date().toLocaleDateString('en-KE',{weekday:'long',year:'numeric',month:'long',day:'numeric'});const pn=project.projectName||'Project';const con=project.contractorName||'Contractor';const rn='COW-'+String(project.reportCounter||1).padStart(3,'0');const cowName=project.cowName||'Clerk of Works';
         const inspRate=it.length>0?Math.round((it.filter(e=>e.result==='pass').length/it.length)*100):100;
-
-        // Plain text
-        let txt='CLERK OF WORKS — DAILY REPORT
-'+'='.repeat(35)+'
-
-'+rn+' | '+rdate+'
-'+pn+' | '+con+'
-
-Activities: '+dt.length+' | Inspections: '+it.length+' | NCRs Open: '+no.length+'
-';
+        let txt='CLERK OF WORKS — DAILY REPORT\n'+'='.repeat(35)+'\n\n'+rn+' | '+rdate+'\n'+pn+' | '+con+'\n\nActivities: '+dt.length+' | Inspections: '+it.length+' | NCRs Open: '+no.length+'\n';
         window._report=txt;
-
-        let h='';
-        h+='<div style="display:flex;gap:6px;margin-bottom:12px;">';
-        h+='<button class="btn btn-primary btn-sm" onclick="copyReport()">📋 Copy</button>';
-        h+='<button class="btn btn-secondary btn-sm" onclick="printReport()">🖨️ Print</button>';
-        h+='<button class="btn btn-secondary btn-sm" onclick="shareWA(window._report)">📱 Share</button>';
-        h+='<button class="btn btn-secondary btn-sm" onclick="emailReport()">📧 Email</button>';
-        h+='<button class="btn btn-secondary btn-sm" onclick="editReportHeader()">✏️ Edit Header</button>';
-        h+='</div>';
-
-        h+='<div class="client-report" id="clientReport">';
-        h+='<div class="cr-header"><h2>Daily Site Report</h2><div class="cr-subtitle" id="rptProject" contenteditable="true" onclick="event.stopPropagation()">'+pn+'</div><div class="cr-date" id="rptMeta" contenteditable="true" onclick="event.stopPropagation()">'+rdate+' | '+rn+'</div>';
-        h+='<div class="cr-status-bar"><div class="cr-status-item"><div class="cr-status-num blue">'+dt.length+'</div><div class="cr-status-lbl">Activities</div></div><div class="cr-status-item"><div class="cr-status-num '+(inspRate>=80?'green':inspRate>=50?'yellow':'red')+'">'+inspRate+'%</div><div class="cr-status-lbl">Pass Rate</div></div><div class="cr-status-item"><div class="cr-status-num red">'+no.length+'</div><div class="cr-status-lbl">NCRs</div></div><div class="cr-status-item"><div class="cr-status-num green">'+(at.reduce((s,e)=>s+(parseInt(e.count)||0),0)||0)+'</div><div class="cr-status-lbl">Workers</div></div></div></div>';
-
-        h+='<div class="cr-body">';
-
-        // Section 1 - Activities (expandable)
-        h+='<div class="cr-section" onclick="toggleSection(this)"><div class="cr-section-title"><div class="icon blue">📔</div>Activities <span style="font-size:.6rem;margin-left:auto;color:#888;">▼</span></div><div class="cr-section-body">';
-        if(dt.length){dt.forEach((e,i)=>{let cls=e.activityType==='Material Delivery'?'delivery':(e.issuesIdentified?'issue':'in-progress');h+='<div class="cr-activity '+cls+'" contenteditable="true" onclick="event.stopPropagation()"><div class="cr-activity-content"><strong>'+e.title+'</strong><br>'+e.description.replace(/
-/g,'<br>')+'<div style="font-size:.6rem;color:#888;">📍 '+e.location+(e.labourCount?' | 👷 '+e.labourCount:'')+(e.equipmentUsed?' | 🚜 '+e.equipmentUsed:'')+'</div>'+(e.materialsDelivered?'<div style="color:#ff9f0a;">🧱 '+e.materialsDelivered.replace(/
-/g,' | ')+'</div>':'')+(e.issuesIdentified?'<div style="color:#ff453a;">⚠️ '+e.issuesIdentified+'</div>':'')+'</div></div>';});}else{h+='<div class="cr-activity"><div class="cr-activity-content" contenteditable="true" onclick="event.stopPropagation()">No entries recorded today. Click to add notes...</div></div>';}
-        h+='</div></div>';
-
-        // Section 2 - Inspections (expandable)
-        h+='<div class="cr-section" onclick="toggleSection(this)"><div class="cr-section-title"><div class="icon green">✅</div>Inspections <span style="font-size:.6rem;margin-left:auto;color:#888;">▼</span></div><div class="cr-section-body">';
-        if(it.length){h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><span style="font-size:.7rem;">Pass:</span><div style="flex:1;" class="cr-progress"><div class="cr-progress-fill '+(inspRate>=80?'good':inspRate>=50?'warn':'bad')+'" style="width:'+inspRate+'%;"></div></div><span style="font-size:.7rem;font-weight:700;">'+inspRate+'%</span></div>';it.forEach(e=>{h+='<div class="cr-inspection-item '+(e.result==='pass'?'pass':'fail')+'"><div><strong contenteditable="true" onclick="event.stopPropagation()">'+e.checklistType+'</strong><br><span style="font-size:.6rem;color:#888;">'+e.location+' | '+e.items.filter(i=>i.passed).length+'/'+e.items.length+'</span></div><div>'+(e.result==='pass'?'✅':'❌')+'</div></div>';});}else h+='<div class="cr-activity"><div class="cr-activity-content" contenteditable="true" onclick="event.stopPropagation()">No inspections today. Click to add notes...</div></div>';
-        h+='</div></div>';
-
-        // Section 3 - NCRs (expandable)
-        if(no.length>0){h+='<div class="cr-section" onclick="toggleSection(this)"><div class="cr-section-title"><div class="icon red">🚨</div>Open NCRs ('+no.length+') <span style="font-size:.6rem;margin-left:auto;color:#888;">▼</span></div><div class="cr-section-body">';no.forEach(e=>{h+='<div class="cr-ncr-card"><span class="ncr-badge">'+e.severity.toUpperCase()+'</span> <strong contenteditable="true" onclick="event.stopPropagation()">'+e.title+'</strong><br><span contenteditable="true" onclick="event.stopPropagation()">📍 '+e.location+' | 🔧 '+e.actionRequired+'</span></div>';});h+='</div></div>';}
-
-        // Section 4 - Labour & Materials (expandable)
-        h+='<div class="cr-section" onclick="toggleSection(this)"><div class="cr-section-title"><div class="icon blue">👷</div>Labour & Materials <span style="font-size:.6rem;margin-left:auto;color:#888;">▼</span></div><div class="cr-section-body">';
-        if(at.length){const total=at.reduce((s,e)=>s+(parseInt(e.count)||0),0);h+='<div style="font-size:.7rem;margin-bottom:4px;"><strong contenteditable="true" onclick="event.stopPropagation()">Workers: '+total+'</strong></div>';;}else h+='<div style="font-size:.65rem;color:#888;" contenteditable="true" onclick="event.stopPropagation()">Refer to contractor returns. Click to edit...</div>';
-        if(lowMat.length){lowMat.forEach(m=>{h+='<div class="cr-material-row"><span>'+m.name+'</span><span class="stock-low" contenteditable="true" onclick="event.stopPropagation()">⚠️ '+m.currentStock+' '+m.unit+'</span></div>';});}
-        h+='</div></div>';
-
-        // Section 5 - H&S (expandable)
-        h+='<div class="cr-section" onclick="toggleSection(this)"><div class="cr-section-title"><div class="icon green">🦺</div>Health & Safety <span style="font-size:.6rem;margin-left:auto;color:#888;">▼</span></div><div class="cr-section-body"><div class="cr-activity completed"><div class="cr-activity-content" contenteditable="true" onclick="event.stopPropagation()">✅ Site orderly. PPE observed. No incidents. Click to add details...</div></div></div></div>';
-
-        // Add notes section
-        h+='<div class="cr-section"><div class="cr-section-title"><div class="icon orange">📝</div>Additional Notes</div><div class="cr-activity"><div class="cr-activity-content" contenteditable="true" id="rptNotes" onclick="event.stopPropagation()" style="min-height:60px;">Click here to add any additional notes, remarks, or observations for the client...</div></div></div>';
-
-        h+='</div>'; // end body
-
-        // Signatures (editable names)
-        h+='<div class="cr-signatures"><div class="cr-sig-block"><div class="cr-sig-line"></div><div class="cr-sig-name" contenteditable="true" onclick="event.stopPropagation()">'+cowName+'</div><div class="cr-sig-title" contenteditable="true" onclick="event.stopPropagation()">Clerk of Works</div></div><div class="cr-sig-block"><div class="cr-sig-line"></div><div class="cr-sig-name" contenteditable="true" onclick="event.stopPropagation()">Contractor Rep</div><div class="cr-sig-title" contenteditable="true" onclick="event.stopPropagation()">Contractor\'s Representative</div></div></div>';
-
-        h+='<div class="cr-footer">CoW Log Pro | '+rdate+' | <span contenteditable="true" onclick="event.stopPropagation()">'+rn+'</span></div></div>';
+        let h='<div style="display:flex;gap:6px;margin-bottom:12px;"><button class="btn btn-primary btn-sm" onclick="copyReport()">📋 Copy</button><button class="btn btn-secondary btn-sm" onclick="printReport()">🖨️ Print</button><button class="btn btn-secondary btn-sm" onclick="shareWA(window._report)">📱 Share</button><button class="btn btn-secondary btn-sm" onclick="emailReport()">📧 Email</button><button class="btn btn-secondary btn-sm" onclick="editReportHeader()">✏️ Edit</button></div>';
+        h+='<div class="client-report"><div class="cr-header"><h2>Daily Site Report</h2><div class="cr-subtitle" contenteditable="true">'+pn+'</div><div class="cr-date">'+rdate+' | '+rn+'</div><div class="cr-status-bar"><div class="cr-status-item"><div class="cr-status-num blue">'+dt.length+'</div><div class="cr-status-lbl">Activities</div></div><div class="cr-status-item"><div class="cr-status-num '+(inspRate>=80?'green':inspRate>=50?'yellow':'red')+'">'+inspRate+'%</div><div class="cr-status-lbl">Pass Rate</div></div><div class="cr-status-item"><div class="cr-status-num red">'+no.length+'</div><div class="cr-status-lbl">NCRs</div></div><div class="cr-status-item"><div class="cr-status-num green">'+(at.reduce((s,e)=>s+(parseInt(e.count)||0),0)||0)+'</div><div class="cr-status-lbl">Workers</div></div></div></div><div class="cr-body">';
+        h+='<div class="cr-section"><div class="cr-section-title"><div class="icon blue">📔</div>Activities</div>';dt.length?dt.forEach(e=>{let cls=e.activityType==='Material Delivery'?'delivery':(e.issuesIdentified)?'issue':'in-progress';h+='<div class="cr-activity '+cls+'"><div class="cr-activity-content"><strong>'+e.title+'</strong><br>'+e.description.replace(/\n/g,'<br>')+'<div style="font-size:.6rem;color:#888;">📍 '+e.location+(e.labourCount?' | 👷 '+e.labourCount:'')+(e.equipmentUsed?' | 🚜 '+e.equipmentUsed:'')+'</div>'+(e.materialsDelivered?'<div style="color:#ff9f0a;">🧱 '+e.materialsDelivered.replace(/\n/g,' | ')+'</div>':'')+(e.issuesIdentified?'<div style="color:#ff453a;">⚠️ '+e.issuesIdentified+'</div>':'')+'</div></div>';}):h+='<div class="cr-activity"><div class="cr-activity-content">No entries today.</div></div>';h+='</div>';
+        h+='<div class="cr-section"><div class="cr-section-title"><div class="icon green">✅</div>Inspections</div>';if(it.length){h+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><span style="font-size:.7rem;">Pass:</span><div style="flex:1;" class="cr-progress"><div class="cr-progress-fill '+(inspRate>=80?'good':inspRate>=50?'warn':'bad')+'" style="width:'+inspRate+'%;"></div></div><span style="font-size:.7rem;font-weight:700;">'+inspRate+'%</span></div>';it.forEach(e=>{h+='<div class="cr-inspection-item '+(e.result==='pass'?'pass':'fail')+'"><div><strong>'+e.checklistType+'</strong><br><span style="font-size:.6rem;color:#888;">'+e.location+' | '+e.items.filter(i=>i.passed).length+'/'+e.items.length+'</span></div><div>'+(e.result==='pass'?'✅':'❌')+'</div></div>';});}else h+='<div class="cr-activity"><div class="cr-activity-content">No inspections.</div></div>';h+='</div>';
+        if(no.length){h+='<div class="cr-section"><div class="cr-section-title"><div class="icon red">🚨</div>Open NCRs ('+no.length+')</div>';no.forEach(e=>{h+='<div class="cr-ncr-card"><span class="ncr-badge">'+e.severity.toUpperCase()+'</span> <strong>'+e.title+'</strong><br>📍 '+e.location+' | 🔧 '+e.actionRequired+'</div>';});h+='</div>';}
+        if(si.length){h+='<div class="cr-section"><div class="cr-section-title"><div class="icon orange">📋</div>Site Instructions</div>';si.forEach(e=>{h+='<div class="cr-activity"><div class="cr-activity-content"><strong>SI-'+e.id.split('-')[1]+':</strong> '+e.description+'<br><span style="font-size:.6rem;">👷 '+e.issuedTo+'</span></div></div>';});h+='</div>';}
+        h+='<div class="cr-section"><div class="cr-section-title"><div class="icon blue">👷</div>Labour & Materials</div>';
+        if(at.length){const total=at.reduce((s,e)=>s+(parseInt(e.count)||0),0);h+='<div style="font-size:.7rem;margin-bottom:4px;"><strong>Workers: '+total+'</strong></div>';}else h+='<div style="font-size:.65rem;color:#888;">Refer to contractor returns.</div>';
+        if(lowMat.length){lowMat.forEach(m=>{h+='<div class="cr-material-row"><span>'+m.name+'</span><span class="stock-low">⚠️ '+m.currentStock+' '+m.unit+'</span></div>';});}
+        h+='</div><div class="cr-section"><div class="cr-section-title"><div class="icon green">🦺</div>H&S</div><div class="cr-activity completed"><div class="cr-activity-content">✅ Site orderly. PPE observed. No incidents.</div></div></div></div>';
+        h+='<div class="cr-signatures"><div class="cr-sig-block"><div class="cr-sig-line"></div><div class="cr-sig-name" contenteditable="true">'+cowName+'</div><div class="cr-sig-title">Clerk of Works</div></div><div class="cr-sig-block"><div class="cr-sig-line"></div><div class="cr-sig-name" contenteditable="true">Contractor Rep</div><div class="cr-sig-title">Contractor\'s Representative</div></div></div><div class="cr-footer">CoW Log Pro | '+rdate+'</div></div>';
         document.getElementById('reportContent').innerHTML=h;
-
-        // Save edited report function
-        window._saveEditedReport=function(){
-            const notes=document.getElementById('rptNotes');
-            if(notes)window._report+='
-
-ADDITIONAL NOTES:
-'+notes.innerText;
-            toast('📝 Report updated!');
-        };
-    }
-
-    function toggleSection(el){
-        const body=el.querySelector('.cr-section-body');
-        if(body){
-            const arrow=el.querySelector('span');
-            if(body.style.display==='none'){
-                body.style.display='block';
-                if(arrow)arrow.textContent='▼';
-            }else{
-                body.style.display='none';
-                if(arrow)arrow.textContent='▶';
-            }
-        }
     }
 
     function editReportHeader(){
-        const pn=prompt('Project Name:',project.projectName||'');
-        if(pn!==null){project.projectName=pn;saveProject(project);}
-        const rn=prompt('Report Number:','COW-'+String(project.reportCounter||1).padStart(3,'0'));
-        toast('✏️ Header updated. Report will refresh.');
-        renderReport();
+        const p=prompt("Project Name:",project.projectName||"");
+        if(p!==null){project.projectName=p;saveProject(project);renderReport();}
     }
-
-    function saveReport(){
-        window._saveEditedReport&&window._saveEditedReport();
-        project.reportCounter=(project.reportCounter||1)+1;saveProject(project);
-        app.dailyReports.push({id:genId('rpt'),content:window._report||'',date:today()});saveApp(app);
-        toast('💾 Report saved!');
-    }
-
     function emailReport(){window.open('mailto:?subject='+encodeURIComponent('Daily Report — '+today())+'&body='+encodeURIComponent(window._report||''),'_blank');toast('📧 Opening email...');}
     function refreshAll(){renderDiary();renderInspections();renderNCRs();renderInstructions();renderRFIs();renderDrawings();renderMaterials();renderConcrete();updateStats();}
 
