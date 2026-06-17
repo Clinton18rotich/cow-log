@@ -212,7 +212,7 @@
     function loadProject(){try{return JSON.parse(localStorage.getItem(PK))||{projectName:'',contractNo:'',contractorName:'',defaultLocation:'',cowName:'CoW',geminiKey:'',reportCounter:1};}catch(e){return{projectName:'',contractNo:'',contractorName:'',defaultLocation:'',cowName:'CoW',geminiKey:'',reportCounter:1};}}
     function saveProject(p){localStorage.setItem(PK,JSON.stringify(p));}
     let project=loadProject();
-    function loadApp(){try{return JSON.parse(localStorage.getItem(AK))||{diary:[],inspections:[],ncrs:[],instructions:[],rfis:[],drawings:[],materials:[],materialLog:[],concrete:[],delays:[],attendance:[],dailyReports:[]};}catch(e){return{diary:[],inspections:[],ncrs:[],instructions:[],rfis:[],drawings:[],materials:[],materialLog:[],concrete:[],delays:[],attendance:[],dailyReports:[]};}}
+    function loadApp(){try{return JSON.parse(localStorage.getItem(AK))||{diary:[],inspections:[],ncrs:[],instructions:[],rfis:[],drawings:[],materials:[],materialLog:[],concrete:[],delays:[],attendance:[],dailyReports:[],reportOverrides:{}};}catch(e){return{diary:[],inspections:[],ncrs:[],instructions:[],rfis:[],drawings:[],materials:[],materialLog:[],concrete:[],delays:[],attendance:[],dailyReports:[],reportOverrides:{}};}}
     function saveApp(d){localStorage.setItem(AK,JSON.stringify(d));}
     let app=loadApp();
     function genId(p){return p+'-'+Date.now()+'-'+Math.random().toString(36).substr(2,5);}
@@ -254,7 +254,7 @@
         h+='<button class="btn btn-secondary btn-sm" onclick="printReport()">🖨️ Print</button>';
         h+='<button class="btn btn-secondary btn-sm" onclick="shareWA(window._report)">📱 Share</button>';
         h+='<button class="btn btn-secondary btn-sm" onclick="emailReport()">📧 Email</button>';
-        h+='<button class="btn btn-secondary btn-sm" onclick="saveReport()">💾 Save</button>';h+='<button class="btn btn-secondary btn-sm" onclick="refreshReportData()">🔄 Refresh Data</button>';
+        h+='<button class="btn btn-secondary btn-sm" onclick="saveReport()">💾 Save</button>';h+='<button class="btn btn-secondary btn-sm" onclick="clearManualEdit()">🔄 Reset</button>';h+='<button class="btn btn-secondary btn-sm" onclick="refreshReportData()">🔄 Refresh Data</button>';
         h+='</div>';
 
         // KENYAN REPORT
@@ -354,7 +354,7 @@
         h+='<div class="ke-signatures">';
         h+='<div class="ke-sig" contenteditable="true" onclick="event.stopPropagation()">';
         h+='<div class="ke-sig-line"></div>';
-        h+='<div class="ke-sig-name">'+cowName+'</div>';
+        h+='<div class="ke-sig-name" contenteditable="true" onclick="event.stopPropagation()" onblur="saveManualEdit('cowName',this.innerText)" title="Click to edit. Auto-filled from Settings.">'+getReportValue('cowName',cowName)+'</div>';
         h+='<div class="ke-sig-title">Clerk of Works</div>';
         h+='<div style="font-size:.55rem;">Date: ................</div>';
         h+='</div>';
@@ -373,6 +373,38 @@
         document.getElementById('reportContent').innerHTML=h;
     }
 
+    function saveManualEdit(field, value){
+        if(!app.reportOverrides)app.reportOverrides={};
+        app.reportOverrides[field]=value;
+        saveApp(app);
+    }
+    function getReportValue(field, autoValue){
+        // Return manual override if exists, otherwise auto value
+        if(app.reportOverrides&&app.reportOverrides[field]!==undefined){
+            return app.reportOverrides[field];
+        }
+        return autoValue;
+    }
+    function clearManualEdit(field){
+        if(field){
+            // Clear specific field
+            if(app.reportOverrides){delete app.reportOverrides[field];saveApp(app);}
+        }else{
+            // Clear ALL manual edits
+            if(confirm('Reset all manual edits? Report will use auto-filled values from Settings and data.')){
+                app.reportOverrides={};saveApp(app);
+            }
+        }
+        renderReport();
+        toast('🔄 Reset to auto-fill values');
+    }
+        if(app.reportOverrides){
+            delete app.reportOverrides[field];
+            saveApp(app);
+            renderReport();
+            toast('🔄 Reset to auto-fill');
+        }
+    }
     function refreshReportData(){
         app=loadApp();project=loadProject();
         renderReport();
